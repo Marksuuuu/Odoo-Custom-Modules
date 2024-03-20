@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sales_product_act_window" model="ir.actions.act_window">
+            <field name="name">Sales Product</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sales.product</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <!-- This Menu Item Must have a parent -->
+        <menuitem id="sales_product_categ_id" name="Sales Product" parent="sale.menu_sale_config" sequence="2"/>
+
+        <menuitem name="Sales Product" id="sales_product_id" parent="sales_product_categ_id" action="sales_product_act_window"/>
+
+    </data>
+</odoo>

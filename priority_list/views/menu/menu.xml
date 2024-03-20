@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <!--        <record id="priority_list_act_window" model="ir.actions.act_window">-->
+        <!--            <field name="name">Priority List</field>-->
+        <!--            <field name="type">ir.actions.act_window</field>-->
+        <!--            <field name="res_model">priority.list</field>-->
+        <!--            <field name="view_mode">tree,form</field>-->
+        <!--            <field name="help" type="html">-->
+
+        <!--                <p class="o_view_nocontent_smiling_face">-->
+        <!--                    Empty Please Create new entry.-->
+        <!--                </p>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <!--        <record id="priority_list_action" model="ir.actions.act_window">-->
+        <!--            <field name="name">Priority List</field>-->
+        <!--            <field name="res_model">priority.list</field>-->
+        <!--            <field name="view_mode">tree</field>-->
+        <!--            <field name="view_id" ref="view_priority_list_tree"/>-->
+        <!--            <field name="target">main</field>-->
+        <!--        </record>-->
+
+
+<!--        <record id="action_priority_list" model="ir.actions.client">-->
+<!--            <field name="name">Priority List</field>-->
+<!--            <field name="tag">priority_list</field>-->
+<!--            <field name="target">main</field>-->
+<!--        </record>-->
+
+
+        <!-- This Menu Item will appear in the Upper bar, That's why It needs NO parent or action -->
+
+        <menuitem id="priority_list_id" name="Priority List" sequence="6"/>
+
+<!--        <menuitem name="Menu" id="priority_menu_list_id" parent="priority_list_id" action="action_priority_list"/>-->
+
+    </data>
+</odoo>

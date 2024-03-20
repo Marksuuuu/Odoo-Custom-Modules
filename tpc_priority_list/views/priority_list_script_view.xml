@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_tpc_priority_list" model="ir.actions.client">
+        <field name="name">Priority List</field>
+        <field name="tag">tpc_priority_list</field>
+        <field name="target">main</field>
+    </record>
+
+    <menuitem id="tpc_priority_list_id" name="Priority List" sequence="6"/>
+
+    <menuitem name="Menu" id="tpc_priority_menu_list_id" parent="tpc_priority_list_id" action="action_tpc_priority_list"/>
+</odoo>
+

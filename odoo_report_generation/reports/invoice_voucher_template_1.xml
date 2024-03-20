@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="template_invoice_voucher_container_id">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+
+                        html * {
+                        font-family: Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace;
+                        font-size: 13px;
+                        }
+                    </style>
+                </xpath>
+                <t t-set="is_usd" t-value="o.get_currency()"/>
+                <t t-foreach="is_usd" t-as="line">
+                    <t t-if="line.name == 'USD'">
+                        <t t-set="is_true" t-value="o.check_for_microchips()"/>
+                        <t t-if="is_true">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <td colspan="5">
+                                            <img src="sales_extension_module/static/src/img/logo.png" class="img-fluid"
+                                                 alt="Logo"/>
+                                        </td>
+
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 100px"/>
+                                        <td style="width: 300px"/>
+                                        <td style="width: 380px">Permit No.
+                                            <span t-esc="o.get_company_registry()"/>
+                                        </td>
+                                        <td/>
+                                        <td colspan="2" style="letter-spacing:5px; ">
+                                            <span>Invoice No.</span>
+                                            <span t-field="o.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td/>
+                                        <td/>
+                                        <td>Contact Person.
+                                            <span t-esc="o.invoice_user_id.name"/>
+                                        </td>
+                                        <td/>
+                                        <td colspan="2">Page 1</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-borderless"
+                                   style="margin: 20px; border-collapse: collapse; width: 100%;">
+                                <tr>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        SOLD TO
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        SHIP TO
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        Invoice Date:
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span t-esc="o.invoice_date.strftime('%m/%d/%Y')"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <t t-foreach="o.partner_id" t-as="val">
+                                            <span t-esc="val.name"/>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <t t-foreach="o.partner_shipping_id" t-as="val">
+                                            <span t-esc="val.name"/>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        Terms:
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <t t-esc="o.get_payment_terms()"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <t t-foreach="o.partner_id" t-as="val">
+                                            <span t-esc="val.street"/>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <t t-foreach="o.partner_shipping_id" t-as="val">
+                                            <span t-esc="val.street"/>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        Carrier Name:
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span t-esc="o.get_delivery_courier()"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <t t-foreach="o.partner_id" t-as="val">
+                                            <span t-esc="val.street2"/>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <t t-foreach="o.partner_shipping_id" t-as="val">
+                                            <span t-esc="val.street2"/>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        Forwarder
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <t t-foreach="o.partner_id" t-as="val">
+                                            <span><span t-esc="val.city"/>,
+                                                <span t-esc="val.zip"/>
+                                            </span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <t t-foreach="o.partner_shipping_id" t-as="val">
+                                            <span><span t-esc="val.city"/>,
+                                                <span t-esc="val.zip"/>
+                                            </span>
+                                        </t>
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        Fit/Vessel
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span t-esc="o.get_flt_vessel()"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                        colspan="2"/>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        MAWB no.
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                        colspan="2"/>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        HAWB no.
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span t-esc="o.hawb"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                        colspan="2"/>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        PO no.
+                                    </td>
+                                    <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <span t-esc="o.ref"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                            rowspan="8">COUNTRY OF ORIGIN :
+                                            <span t-esc="o.get_company_country()"/>
+                                        </td>
+                                        <!--                             <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"-->
+                                        <!--                                rowspan="8">-->
+                                        <!--                                <t t-foreach="o.partner_id" t-as="val">-->
+                                        <!--                                    COUNTRY OF ORIGIN : <span t-esc="val.country_id.name"/>-->
+                                        <!--                                </t>-->
+                                        <!--                            </td>-->
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table class="table table-borderless"
+                                   style="border-top: 3px dotted black; border-bottom: 3px dotted black; text-align: center;">
+                                <thead style="text-align:center;">
+                                    <tr>
+                                        <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                            Item
+                                        </td>
+                                        <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                            J.O./R.O. No.
+                                        </td>
+                                        <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                            Device
+                                        </td>
+                                        <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 550px;">
+                                            Description
+                                        </td>
+                                        <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                            Quantity
+                                        </td>
+                                        <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                            U/M
+                                        </td>
+                                        <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                            Unit Price
+                                        </td>
+                                        <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                            Amount
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table class="table table-borderless" style="text-align: center;">
+                                <t t-foreach="o.invoice_line_ids" t-as="val">
+                                    <tbody style="text-align: center;">
+                                        <tr>
+                                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                                <t t-esc="val_index + 1"/>.
+                                            </td>
+                                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                                <t t-esc="o.ref"/>
+                                            </td>
+                                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                                <t t-esc="val.product_id.name"/>
+                                            </td>
+                                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 550px;">
+                                                <t t-esc="val.name"/>
+                                                <br/>
+                                                <br/>
+                                                <t t-esc="o.get_partner_id_tax_id()"/>
+                                            </td>
+                                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                                <t t-esc="val.quantity"/>
+                                            </td>
+                                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                                <t t-esc="val.product_uom_id.name"/>
+                                            </td>
+                                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                                <t t-esc="val.price_unit * 0.4"/>
+                                            </td>
+                                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                                <t t-set="quantity" t-value="val.quantity"/>
+                                                <t t-esc="val.price_unit * 0.4 * quantity"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </t>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="8"/>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="8"/>
+                                    </tr>
+                                </tbody>
+                                <tbody style="text-align: center;">
+                                    <tr>
+                                        <td style="text-align: center; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  width: 250px;"/>
+                                        <td style="text-align: center; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                            INVOICE TOTAL
+                                        </td>
+                                        <td style="text-align: center; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  width: 250px;"/>
+                                        <td style="text-align: center; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  width: 250px;"/>
+                                        <td style="text-align: center; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                            <t t-set="sum_row2" t-value="0"/>
+                                            <t t-foreach="o.invoice_line_ids" t-as="line">
+                                                <t t-set="sum_row2" t-value="sum_row2+line.quantity"/>
+                                            </t>
+                                            <t t-esc="sum_row2"/>
+                                        </td>
+                                        <td style="text-align: center; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;"/>
+                                        <td style="text-align: center; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px; border-top: 3px dotted black; border-bottom: 3px dotted black">
+                                            <t t-esc="o.currency_id.name"/>
+                                        </td>
+                                        <td style="text-align: center; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px; border-top: 3px dotted black; border-bottom: 3px dotted black">
+                                            <t t-set="sum_row2" t-value="0"/>
+                                            <t t-foreach="o.invoice_line_ids" t-as="line">
+                                                <t t-set="quantity" t-value="line.quantity"/>
+                                                <t t-set="total" t-value="line.price_unit * 0.4 * quantity"/>
+                                                <t t-set="sum_row2" t-value="sum_row2+total"/>
+                                            </t>
+                                            <t t-esc="sum_row2"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-borderless" style="text-align: center; margin-top: 50px; ">
+                                <tbody>
+                                    <tr>
+                                        <td/>
+                                        <td/>
+                                        <td/>
+                                        <td/>
+                                        <td style="width: 350px; border-top: 3px dotted black; border-bottom: 3px dotted black; border-right: 3px dotted black; border-left: 3px dotted black; text-align: center;">
+                                            PLEASE NOTIFY US IMMEDIATELY OF
+                                            DISCREPANCIES OR NON RECIEPT OF
+                                            PRODUCTS NO ADJUSTMENTS WILL BE
+                                            MADE BEYOND 30 DAYS OF SHIPMENTS.
+                                        </td>
+                                        <td/>
+                                        <td/>
+                                        <td/>
+                                        <td/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </t>
+                </t>
+
+
+                <!-- page 1 -->
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td colspan="5">
+                                <img src="sales_extension_module/static/src/img/logo.png" class="img-fluid"
+                                     alt="Logo"/>
+                            </td>
+
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <td style="width: 100px"/>
+                            <td style="width: 300px"/>
+                            <td style="width: 380px">Permit No.
+                                <span t-esc="o.get_company_registry()"/>
+                            </td>
+                            <td/>
+                            <td colspan="2" style="letter-spacing:5px; ">
+                                <span>Invoice No.</span>
+                                <span t-field="o.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td/>
+                            <td/>
+                            <td>Contact Person.
+                                <span t-esc="o.invoice_user_id.name"/>
+                            </td>
+                            <td/>
+                            <td colspan="2">Page 1</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless" style="margin: 20px; border-collapse: collapse; width: 100%;">
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            SOLD TO
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            SHIP TO
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Invoice Date:
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <span t-esc="o.invoice_date.strftime('%m/%d/%Y')"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_id" t-as="val">
+                                <span t-esc="val.name"/>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_shipping_id" t-as="val">
+                                <span t-esc="val.name"/>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Terms:
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-esc="o.get_payment_terms()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_id" t-as="val">
+                                <span t-esc="val.street"/>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_shipping_id" t-as="val">
+                                <span t-esc="val.street"/>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Carrier Name:
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <span t-esc="o.get_delivery_courier()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_id" t-as="val">
+                                <span t-esc="val.street2"/>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_shipping_id" t-as="val">
+                                <span t-esc="val.street2"/>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Forwarder
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <span t-esc="o.forwarder"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_id" t-as="val">
+                                <span><span t-esc="val.city"/>,
+                                    <span t-esc="val.zip"/>
+                                </span>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_shipping_id" t-as="val">
+                                <span><span t-esc="val.city"/>,
+                                    <span t-esc="val.zip"/>
+                                </span>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Fit/Vessel
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <span t-esc="o.get_flt_vessel()"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            colspan="2"/>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            MAWB no.
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            colspan="2"/>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            HAWB no.
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <span t-esc="o.hawb"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            colspan="2"/>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            PO no.
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-esc="o.ref"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                                rowspan="8">COUNTRY OF ORIGIN : PHILIPPINES
+                            </td>
+                            <!--                             <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"-->
+                            <!--                                rowspan="8">-->
+                            <!--                                <t t-foreach="o.partner_id" t-as="val">-->
+                            <!--                                    COUNTRY OF ORIGIN : <span t-esc="val.country_id.name"/>-->
+                            <!--                                </t>-->
+                            <!--                            </td>-->
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-borderless"
+                       style="border-top: 3px dotted black; border-bottom: 3px dotted black; text-align: center;">
+                    <thead style="text-align:center;">
+                        <tr>
+                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 200px;">
+                                Item
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                J.O./R.O. No.
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 450px;">
+                                Device
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 550px;">
+                                Description
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 200px;">
+                                Quantity
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                U/M
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 250px;">
+                                Unit Price
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;  width: 150px;">
+                                Amount
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-borderless" style="text-align: center;">
+                    <t t-foreach="o.invoice_line_ids" t-as="val">
+                        <tbody style="text-align: center;">
+                            <tr>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-esc="val_index + 1"/>.
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-esc="o.ref"/>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 450px;">
+                                    <t t-esc="val.product_id.name"/>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 550px;">
+                                    <t t-esc="val.name"/>
+                                    <br/>
+                                    <br/>
+                                    <t t-esc="o.get_partner_id_tax_id()"/>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 200px;">
+                                    <t t-esc="val.quantity"/>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-esc="val.product_uom_id.name"/>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-esc="val.price_unit"/>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 150px;">
+                                    <t t-esc="val.price_total"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </t>
+                    <tbody>
+                        <tr>
+                            <td colspan="8"/>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td colspan="8"/>
+                        </tr>
+                    </tbody>
+                    <tbody style="text-align: center;">
+                        <tr>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;"/>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                INVOICE TOTAL
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;"/>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;"/>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                <t t-set="sum_row2" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <t t-set="sum_row2" t-value="sum_row2+line.quantity"/>
+                                </t>
+                                <t t-esc="sum_row2"/>
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;"/>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px; border-top: 3px dotted black; border-bottom: 3px dotted black">
+                                <t t-esc="o.currency_id.name"/>
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 150px; border-top: 3px dotted black; border-bottom: 3px dotted black">
+                                <t t-set="sum_row2" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <t t-set="sum_row2" t-value="sum_row2+line.price_total"/>
+                                </t>
+                                <t t-esc="sum_row2"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless" style="text-align: center; margin-top: 40px;">
+                    <tbody>
+                        <tr>
+                            <td/>
+                            <td/>
+                            <td/>
+                            <td/>
+                            <td style="width: 350px; border-top: 3px dotted black; border-bottom: 3px dotted black; border-right: 3px dotted black; border-left: 3px dotted black; text-align: center;">
+                                PLEASE NOTIFY US IMMEDIATELY OF
+                                DISCREPANCIES OR NON RECIEPT OF
+                                PRODUCTS NO ADJUSTMENTS WILL BE
+                                MADE BEYOND 30 DAYS OF SHIPMENTS.
+                            </td>
+                            <td/>
+                            <td/>
+                            <td/>
+                            <td/>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- page 2 -->
+
+
+                <table class="table table-borderless" style="margin-top: 200px;">
+                    <thead>
+                        <tr>
+                            <td colspan="5">
+                                <img src="sales_extension_module/static/src/img/logo.png" class="img-fluid"
+                                     alt="Logo"/>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <td style="width: 100px"/>
+                            <td style="width: 500px"/>
+                            <td style="width: 180px"/>
+                            <td/>
+                            <td colspan="2">PACKING LIST/GATEPASS</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless">
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            SHIP TO
+                        </td>
+                        <td/>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Invoice Reference:
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-esc="o.name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_shipping_id" t-as="val">
+                                <span t-esc="val.name"/>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                        <td/>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Page 2
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_shipping_id" t-as="val">
+                                <span t-esc="val.street"/>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Ship Date:
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <span t-esc="o.invoice_date.strftime('%m/%d/%Y')"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_shipping_id" t-as="val">
+                                <span t-esc="val.street2"/>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            PO No.:
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-esc="o.ref"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <t t-foreach="o.partner_shipping_id" t-as="val">
+                                <span><span t-esc="val.city"/>,
+                                    <span t-esc="val.zip"/>
+                                </span>
+                            </t>
+                        </td>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                        <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                    </tr>
+                </table>
+
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td rowspan="8"/>
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-borderless"
+                       style="border-top: 3px dotted black; border-bottom: 3px dotted black; text-align: center;">
+                    <thead style="text-align:center;">
+                        <tr>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                Item
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                MO No./Date Co
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                Device
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                Lot No.
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                Quantity
+                            </td>
+                            <td style="text-align: center; padding: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                Case No.
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-borderless" style="text-align: center;">
+                    <t t-set="mo" t-value="o.get_qty_done_from_mo()"/>
+                    <t t-foreach="mo" t-as="line">
+                        <tbody style="text-align: center;">
+                            <tr>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-foreach="line" t-as="a">
+                                        <t t-if="a and a.finished_move_line_ids">
+                                            <t t-foreach="a.finished_move_line_ids" t-as="b">
+                                                <t t-if="b and b.product_id.name == False">
+                                                    <span>&#160;</span>
+                                                </t>
+                                                <t t-if="b and b.product_id.name">
+                                                    <t t-esc="line_index + 1"/>.
+                                                </t>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-foreach="line" t-as="a">
+                                        <t t-if="a and a.finished_move_line_ids">
+                                            <t t-foreach="a.finished_move_line_ids" t-as="b">
+                                                <t t-if="b and b.product_id.name == False">
+                                                    <span>&#160;</span>
+                                                </t>
+                                                <t t-if="b and b.product_id.name">
+                                                    <t t-foreach="line" t-as="a">
+                                                        <t t-if="a and a.name == False">
+                                                            <span>&#160;</span>
+                                                        </t>
+                                                        <t t-if="a and a.name">
+                                                            <span t-esc="a.name"/>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-foreach="line" t-as="a">
+                                        <t t-if="a and a.finished_move_line_ids">
+                                            <t t-foreach="a.finished_move_line_ids" t-as="b">
+                                                <t t-if="b and b.product_id.name == False">
+                                                    <span>&#160;</span>
+                                                </t>
+                                                <t t-if="b and b.product_id.name">
+                                                    <span t-esc="b.product_id.name"/>
+                                                </t>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-foreach="line" t-as="a">
+                                        <t t-if="a and a.finished_move_line_ids">
+                                            <t t-foreach="a.finished_move_line_ids" t-as="b">
+                                                <t t-if="b and b.lot_id.name == False">
+                                                    <span>&#160;</span>
+                                                </t>
+                                                <t t-if="b and b.lot_id.name">
+                                                    <span t-esc="b.lot_id.name"/>
+                                                </t>
+                                            </t>
+                                        </t>
+                                    </t>
+
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-foreach="line" t-as="a">
+                                        <t t-if="a and a.finished_move_line_ids">
+                                            <t t-foreach="a.finished_move_line_ids" t-as="b">
+                                                <t t-if="b and b.qty_done == False">
+                                                    <span>&#160;</span>
+
+                                                </t>
+                                                <t t-if="b and b.qty_done">
+                                                    <span t-esc="b.qty_done"/>
+                                                </t>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </td>
+                                <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 250px;">
+                                    <t t-foreach="line" t-as="a">
+                                        <t t-if="a and a.case_no == False">
+                                            <span>&#160;</span>
+                                        </t>
+                                        <t t-if="a and a.case_no">
+                                            <span t-esc="b.qty_done"/>
+                                        </t>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </t>
+                    <tbody>
+                        <tr>
+                            <td colspan="8"/>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td colspan="8"/>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless"
+                       style="margin-top: 30px; margin-left: auto; margin-right: auto; text-align: center;">
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 280px"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 280px">
+                                TOTAL QUANTITY =
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 280px">
+                                <span t-esc="o.get_total_qty_done()"/>
+                            </td>
+
+
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 280px">
+                                TOTAL CARTONS =
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 280px">
+                                <t t-esc="o.total_cartons"/>
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 280px">
+                                TOTAL WEIGHT (GROSS) =
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 280px">
+                                <t t-esc="o.get_weight()"/>
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 280px"/>
+                        </tr>
+                        <tr>
+                            <td/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Prepared by:
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid black;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Approved by:
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid black;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Approved by:
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid black;"/>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Shipping
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Traffic Mgr.
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Production/Marketing Mgr.
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Checked by:
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid black;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Dispatched by:
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid black;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Received by:
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 1px solid black;"/>
+                            <td/>
+
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Security
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Security
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                Sign Over Printed Name
+                            </td>
+                            <td style="text-align: left; padding: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"/>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+            </t>
+        </template>
+        <template id="template_invoice_template_voucher_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="odoo_report_generation.template_invoice_voucher_container_id" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+
+

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!--        <report-->
+        <!--                id="travel_voucher"-->
+        <!--                model="stock.picking"-->
+        <!--                string="Transfer Voucher"-->
+        <!--                name="sales_extension_module.travel_voucher_id"-->
+        <!--                file="sales_extension_module.travel_voucher_id"-->
+        <!--                report_type="qweb-pdf"-->
+        <!--                menu="True"-->
+        <!--        />-->
+
+        <report
+                id="transfer_voucher"
+                model="stock.picking"
+                string="Transfer Voucher"
+                name="sales_extension_module.transfer_voucher_id"
+                file="sales_extension_module.transfer_voucher_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="payable_voucher_extension"
+                model="account.move"
+                string="Payable Voucher"
+                name="sales_extension_module.payable_voucher_id"
+                file="sales_extension_module.payable_voucher_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="debit_note_extension"
+                model="account.move"
+                string="Debit Note Voucher"
+                name="sales_extension_module.debit_note_template_voucher_id"
+                file="sales_extension_module.debit_note_template_voucher_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="credit_note_extension"
+                model="account.move"
+                string="Credit Note Voucher"
+                name="sales_extension_module.credit_note_template_voucher_id"
+                file="sales_extension_module.credit_note_template_voucher_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="debit_note_without_fee_extension"
+                model="account.move"
+                string="Debit Note Without Fee Voucher"
+                name="sales_extension_module.debit_note_without_fee_template_voucher_id"
+                file="sales_extension_module.debit_note_without_fee_template_voucher_id"
+                report_type="qweb-pdf"
+                menu="False"
+        />
+
+<!--        <report-->
+<!--                id="invoice_voucher"-->
+<!--                model="account.move"-->
+<!--                string="Invoice Voucher"-->
+<!--                name="sales_extension_module.invoice_template_voucher_id"-->
+<!--                file="sales_extension_module.invoice_template_voucher_id"-->
+<!--                report_type="qweb-pdf"-->
+<!--                menu="True"-->
+<!--        />-->
+
+        <report
+                id="test_payable_voucher"
+                model="account.move"
+                string="Test Payable Voucher"
+                name="sales_extension_module.test_payable_id"
+                file="sales_extension_module.test_payable_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+               id="journal_voucher_xlsx_extension"
+               model="account.move"
+               string="Journal Voucher XLSX"
+               report_type="xlsx"
+               name="sales_extension.journal_voucher"
+               file="sales_extension.journal_voucher"
+               attachment="(object.state == 'posted') and ((object.name or 'AP').replace('/','_')+'.xlsx')"
+               print_report_name="(object._get_report_base_filename())"
+               attachment_use="False"
+               menu="True"
+        />
+
+
+    </data>
+</odoo>

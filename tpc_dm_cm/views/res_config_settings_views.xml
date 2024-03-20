@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.tpc_dm_cm</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="tpc_dm_cm" id="tpc_dm_cm" string="Billing Request"
+                         data-key="tpc_dm_cm" groups="tpc_dm_cm.group_dm_cm_manager">
+                        <h2>Address Configuration</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="host">Host</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="host" class="text-center oe_inline"
+                                                   placeholder="e.g https://example.com"/>
+                                            <field name="connection_bool" invisible="1"/>
+                                            <field name="credentials_bool" invisible="1"/>
+                                            <span class="text-success"
+                                                  attrs="{'invisible': [('connection_bool', '=', False)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10004;
+                                                </span>
+                                                <span class="font-size: 10px">- Success Host &amp; Port are valid</span>
+                                            </span>
+                                            <span class="text-danger"
+                                                  attrs="{'invisible': [('connection_bool', '=', True)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10008;
+                                                </span>
+                                                <span class="font-size: 10px">- Maybe Host or Port are Invalid</span>
+                                            </span>
+                                            <div class="text-muted">
+                                                Enter your Host like mail.your_host.com or ip 192.169.69.6969
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="port">Port</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="port" class="text-center oe_inline" placeholder="22"/>
+                                            <span class="text-success"
+                                                  attrs="{'invisible': [('connection_bool', '=', False)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10004;
+                                                </span>
+                                                <span class="font-size: 10px">- Success Host &amp; Port are valid</span>
+                                            </span>
+                                            <span class="text-danger"
+                                                  attrs="{'invisible': [('connection_bool', '=', True)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10008;
+                                                </span>
+                                                <span class="font-size: 10px">- Maybe Host or Port are Invalid</span>
+                                            </span>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your port like 69
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <h2>Credentials Configuration</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="sender">Sender</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="sender" class="text-center oe_inline"
+                                                   placeholder="Sender"/>
+                                            <span class="text-success"
+                                                  attrs="{'invisible': [('credentials_bool', '=', False)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10004;
+                                                </span>
+                                                <span class="font-size: 10px">- Success
+                                                </span>
+                                            </span>
+                                            <span class="text-danger"
+                                                  attrs="{'invisible': [('credentials_bool', '=', True)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10008;
+                                                </span>
+                                                <span class="font-size: 10px">- Maybe Sender, Url, Username &amp;
+                                                    Password
+                                                    are
+                                                    Invalid
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your sender like sender@domain.com
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="username">Username</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="username" class="text-center oe_inline"
+                                                   placeholder="Username"/>
+                                            <span class="text-success"
+                                                  attrs="{'invisible': [('credentials_bool', '=', False)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10004;
+                                                </span>
+                                                <span class="font-size: 10px">- Success
+                                                </span>
+                                            </span>
+                                            <span class="text-danger"
+                                                  attrs="{'invisible': [('credentials_bool', '=', True)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10008;
+                                                </span>
+                                                <span class="font-size: 10px">- Maybe Sender, Url, Username &amp;
+                                                    Password
+                                                    are
+                                                    Invalid
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your username like sample_username_69
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="login_url">Url</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="login_url" class="text-center oe_inline"
+                                                   placeholder="Url"/>
+                                            <span class="text-success"
+                                                  attrs="{'invisible': [('credentials_bool', '=', False)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10004;
+                                                </span>
+                                                <span class="font-size: 10px">- Success
+                                                </span>
+                                            </span>
+                                            <span class="text-danger"
+                                                  attrs="{'invisible': [('credentials_bool', '=', True)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10008;
+                                                </span>
+                                                <span class="font-size: 10px">- Maybe Sender, Url, Username &amp;
+                                                    Password
+                                                    are
+                                                    Invalid
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your url like http://mail.domain.com/
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="password">Password</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="password" password="True" class="text-center oe_inline"
+                                                   placeholder="Password"/>
+                                            <span class="text-success"
+                                                  attrs="{'invisible': [('credentials_bool', '=', False)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10004;
+                                                </span>
+                                                <span class="font-size: 10px">- Success
+                                                </span>
+                                            </span>
+                                            <span class="text-danger"
+                                                  attrs="{'invisible': [('credentials_bool', '=', True)]}">
+                                                <span style="font-size: 25px; font-weight: 20px">
+                                                    &#10008;
+                                                </span>
+                                                <span class="font-size: 10px">- Maybe Sender, Url, Username &amp;
+                                                    Password
+                                                    are
+                                                    Invalid
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your password like sample_password_69
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2>File Type Configuration</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="file_types">File Types</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="file_types" password="True" class="text-center oe_inline"
+                                                   placeholder="File Types"
+                                                   widget="many2many_tags" options="{'no_create': True}"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Set your file types
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h2>Read Me</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="form-group">
+                                        <span class="text-muted">
+                                            <i>Kindly request credentials from your administrator or network
+                                                administrator. Exercise caution when entering data to ensure the
+                                                security of your information.
+                                                <br/>
+                                                <br/>
+                                                Your cooperation is greatly appreciated.
+                                                <br/>
+                                                Thank you,
+                                                <br/>
+                                                -John Raymark - 10450 @2023
+                                            </i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
+

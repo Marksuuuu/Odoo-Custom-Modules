@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_mach_tag_form_inherit" model="ir.ui.view">
+            <field name="name">product.template.inherit.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='options']" position="after">
+                    <group>
+                        <field name="wiv_picklist" attrs="{'invisible': [('purchase_ok', '=', False)]}"/>
+                    </group>
+                </xpath>
+                <xpath expr="//div[@name='options']" position="after">
+                    <group>
+                        <field name="reflect_pt"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

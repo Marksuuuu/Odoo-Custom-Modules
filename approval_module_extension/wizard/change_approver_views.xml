@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_change_approvers_form" model="ir.ui.view">
+            <field name="name">change.approvers.wiz.form</field>
+            <field name="model">change.approvers.wiz</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="department_id" style="width: 40%%" invisible="1"/>
+                        <field name="approver_id" style="width: 40%%"/>
+                    </group>
+                    <group>
+                        <field name="reason" style="width: 50%%" height="80"/>
+                    </group>
+
+
+
+                    <footer class="oe_right">
+                        <button string="Save" type="object" class="btn-primary" name="button_submit"/>
+                        <button string="Discard" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_change_approvers_view" model="ir.actions.act_window">
+            <field name="name">Approvers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">change.approvers.wiz</field>
+            <field name="view_id" ref="view_change_approvers_form"/>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <!--            <field name="binding_model_id" ref="approval_module.model_purchase_approval_types" />-->
+        </record>
+    </data>
+</odoo>

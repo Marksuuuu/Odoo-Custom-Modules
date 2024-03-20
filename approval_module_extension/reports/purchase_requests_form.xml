@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="purchase_requests_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        @font-face {
+                        font-family: 'CourierPrime-Regular';
+                        src: url('/approval_module_extension/static/src/font/CourierPrime-Regular.ttf')
+                        format('truetype');
+                        font-weight: normal;
+                        font-style: normal;
+                        }
+                        .compact-table td,
+                        .compact-table th {
+                        padding: 0px /* Adjust the padding as needed */
+                        }
+                        #box{
+                        width: 20px;
+                        height: 20px;
+                        border: 1px solid black;
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        }
+                        .container {
+                        display: -webkit-box; /* wkhtmltopdf uses this one */
+                        display: -webkit-flex;
+                        align-items: center;
+                        margin-top: 20px;
+                        }
+                        table,tr,th,td,h6{
+                        font-family: 'CourierPrime-Regular', monospace;
+                        }
+
+                        .rectangle {
+                        width: 350px;
+                        height: 40px;
+                        border: 1px solid white;
+                        float: right;
+                        margin-left: 10px;
+                        }
+
+                        .text {
+                        margin-right: 10px; /* Adjusted margin to reduce space */
+                        margin-left: 30px;
+                        flex: 1;
+                        }
+                        .signature-container {
+                        text-align: center;
+                        margin-bottom: 150px;
+                        }
+
+                        .signature-line {
+                        width: 250px; /* Adjust the length of the line as needed */
+                        border: 1px solid #000; /* Adjust the line style as needed */
+                        margin: 10px auto; /* Center the line horizontally */
+                        }
+                    </style>
+
+
+                </xpath>
+                <div class="table-responsive-xs">
+                    <table class="table table-borderless table-sm compact-table">
+                        <thead>
+                            <tr>
+                                <td style='text-align: center;'>
+                                    PURCHASE REQUISITION FORM
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="table table-borderless table-sm compact-table">
+                        <thead>
+                            <tr>
+                                <td style=" text-align: center; position: relative; width: 25px;
+               vertical-align: middle;">
+                                    <div id="box"/>
+                                </td>
+                                <td>
+                                    <span style="margin-left: 30px;">Stock Items</span>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span>Date:</span>
+                                </td>
+                                <td>
+                                    <span style="margin-left: 30px;">
+                                        <span t-esc="o.ordering_date"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style=" text-align: center; position: relative; width: 25px;
+        vertical-align: middle;">
+                                    <div id="box"/>
+                                </td>
+                                <td>
+                                    <span style="margin-left: 30px;">Non-Stock Items</span>
+                                </td>
+                                <td style="width: 50px; text-align: center;">
+                                    <span>PR#:</span>
+                                </td>
+                                <td style="width: 280px;">
+                                    <span style="margin-left: 30px;">
+                                        <span t-esc="o.name"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <table class="table table-bordered table-sm compact-table" style="text-align:center;">
+                        <thead>
+                            <tr>
+                                <td style="width: 300px; vertical-align: middle;">
+                                    <span>LINE ITEMS</span>
+                                </td>
+                                <td style="width: 600px">
+                                    <span>DESCRIPTION</span>
+                                    <br/>
+                                    <span style="font-style: italic;">(Pls Attach drawings or indicate drawing it)</span>
+                                </td>
+                                <td style="vertical-align: middle">
+                                    <span>QTY</span>
+                                </td>
+                                <td style="vertical-align: middle">
+                                    <span>UINIT PRICE</span>
+                                </td>
+                                <td style="vertical-align: middle">
+                                    <span>AMOUNT</span>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.line_ids" t-as="val">
+                                <tr>
+                                    <td>
+                                        <t t-foreach="val.product_id" t-as="a">
+                                            <span t-esc="a.name"/>
+                                        </t>
+                                        <t t-if="not val.product_id">
+                                            &#160;
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-if="val.description">
+                                            <span t-esc="val.description"/>
+                                        </t>
+                                        <t t-if="not val.description">
+                                            &#160;
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-if="val.product_qty">
+                                            <span t-esc="val.product_qty"/>
+                                        </t>
+                                        <t t-if="not val.product_qty">
+                                            &#160;
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-if="val.price_unit">
+                                            <span t-esc="val.price_unit"/>
+                                        </t>
+                                        <t t-if="not val.price_unit">
+                                            &#160;
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-if="val.subtotal">
+                                            <span t-esc="val.subtotal"/>
+                                        </t>
+                                        <t t-if="not val.subtotal">
+                                            &#160;
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td colspan="2">
+                                    <span style="float: left; margin-left: 20px;">CHARGE TO:
+                                        <span style="margin-left: 20px">
+                                            <t t-foreach="o.department_id" t-as="a">
+                                                <span t-esc="a.name"/>
+                                            </t>
+                                            <t t-if="not o.department_id">
+                                                &#160;
+                                            </t>
+                                        </span>
+                                    </span>
+                                </td>
+                                <td colspan="3">
+                                    <span style="float: left; margin-left: 20px;">TOTAL AMOUNT:
+                                        <span style="margin-left: 20px">
+                                            <t t-set="sum_row3" t-value="0"/>
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-set="sum_row3" t-value="sum_row3+line.subtotal"/>
+                                            </t>
+                                            <t t-esc="sum_row3"/>
+                                        </span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td colspan="2" style="height: 150px;">
+                                    <div class="container">
+                                        <div class="text">DEPT CODE
+                                            <span style="margin-left: 60px">
+                                                <t t-foreach="o.department_id" t-as="a">
+                                                    <span t-esc="a.name"/>
+                                                </t>
+                                                <t t-if="not o.department_id">
+                                                    &#160;
+                                                </t>
+                                            </span>
+                                        </div>
+                                        <div class="rectangle"/>
+                                        <span style="float-left"></span>
+                                    </div>
+
+                                    <div class="container">
+                                        <div class="text">GL Account Code
+                                            <span style="margin-left: 60px"> &#160;</span>
+                                        </div>
+                                        <div class="rectangle">
+                                            <span style="float-left"></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td colspan="3" style="height: 150px;">
+                                    <div class="container" style="margin-top: 20px;">
+                                        <div class="text">CUSTOMER
+                                            <span style="margin-left: 60px">
+                                                <t t-foreach="o.vendor_id" t-as="a">
+                                                    <span t-esc="a.name"/>
+                                                </t>
+                                                <t t-if="not o.vendor_id">
+                                                    &#160;
+                                                </t>
+                                            </span>
+                                        </div>
+                                        <div class="rectangle"/>
+                                        <span style="float-left"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" style="height:150px;">
+                                    <span style="float: left;">JUSTIFICATION REMARKS:
+                                        <span t-esc="o.description" style="margin-left: 30px"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td colspan="2" style="height: 250px">
+                                    <div class="signature-container">
+                                        <p>PREPARED BY/REQUEST BY</p>
+                                        <t t-foreach="o.user_id" t-as="a">
+                                            <span t-esc="a.name"/>
+                                        </t>
+                                        <t t-if="not o.user_id">
+                                            &#160;
+                                        </t>
+                                        <div class="signature-line"/> <!-- Shortened line here -->
+                                        <p>PRINTED NAME &amp; SIGNATURE</p>
+                                    </div>
+                                </td>
+                                <td colspan="3" style="height: 250px">
+                                    <div class="signature-container">
+                                        <p>PRE-APPROVED BY</p>
+                                        <t t-foreach="o.approver_id" t-as="a">
+                                            <span t-esc="a.name"/>
+                                        </t>
+                                        <t t-if="not o.approver_id">
+                                            &#160;
+                                        </t>
+                                        <div class="signature-line"/> <!-- Shortened line here -->
+                                        <p>Department Head</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </t>
+        </template>
+        <template id="purchase_requests_container_template_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.user_id.lang"/>
+                    <t t-call="approval_module_extension.purchase_requests_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

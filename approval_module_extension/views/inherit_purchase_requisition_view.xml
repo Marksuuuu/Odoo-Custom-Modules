@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="purchase_requisition_inherit_view_extension_v1" model="ir.ui.view">
+            <field name="name">purchase_requisition_inherit_view_extension_v1</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="buyer"/>
+                </xpath>
+
+                <!--                <xpath expr="//field[@name='line_ids']/tree/field[@name='product_qty']" position="after">-->
+                <!--                    <field name="description" string="Your New Field Label"/>-->
+                <!--                </xpath>-->
+
+                <!--                <xpath expr="//notebook/page/field[@name='line_ids']/tree/field[@name='product_qty']"-->
+                <!--                       position="after">-->
+                <!--                    <field name="description" string="Your New Field Label"/>-->
+                <!--                </xpath>-->
+
+
+            </field>
+        </record>
+
+        <record id="purchase_requisition_purchase_request_view_form_inherit" model="ir.ui.view">
+            <field name="name">purchase_requisition_inherit_view_extension</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="approval_module.purchase_request_view_form_inherit"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+
+                <!--                <xpath expr="//field[@name='department_id']" position="attributes">-->
+                <!--                    <attribute name="string">Charge To</attribute>-->
+                <!--                </xpath>-->
+
+                <!--                <xpath expr="//field[@name='approver_id']" position="attributes">-->
+                <!--                    <attribute name="string">Multiple Approvers</attribute>-->
+                <!--                </xpath>-->
+
+                <xpath expr="//button[@name='action_cancel']" position="after">
+                    <button name="print_purchase_requests_form" type="object" string="Print Purchase Request"
+                            class="btn btn-danger"
+                            attrs="{'invisible': [('state','not in', ('confirmed', 'to_approve'))]}"/>
+                </xpath>
+
+                <!--                <xpath expr="//button[@name='action_cancel']" position="after">-->
+                <!--                    <button name="print_purchase_requests_form" type="object" string="test" class="btn btn-danger"/>-->
+                <!--                </xpath>-->
+
+                <xpath expr="//field[@name='currency_id']" position="attributes">
+                    <attribute name="required">0</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='currency_id']" position="attributes">
+                    <attribute name="required">0</attribute>
+                </xpath>
+
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

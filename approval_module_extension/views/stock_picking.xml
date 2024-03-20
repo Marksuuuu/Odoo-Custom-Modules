@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="stock_picking_attachments_inherit_form" model="ir.ui.view">
+            <field name="name">stock_picking_attachments_inherit_form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Attachments" name="attachment_stock">
+                        <field name="stock_picking_attach" widget="section_and_note_one2many">
+                            <tree string="Attachments" editable="bottom" create="false" edit="false">
+                                <field name="product_id" string="Product Related"/>
+                                <field name="attachments_ids" string="Attachment Related"/>
+                                <field name="file_links" widget="url"/>
+                                <!--                                <field name="requisition_id"-->
+                                <!--                                       domain="[('state', 'in', ('in_progress', 'open', 'ongoing', 'approved')), ('vendor_id', 'in', (partner_id, False)), ('company_id', '=', company_id)]"/>-->
+                                <!--                                <field name="is_quantity_copy" invisible="1"/>-->
+                                <!--                                <field name="partner_id" context="{'res_partner_search_mode': 'supplier'}"-->
+                                <!--                                       attrs="{'readonly': ['|', ('is_quantity_copy', '=', 'none'), ('state', 'in', ['purchase', 'done', 'cancel'])]}"-->
+                                <!--                                       force_save="1"/>-->
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="stock_picking_view_form_inherit" model="ir.ui.view">
+            <field name="name">stock_picking_view_form_inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='location_dest_id']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='button_validate']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['&amp;', ('state', 'not in',
+                        ('approved','done')),('check_if_here', '=', False)]}
+                    </attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='button_validate']" position="after">
+                    <button name="print_invoice_voucher" type="object" string="Print Invoice Voucher"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('check_if_else', '=', False)]}"/>
+
+                    <button name="print_picking_components" type="object" string="Print Picking Components"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('check_if_pick', '=', False)]}"/>
+
+
+                </xpath>
+
+                <xpath expr="//button[@name='button_scrap']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', '&amp;', '|', ('state', '!=', 'approved'),
+                        ('picking_type_code', '=', 'incoming'), ('state', '!=', 'done'), '&amp;', ('picking_type_code',
+                        '=', 'outgoing'), ('state', '=', 'done'), ('is_locked', '=', False)]}
+                    </attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="show_submit_request" invisible="1"/>
+                    <field name="approval_status" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//group" position="after">
+                    <group>
+                        <group/>
+                        <group string="Details" name="details_for_printing"
+                               attrs="{'invisible': [('check_if_else', '=', False)]}">
+                            <field name="payment_term_id"/>
+                            <field name="invoice_date"/>
+                            <field name="carrier_id"/>
+                            <field name="forwarder"/>
+                            <field name="flt_vessel"/>
+                            <field name="hawb"/>
+                            <field name="mawb"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                <xpath expr="//field[@name='origin']" position="after">
+                    <!--                    <field name="is_shipping_bool" invisible="1"/>-->
+                    <field name="user_id" string="Purchase Representative"
+                           attrs="{'readonly' : [('state', 'in', ('approved', 'disapprove'))]}"/>
+                    <field name="department_id"
+                           attrs="{'invisible': [('check_if_here', '=', False)]}"/>
+                    <field name="approver_id"
+                           attrs="{'invisible': [('check_if_here', '=', False)]}"/>
+
+                    <field name="custodian" attrs="{'invisible': [('check_if_pick', '=', False)]}"/>
+                    <field name="request_by" attrs="{'invisible': [('check_if_pick', '=', False)]}"/>
+                    <field name="verified_by" attrs="{'invisible': [('check_if_pick', '=', False)]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <!--                    invisible fields-->
+                    <field name="to_approve" invisible="1"/>
+                    <field name="to_approve_po" invisible="1"/>
+                    <field name="check_if_receipts" invisible="1"/>
+                    <field name="check_if_here" invisible="1"/>
+                    <field name="check_if_wiv" invisible="1"/>
+                    <field name="check_if_else" invisible="1"/>
+                    <field name="check_if_pick" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//header" position="after">
+                    <div style="background-color:#D5E1F4"
+                         attrs="{'invisible':['|', ('state', 'not in', ('to_approve', 'for_final_approval')), ('check_if_receipts', '=', True)]}">
+                        <span style="margin:20px;">This document needs to be approved.</span>
+                    </div>
+                </xpath>
+
+                <xpath expr="//header" position="after">
+                    <header attrs="{'invisible': ['|', '|', '|', ('state', 'in', ('approved')), ('check_if_receipts', '=', True), ('check_if_else', '=', True), ('check_if_pick', '=', True)]}">
+                        <field name="user_id" invisible="1"/>
+                        <field name="is_approver" invisible="1"/>
+                        <field name="approval_status" invisible="1"/>
+
+                        <button name="submit_for_approval" type="object"
+                                string="Submit Request"
+                                class="oe_highlight"
+                                confirm="Submit Purchase Request to Initial Approver?"
+                                attrs="{'invisible': [('show_submit_request', '=', False)]}"/>
+
+                        <button name="approve_request" type="object"
+                                string="Approve Request"
+                                class="oe_highlight"
+                                confirm="Are you sure you want to approve?"
+                                attrs="{'invisible': ['|', ('approval_status', '!=', 'po_approval'), ('is_approver', '=', False)]}"/>
+
+                        <!--                        <button name="%(action_change_approvers_pr_view)d" type="action"-->
+                        <!--                                states='to_approve'-->
+                        <!--                                string="Change Approver"-->
+                        <!--                                class="oe_highlight"/>-->
+
+                        <!--                        <button name="action_rfq_send" states="draft" string="Send by Email" type="object"-->
+                        <!--                                context="{'send_rfq':True}" class="oe_highlight"/>-->
+                        <!--                        <button name="print_quotation" string="Print RFQ" type="object" states="draft"-->
+                        <!--                                class="oe_highlight" groups="base.group_user"/>-->
+                        <!--                        <button name="button_confirm" type="object" states="sent" string="Confirm Order"-->
+                        <!--                                class="oe_highlight" id="bid_confirm"/>-->
+
+                        <button name="action_rfq_send" states="sent" string="Re-Send by Email" type="object"
+                                context="{'send_rfq':True}"/>
+                        <!--                        <button name="button_confirm" type="object" states="draft" string="Confirm Order"-->
+                        <!--                                id="draft_confirm"/>-->
+                        <button name="button_draft" states="cancel" string="Set to Draft" type="object"/>
+                        <!--                        <button name="button_cancel" states="draft,to_approve,sent,purchase,approved"-->
+                        <!--                                string="Cancel" type="object"/>-->
+                        <!--                                                                         <button name="get_picking_type" string="test" type="object"/>-->
+                        <!--                                                 <button name="notify_requester" string="tset" type="object"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,sent,purchase,to_approve"
+                               readonly="1"/>
+
+                    </header>
+                </xpath>
+
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
+
+

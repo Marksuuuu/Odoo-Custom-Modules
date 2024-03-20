@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+
+
+access_inventory_change_approvers_wiz,access.inventory.change.approvers.wiz,model_inventory_change_approvers_wiz,account.group_account_user,1,1,1,1
+access_inventory_change_pr_approvers,access.inventory.change.pr.approvers,model_inventory_change_pr_approvers,account.group_account_user,1,1,1,1
+access_inventory_disapprove_pr_reason_wizard,access.inventory.disapprove.pr.reason.wizard,model_inventory_disapprove_pr_reason_wizard,account.group_account_user,1,1,1,1

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="report_template_setup_act_window" model="ir.actions.act_window">
+            <field name="name">Report Template</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">report.template.setup</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <record id="report_template_setup_sequence" model="ir.sequence">
+            <field name="name">Report Setup Sequence</field>
+            <field name="code">report.template.code</field>
+            <field name="padding">4</field>
+            <field name="prefix">RTS/%(year)s%(month)s%(day)s#</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+
+        <menuitem id="report_template_setup_root_id"
+                  name="Report Template Setup"
+                  sequence="20"
+                  parent="account.menu_finance_configuration"
+                   groups="base.group_system"/>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="report_template_setup_action_id" name="Report Setup" parent="report_template_setup_root_id"
+                  action="report_template_setup_act_window" sequence="0"/>
+
+    </data>
+</odoo>

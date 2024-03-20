@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="freight_cron_model_tree_view" model="ir.ui.view">
+            <field name="name">freight_cron_model_tree_view</field>
+            <field name="model">freight.cron.model</field>
+            <field name="arch" type="xml">
+                <tree string="Mrp Freight Tree" create="false" edit="false">
+                    <field name="create_date"/>
+                    <field name="total"/>
+                    <field name="date_compute"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="freight_cron_model_act_window" model="ir.actions.act_window">
+            <field name="name">Freight Cron Model View</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">freight.cron.model</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Freight Cron Data" id="mrp_freight_model_menu" parent="stock.menu_stock_inventory_control" action="freight_cron_model_act_window"/>
+
+    </data>
+</odoo>

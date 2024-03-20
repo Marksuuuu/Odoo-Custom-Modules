@@ -1,0 +1,11 @@
+ html, body, .container-fluid, .card {
+      height: 100%;
+    }
+    #custom_card {
+      width: 65%;
+      margin: auto; /* Center horizontally */
+      height: 95%; /* To fill the entire height */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }

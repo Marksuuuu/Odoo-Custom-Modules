@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="test_payable_voucher_container_id">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        @font-face {
+                        font-family: 'CourierPrime-Regular';
+                        src: url('/sales_extension_module/static/src/font/CourierPrime-Regular.ttf')
+                        format('truetype');
+                        font-weight: normal;
+                        font-style: normal;
+                        }
+                        table,tr,th,td,h6{
+                        border: 1px solid white;
+                        font-size:18px;
+                        font-family: 'CourierPrime-Regular', monospace;
+                        }
+                    </style>
+                </xpath>
+                <table style="font-size:24px; text-transform:uppercase;">
+                    <tr style="text-align:center; height: 50px;">
+                        <td colspan="6">
+                            <span>TEAM PACIFIC CORPORATION
+                                <br/>
+                                AP VOUCHER
+                            </span>
+                        </td>
+                    </tr>
+                    <tr style="text-align:center; height: 80px;">
+                        <td colspan="6">&#160;</td>
+                    </tr>
+                    <tr style="text-align:left; margin-top: 60px; font-weight: normal;">
+                        <th style="width:90px;">APV No.:</th>
+                        <th style="width:100px;">
+                            <span t-esc="o.name"/>
+                        </th>
+                        <th style="width:420px;">&#160;</th>
+                        <th style="width:50px;">&#160;</th>
+                        <th style="width:180px">VP DATE</th>
+                        <th style="width:80px;">
+                            <span t-esc="o.date.strftime('%m/%d/%Y')"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>&#160;</td>
+                        <td>Payee</td>
+                        <td>
+                            <div t-if='o.partner_id'>
+                                <span t-field='o.partner_id'/>
+                            </div>
+                        </td>
+                        <th>&#160;</th>
+                        <td>TIN</td>
+                        <td>&#160;</td>
+                    </tr>
+                    <tr>
+                        <td>&#160;</td>
+                        <td>Address</td>
+                        <td>
+                            <div t-if='o.partner_id'>
+                                <span t-field='o.partner_id.street'/>
+                            </div>
+                        </td>
+                        <th>&#160;</th>
+                        <td>TRAN/INVOICE DATE</td>
+                        <td>
+                            <span t-esc="o.invoice_date.strftime('%m/%d/%Y')"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Currency</td>
+                        <td>
+                            <span t-esc="o.currency_id.name"/>
+                        </td>
+                        <td>
+                            <span>INV/REF#&#160;&#160;<span t-esc="o.ref"/>
+                            </span>
+                        </td>
+                        <th>&#160;</th>
+                        <td>DUE DATE</td>
+                        <td>
+                            <span t-esc="o.invoice_date_due.strftime('%m/%d/%Y')"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>
+                            <span>TERMS:&#160;&#160;</span>
+                            <!--				<span t-esc="o.invoice_payment_term_id.name"/>-->
+                            <t t-if="not o.invoice_payment_term_id">
+                                <span t-esc="o.invoice_date_due.strftime('%m/%d/%Y')"/>
+                            </t>
+                            <t t-elif="o.invoice_payment_term_id">
+                                <span t-field="o.invoice_payment_term_id.name"/>
+                            </t>
+                        </td>
+                        <th colspan="1">&#160;</th>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">IN PAYMENT OF THE FOLLOWING:</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            =========================================================================================================================
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center;">
+                            <span>PARTICULAR / DESCRIPTION</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            =========================================================================================================================
+                        </td>
+                    </tr>
+                    <tr style="height: 270px; text-align:center;">
+                        <td colspan="6">
+                            <div t-foreach="o.invoice_line_ids" t-as="val">
+                                <t t-if="val.name">
+                                    <span t-field="val.name"/>&#160;&#160;
+                                </t>
+                                <t t-else="not in val.name">
+                                    <span>&#160;</span>
+                                </t>
+                                <br/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            =========================================================================================================================
+                        </td>
+                    </tr>
+                    <tr style="text-align:center;">
+                        <td>GL CODE</td>
+                        <td colspan="2">|DESCRIPTION</td>
+                        <td>|DEBIT</td>
+                        <td>&#160;</td>
+                        <td>|CREDIT</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            =========================================================================================================================
+                        </td>
+                    </tr>
+                    <tr style="text-align: center; height: 400px; vertical-align: text-top;">
+                        <td>
+                            <div t-foreach="o.line_ids" t-as="val">
+                                <span t-esc="val.account_id.code"/>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <span>
+                                <div t-foreach="o.line_ids" t-as="val">
+                                    <span t-esc="val.account_id.name"/>
+                                </div>
+                            </span>
+                        </td>
+                        <td>
+                            <div t-foreach="o.line_ids" t-as="val">
+                                <t t-if="val.debit_data_payable == 0">
+                                    <span>&#160;</span>
+                                </t>
+                                <t t-else="val.debit_data_payable">
+                                    <h6 t-esc="val.debit_data_payable" t-options='{"widget": "float", "precision": 2}'/>
+                                </t>
+                            </div>
+                        </td>
+                        <td>&#160;</td>
+                        <td>
+                            <div t-foreach="o.line_ids" t-as="val">
+                                <t t-if="val.credit_data_payable == 0">
+                                    <span>&#160;</span>
+                                </t>
+                                <t t-else="val.credit_data_payable">
+                                    <h6 t-esc="val.credit_data_payable"
+                                        t-options='{"widget": "float", "precision": 2}'/>
+                                </t>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">
+                            =========================================================================================================================
+                        </td>
+                    </tr>
+                </table>
+                <table style="margin-top: 90px; text-align: center;">
+                    <tr>
+                        <th style="width:260px;">ACCTS PAYABLE SECTION:</th>
+                        <th style="width:180px;">&#160;</th>
+                        <th style="width:150px;">PREPARED BY:</th>
+                        <th style="width:80px;">&#160;</th>
+                        <th style="width:150px;">REVIEWED BY:</th>
+                        <th style="width:80px;">&#160;</th>
+                        <th style="width:120px;">POSTED BY:</th>
+                    </tr>
+                    <tr style="margin-top:80px;">
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                    </tr>
+                    <tr style="margin-top:80px;">
+                        <td>&#160;</td>
+                        <td>&#160;</td>
+                        <td style="border-bottom: 1px solid black; padding-bottom: 2px; ">JNG</td>
+                        <td>&#160;</td>
+                        <td style="border-bottom: 1px solid black; padding-bottom: 2px; ">OVM</td>
+                        <td>&#160;</td>
+                        <td style="border-bottom: 1px solid black; padding-bottom: 2px; ">&#160;</td>
+                    </tr>
+                </table>
+
+            </t>
+        </template>
+
+        <template id="test_payable_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="sales_extension_module.test_payable_voucher_container_id" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+
+

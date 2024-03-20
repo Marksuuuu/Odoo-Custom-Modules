@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="picking_operations_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        @font-face {
+                        font-family: 'CourierPrime-Regular';
+                        src: url('/approval_module_extension/static/src/font/CourierPrime-Regular.ttf')
+                        format('truetype');
+                        font-weight: normal;
+                        font-style: normal;
+                        }
+                        table,tr,th,td,h6,h1{
+                        font-size:15px;
+                        font-family: 'CourierPrime-Regular';
+                        }
+                        .container {
+                        font-weight: normal;
+                        width: 100%;
+                        }
+                        .container td,
+                        .container th {
+                        width: 150px;
+                        max-width: 150px;
+                        }
+                    </style>
+
+
+                </xpath>
+                <div class="container" id='top-table' style="width: 50%; float: left;">
+                    <h1 style="float: left; font-size: 52px;" t-esc="o.name"/>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Status</th>
+                                <th>Scheduled Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td style="text-transform: uppercase;">
+                                    <span t-esc="o.state"/>
+                                </td>
+                                <td>
+                                    <span t-esc="o.scheduled_date"/>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="container">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Lot Number</th>
+                                <th>Location</th>
+                                <th>System Quantity</th>
+                                <th>Expiry Date</th>
+                                <th>Received Date</th>
+                                <th>Qty to Release</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.move_line_ids_without_package" t-as="val">
+                                <tr>
+                                    <td>
+                                        <t t-esc="val.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.qty_done"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.lot_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.location_dest_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.product_id.qty_available"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.expiry_date"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.received_date"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.qty_done"/>
+                                    </td>
+
+                                    <td>
+                                        <t t-esc="o.note"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <div class="container" id='top-table' style="margin-top: 100px;">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;"><span t-esc="o.custodian.name"/><span style="margin-left: 74px; display: block; border-bottom: 2px solid black; margin-top: 4px; width: 200px"/>Custodian</th>
+                                <th style="text-align: center;"><span t-esc="o.request_by.name"/><span style="margin-left: 74px; display: block; border-bottom: 2px solid black; margin-top: 4px; width: 200px"/>Request By</th>
+                                <th style="text-align: center;"><span t-esc="o.verified_by.name"/><span style="margin-left: 74px; display: block; border-bottom: 2px solid black; margin-top: 4px; width: 200px"/>Verified By</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </t>
+        </template>
+        <template id="picking_operations_container_template_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.user_id.lang"/>
+                    <t t-call="approval_module_extension.picking_operations_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

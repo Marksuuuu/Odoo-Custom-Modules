@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="process_traveler_report_container">
+        <t t-call="web.html_container">
+            <!-- First Page -->
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+                    <xpath expr="//style" position="after">
+                        <style type="text/css">
+                            @font-face {
+                            font-family: 'OpenSans-Regular';
+                            src: url('/mrp_extension/static/src/font/OpenSans-Regular.ttf')
+                            format('truetype');
+                            font-weight: normal;
+                            font-style: normal;
+                            }
+
+                            @font-face {
+                            font-family: 'LibreBarcode39-Regular';
+                            src: url('/mrp_extension/static/src/font/LibreBarcode39-Regular.ttf')
+                            format('truetype');
+                            font-weight: normal;
+                            font-style: normal;
+                            }
+
+                            @font-face {
+                            font-family: 'LibreBarcode39Text-Regular';
+                            src: url('/mrp_extension/static/src/font/LibreBarcode39Text-Regular.ttf')
+                            format('truetype');
+                            font-weight: normal;
+                            font-style: normal;
+                            }
+
+                            html * {
+                            font-family: OpenSans-Regular, sans-serif;
+                            font-size: 12px;
+                            }
+
+                            .table.small-padding td, th{
+                            padding: 5px;
+                            }
+
+                            .barcode {
+                            font-family: 'LibreBarcode39-Regular', Arial, Helvetica, sans-serif;
+                            font-size: 50px;
+                            }
+
+                        </style>
+                    </xpath>
+                    <div class="page">
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="col-7">
+                                <span>
+                                    <img
+                                            style="height: 50px; float: left;"
+                                            src="/mrp_extension/static/src/img/tpc pt logo.png"
+                                    />
+                                </span>
+                            </div>
+
+                            <div class="col-5" style="position: relative;">
+                                <div style="position: absolute; right: 0; top: 0;">
+                                    <p class="barcode" t-field="o.name"></p>
+                                </div>
+                                <div style="position: absolute; right: 0; top: 43px;">
+                                    <p style="font-size: 12px;">*<span t-field="o.name"></span>*
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <table class="table table-bordered small-padding" width="100%" style="margin: 0;">
+                            <tr style="text-align:left;">
+                                <td style="font-weight: normal; width: 90px">CUSTOMER</td>
+                                <td style="font-weight: normal; width: 305px;">
+                                    <span t-field="o.customer_name" style="text-transform: uppercase; "/>
+                                </td>
+                                <td style="font-weight: normal; width: 90px">P.T.#</td>
+                                <td style="font-weight: normal; width: 280px;">
+                                    <!--                                    <span t-field="o.name"/>-->
+
+                                    <t t-set="mo_objects" t-value="o.get_mo()"/>
+                                    <span>
+                                        <t t-esc="mo_objects[-1].name"/>
+                                    </span>
+
+                                    <span>(
+                                        <t t-esc="mo_objects[-1].name"/>
+                                        -
+                                        <t t-esc="mo_objects[0].name"/>)
+                                    </span>
+
+                                </td>
+                                <td style="font-weight: normal; width: 115px;">START DATE</td>
+                                <td style="font-weight: normal; width: 95px;">
+                                    <span t-field="o.mo_start_date"
+                                          t-options='{"widget": "date","format": "dd-MMM-yyyy"}'
+                                          style="text-transform: uppercase; font-size: 11px;"/>
+                                </td>
+                            </tr>
+                            <tr style="text-align:left; ">
+                                <td style="font-weight: normal;">PKG TYPE</td>
+                                <td style="font-weight: normal;">
+                                    <span t-field="o.product_tmpl_id.description" style="text-transform: uppercase;"/>
+                                </td>
+                                <td style="font-weight: normal;">S.O.#</td>
+                                <td style="font-weight: normal;">
+                                    <span t-field="o.origin"/>
+                                </td>
+                                <td style="font-weight: normal;">ASSY.DATE</td>
+                                <td style="font-weight: normal;">
+                                    <span t-field="o.date_planned_start"
+                                          t-options='{"widget": "date","format": "dd-MMM-yyyy"}'
+                                          style="text-transform: uppercase; font-size: 11px;"/>
+                                </td>
+                            </tr>
+                            <tr style="text-align:left; ">
+                                <td style="font-weight: normal;">PROD CAT</td>
+                                <td style="font-weight: normal;">
+                                    <span t-field="o.product_tmpl_id.categ_id.name" style="text-transform: uppercase;"/>
+                                </td>
+                                <td style="font-weight: normal;">PROD NAME / BD NO. / REV.</td>
+                                <td style="font-weight: normal;">
+                                    <span t-field="o.product_tmpl_id.name"/>
+                                </td>
+                                <td style="font-weight: normal;">SHIP-OUT DATE</td>
+                                <td style="font-weight: normal;">
+                                    <!--                                    <span t-field="o.commitment_date"-->
+                                    <!--                                          t-options='{"widget": "date","format": "dd-MMM-yyyy"}'/>-->
+                                    <span t-field="o.date_deadline"
+                                          t-options='{"widget": "date","format": "dd-MMM-yyyy"}'
+                                          style="text-transform: uppercase; font-size: 11px;"/>
+                                </td>
+                            </tr>
+                            <tr style="text-align:left; ">
+                                <td style="font-weight: normal;">LOT #</td>
+                                <td style="font-weight: normal;">
+                                    <span t-field="o.lot_number"/>
+                                </td>
+                                <td style="font-weight: normal;">P.O.#</td>
+                                <td style="font-weight: normal;">
+                                    <span t-field="o.po_number"/>
+                                </td>
+                                <td style="font-weight: normal;">START QTY.</td>
+                                <td style="font-weight: normal;">
+                                    <span t-field="o.product_qty" t-options='{"widget": "float", "precision": 0}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <t t-set="data" t-value="o.get_prod_attr_id()"/>
+                                    <t t-foreach="data" t-as="line">
+                                        <span t-esc="line['attr_name']"/>&#160;(<span t-esc="line['attr_value_name']"/>),
+                                    </t>
+                                </td>
+
+                            </tr>
+                        </table>
+
+
+                        <table class="table table-bordered" width="100%" style="margin: 0; padding: 0;">
+                            <tr colspan="5" height="110px" style="text-align: left;">
+                                <td style="margin: 0; padding: 5px;">
+                                    <span>
+                                        SPECIAL INSTRUCTIONS:
+                                        <span>
+                                            <p t-field="o.remarks"/>
+                                        </span>
+                                        Tray Number(s):
+                                        <t t-if="o.remarks">
+                                            <br/>
+                                        </t>
+                                    </span>
+                                </td>
+                                <td width="30%" style="margin: 0; padding: 5px;">
+                                    SHIP TO:
+                                    <br/>
+                                    <t t-set="ship" t-value="o.get_shipping_address()"/>
+                                    <span>
+                                        <span t-esc="ship[0]"/>
+                                        <span t-esc="ship[1]"/>
+                                        <span t-esc="ship[2]"/>
+                                        <span t-esc="ship[3]"/>
+                                        <span t-esc="ship[4]"/>
+                                        <span t-esc="ship[5]"/>
+                                        <span t-esc="ship[6]"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div t-if="o.workorder_ids">
+                            <div>
+                                <h6 style="margin: 2px;">OPERATIONS:</h6>
+                            </div>
+
+                            <table class="table table-bordered" style="margin: 0; padding:0;">
+                                <tr class="text-center">
+                                    <th>
+                                        OPERATIONS
+                                    </th>
+                                    <th style="width: 80px;">
+                                        SPEC NO.
+                                    </th>
+                                    <th>
+                                        CONDITIONS
+                                    </th>
+                                    <th>
+                                        MACH NO.
+                                    </th>
+                                    <th>
+                                        OPTR NO.
+                                    </th>
+                                    <th>
+                                        DATE START/TIME
+                                    </th>
+                                    <th>
+                                        DATE STOP/TIME
+                                    </th>
+                                    <th>
+                                        QTY IN
+                                    </th>
+                                    <th>
+                                        QTY OUT
+                                    </th>
+                                    <th>
+                                        YLD
+                                    </th>
+                                    <th>
+                                        QA
+                                    </th>
+                                </tr>
+
+                                <tr t-foreach="o.get_operation_details()" t-as="operation_details">
+                                    <td style="padding: 10px 0; text-align: left;">
+                                        <span t-esc="operation_details[0]"/>
+                                    </td>
+                                    <td style="padding: 10px 0; text-align: center;">
+                                        <span t-esc="operation_details[1]"/>
+                                    </td>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="oe_structure"/>
+                    </div>
+                </t>
+            </t>
+
+            <!-- Second Page -->
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+                    <xpath expr="//style" position="after">
+                        <style type="text/css">
+                            @font-face {
+                            font-family: 'OpenSans-Regular';
+                            src: url('/mrp_extension/static/src/font/OpenSans-Regular.ttf')
+                            format('truetype');
+                            font-weight: normal;
+                            font-style: normal;
+                            }
+
+                            @font-face {
+                            font-family: 'LibreBarcode39-Regular';
+                            src: url('/mrp_extension/static/src/font/LibreBarcode39-Regular.ttf')
+                            format('truetype');
+                            font-weight: normal;
+                            font-style: normal;
+                            }
+
+                            @font-face {
+                            font-family: 'LibreBarcode39Text-Regular';
+                            src: url('/mrp_extension/static/src/font/LibreBarcode39Text-Regular.ttf')
+                            format('truetype');
+                            font-weight: normal;
+                            font-style: normal;
+                            }
+
+                            html * {
+                            font-family: OpenSans-Regular, sans-serif;
+                            font-size: 17px;
+                            }
+
+                            .table.small-padding td, th {
+                            padding: 5px;
+                            }
+
+                            .barcode {
+                            font-family: 'LibreBarcode39-Regular', Arial, Helvetica, sans-serif;
+                            font-size: 75px;
+                            }
+                        </style>
+                    </xpath>
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-7">
+                                <span>
+                                    <img
+                                            style="height: 75px; float: left;"
+                                            src="/mrp_extension/static/src/img/tpc pt logo.png"
+                                    />
+                                </span>
+                            </div>
+                            <div class="col-5" style="position: relative;">
+                                <div style="position: absolute; right: 0; top: 0;">
+                                    <p class="barcode" t-field="o.name"></p>
+                                </div>
+                                <div style="position: absolute; right: 0; top: 63px;">
+                                    <p>*<span t-field="o.name" style="font-size: 18px;"></span>*
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h6 style="margin: 20px 20px; font-size: 16px;">...Continuation of First Page</h6>
+                        <h6>
+                            MATERIALS:
+                        </h6>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-9" style="margin-right: 5px;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                    STOCK NO.
+                                                </th>
+                                                <th style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                    DESCRIPTION
+                                                </th>
+                                                <th style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                    LOT NUMBER
+                                                </th>
+                                                <th style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis; ">
+                                                    QUANTITY
+                                                </th>
+                                                <!-- Add more headers if needed -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-if="o.move_raw_ids">
+                                                <t t-foreach="o.move_raw_ids" t-as="raw_line">
+                                                    <t t-if="raw_line.product_tmpl_id.reflect_pt">
+                                                        <tr>
+                                                            <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                                <span t-field="raw_line.product_id"/>
+                                                            </td>
+                                                            <td style="text-align: left; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                                <span t-field="raw_line.product_tmpl_id.description"/>
+                                                            </td>
+                                                            <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                                <!--                                                                <span t-field="raw_line.product_tmpl_id.reflect_pt"/>-->
+                                                            </td>
+                                                            <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                                <span t-field="raw_line.product_qty"
+                                                                      t-options='{"widget": "float", "precision": 2}'/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </tbody>
+                                        <!--                                        <tbody>-->
+                                        <!--                                            <t t-if="o.move_raw_ids">-->
+                                        <!--                                                <t t-foreach="o.move_raw_ids" t-as="raw_line">-->
+                                        <!--                                                    <tr>-->
+                                        <!--                                                        <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis;">-->
+                                        <!--                                                            <span t-field="raw_line.product_id"-->
+                                        <!--                                                                 />-->
+                                        <!--                                                        </td>-->
+                                        <!--                                                        <td style="text-align: left; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis;">-->
+                                        <!--                                                            <span t-field="raw_line.product_tmpl_id.description"-->
+                                        <!--                                                                  />-->
+                                        <!--                                                        </td>-->
+                                        <!--                                                        <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis;">-->
+                                        <!--                                                            <span t-field="raw_line.product_tmpl_id.reflect_pt"/>-->
+                                        <!--                                                        </td>-->
+                                        <!--                                                        <td style="text-align: center; padding: 0; white-space: normal; overflow: hidden; text-overflow: ellipsis;">-->
+                                        <!--                                                            <span t-field="raw_line.product_qty"-->
+                                        <!--                                                                  t-options='{"widget": "float", "precision": 2}' />-->
+                                        <!--                                                        </td>-->
+                                        <!--                                                    </tr>-->
+                                        <!--                                                </t>-->
+                                        <!--                                            </t>-->
+                                        <!--                                        </tbody>-->
+                                        <!--                                        <tbody>-->
+                                        <!--                                            <td style="height: 200px;"></td>-->
+                                        <!--                                            <td/>-->
+                                        <!--                                            <td/>-->
+                                        <!--                                            <td/>-->
+                                        <!--                                        </tbody>-->
+                                    </table>
+                                </div>
+
+                                <div class="col-3">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                    TOP/SIDE MARK INSTRUCTION
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="height: 200px;">
+                                                <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                    <span t-field="o.top_side_mark_instruction"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;">
+                                                    BACK/BOTTOM MARK INSTRUCTION
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="height: 200px;">
+                                                <td style="text-align: center; padding: 1; white-space: normal; overflow: hidden; text-overflow: ellipsis;"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid" style="width: 100%; margin-top: 20px;">
+                            <div class="row">
+                                <div style="width: 270px; margin-right: 10px;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 200px">2/0 DEFECTS</th>
+                                                <th>QTY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div style="width: 270px; margin-right: 10px;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 200px">3/0 DEFECTS</th>
+                                                <th>QTY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <!-- Add more rows as needed -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div style="width: 270px; margin-right: 10px;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 200px">PRE-SEAL DEFECT</th>
+                                                <th>QTY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <!-- Add more rows as needed -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div style="width: 270px; margin-right: 10px;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 200px">4/0 DEFECTS</th>
+                                                <th>QTY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <!-- Add more rows as needed -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div style="width: 270px; margin-right: 10px;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 200px">ISOLATION</th>
+                                                <th>QTY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <!-- Add more rows as needed -->
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 200px">OS</th>
+                                                <th>QTY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <th/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <!-- Add more rows as needed -->
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 200px">FINAL TEST</th>
+                                                <th>QTY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <th/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <tr>
+                                                <td/>
+                                                <td/>
+                                            </tr>
+                                            <!-- Add more rows as needed -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="oe_structure"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

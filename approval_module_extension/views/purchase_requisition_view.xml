@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="purchase_request_view_form_inherit" model="ir.ui.view">
+            <field name="name">purchase_request_view_form_inherit</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+            <field name="arch" type="xml">
+
+                <!--                <xpath expr="//notebook/page/field[@name='line_ids']/tree/field[@name='product_id']"-->
+                <!--                       position="after">-->
+                <!--                    <field name="description" string="Description"/>-->
+                <!--                </xpath>-->
+
+
+                <xpath expr="//notebook/page/field[@name='line_ids']/tree/field[@name='subtotal']"
+                       position="after">
+                    <field name="reference_doc" string="Attachments" widget="many2many_binary"/>
+                    <field name="file_links" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='vendor_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='currency_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='department_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='approver_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='line_ids']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="purchase_requisition_add_notebook" model="ir.ui.view">
+            <field name="name">purchase_requisition_add_notebook</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook" position="inside">
+                    <page string="Attachments">
+                        <field name="pr_attachments" widget="section_and_note_one2many">
+                            <tree string="Attachments" editable="bottom">
+                                <field name="attachments_ids" readonly="1"/>
+                                <field name="product_id" readonly="1"/>
+                                <field name="file_links" widget='url' readonly="1"/>
+                            </tree>
+                            <form string="Products" create="0" edit="0">
+                                <group>
+                                    <field name="attachments_ids" readonly="1"/>
+                                    <field name="file_links" widget='url' readonly="1"/>
+                                </group>
+                            </form>
+                        </field>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

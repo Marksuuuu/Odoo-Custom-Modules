@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="source_trade_non_trade_form_view" model="ir.ui.view">
+            <field name="name">source_trade_non_trade_form</field>
+            <field name="model">source.trade.non.trade</field>
+            <field name="arch" type="xml">
+                <form string="Source Trade Non Trade Form">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="source_trade_n_trade"/>
+                            <h1>
+                                <field name="source_trade_n_trade" placeholder="Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="write_date"/>
+                            </group>
+                            <group>
+                                <field name="create_uid" string="Created by"/>
+                                <field name="write_uid" string="Last edit by"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Sales" attrs="{'invisible': [('source_trade_n_trade', '=', 'Non-Trade')]}">
+                                <field name="source_sales_lines">
+                                    <tree string="Email" editable="bottom">
+                                        <field name="name"/>
+                                        <field name="email"/>
+                                    </tree>
+                                    <form string="Email">
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="email"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Account Receivable">
+                                <field name="source_ar_lines">
+                                    <tree string="Email" editable="bottom">
+                                        <field name="name"/>
+                                        <field name="email"/>
+                                    </tree>
+                                    <form string="Email">
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="email"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="source_trade_non_trade_tree_view" model="ir.ui.view">
+            <field name="name">source_trade_non_trade_tree</field>
+            <field name="model">source.trade.non.trade</field>
+            <field name="arch" type="xml">
+                <tree string="Source Trade Non Trade Tree">
+                    <field name="source_trade_n_trade"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

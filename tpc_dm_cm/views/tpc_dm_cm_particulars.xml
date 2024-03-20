@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="particulars_form_view" model="ir.ui.view">
+            <field name="name">particulars.form</field>
+            <field name="model">tpc.dm.cm.particulars</field>
+            <field name="arch" type="xml">
+                <form string="Form">
+                    <!--                    <header>-->
+                    <!--                        <button name="test_insert" string="Test Insert" class="oe_highlight" states="" type="object"/>-->
+                    <!--                    </header>-->
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="particulars"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="create_uid"/>
+                            </group>
+                            <group>
+                                <field name="write_date"/>
+                                <field name="write_uid"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Description">
+                                <group>
+                                    <field name="description" nolabel="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="particulars_tree_view" model="ir.ui.view">
+            <field name="name">particulars.tree</field>
+            <field name="model">tpc.dm.cm.particulars</field>
+            <field name="arch" type="xml">
+                <tree string="Action">
+                    <field name="create_date"/>
+                    <field name="particulars"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

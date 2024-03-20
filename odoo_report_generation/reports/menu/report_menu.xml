@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <report
+                id="template_invoice_voucher"
+                model="account.move"
+                string="Invoice Voucher - Template 1"
+                name="odoo_report_generation.template_invoice_template_voucher_id"
+                file="odoo_report_generation.template_invoice_template_voucher_id"
+                report_type="qweb-pdf"
+                menu="False"
+        />
+
+        <report
+                id="template_invoice_voucher_2"
+                model="account.move"
+                string="Invoice Voucher - Template 2"
+                name="odoo_report_generation.template_invoice_template_voucher_id_2"
+                file="odoo_report_generation.template_invoice_template_voucher_id_2"
+                report_type="qweb-pdf"
+                menu="False"
+        />
+
+    </data>
+</odoo>

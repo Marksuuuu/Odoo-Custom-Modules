@@ -1,0 +1,20 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="AccordionWidget">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default" t-foreach="widget_data" t-as="item">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" t-attf-data-parent="#accordion" t-attf-href="#collapse_{{item.id}}">
+                            <t t-esc="item.title"/>
+                        </a>
+                    </h4>
+                </div>
+                <div t-attf-id="collapse_{{item.id}}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <t t-raw="item.content"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

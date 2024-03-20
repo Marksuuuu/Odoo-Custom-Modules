@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend" name="mrp_auto_redirect.assets_backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/mrp_auto_redirect/static/src/redirect.js"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="purchase_request_approval_tree" model="ir.ui.view">
+            <field name="name">purchase.request.approval.tree</field>
+            <field name="model">purchase.requisition</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="approval_status in ('cancel','disapprove')"
+                      class="o_purchase_order" decoration-danger="approval_status=='pr_approval'">
+
+
+                    <field name="name"/>
+                    <field name="user_id" optional="show"/>
+                    <field name="ordering_date" optional="show" string="Request Date"/>
+                    <field name="schedule_date" optional="show" string="Request Deadline"/>
+                    <field name="approver_id" string="Name of Approver"/>
+                    <field name="approval_status" string="Status"/>
+                    <field name="disapproval_reason"/>
+
+                    <!--invisible fields-->
+                    <field name="date_end" invisible="1"/>
+                    <field name="origin" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"
+                           invisible="1"/>
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="activity_exception_decoration" widget="activity_exception" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="purchase_request_view_form_inherit" model="ir.ui.view">
+            <field name="name">purchase_request_view_form_inherit</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="show_submit_request" invisible="1"/>
+                    <field name="approval_status" invisible="1"/>
+                    <field name="is_approver" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="to_approve" invisible="1"/>
+                    <field name="to_approve_po" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//header" position="after">
+                    <div style="background-color:#D5E1F4"
+                         attrs="{'invisible':[('state', '!=', 'to_approve')]}">
+                        <span style="margin:20px;">This document needs to be approved.</span>
+                    </div>
+                </xpath>
+
+<!--                <xpath expr="//field[@name='state']" position="replace">-->
+<!--                    <field name="state" widget="statusbar" statusbar_visible="draft,draft,in_progress,to_approve"-->
+<!--                           attrs="{'invisible': [('is_quantity_copy', '=', 'none')]}"/>-->
+<!--                </xpath>-->
+
+<!--                <xpath expr="//field[@name='state_blanket_order']" position="replace">-->
+<!--                    <field name="state_blanket_order" widget="statusbar" statusbar_visible="ongoing,to_approve"-->
+<!--                           attrs="{'invisible': [('is_quantity_copy', '!=', 'none')]}"/>-->
+<!--                </xpath>-->
+
+                <xpath expr="//header" position="replace">
+                    <header>
+                        <button name="submit_for_approval" type="object"
+                                string="Submit Request"
+                                class="oe_highlight"
+                                confirm="Submit Purchase Request to Initial Approver?"
+                                attrs="{'invisible': [('show_submit_request', '=', False)]}"/>
+                        <button name="%(action_change_approvers_pr_view)d" type="action"
+                                states='to_approve'
+                                string="Change Approver"
+                                class="oe_highlight"/>
+                        <button name="approve_request" type="object"
+                                string="Approve Request"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', ('approval_status', '!=', 'pr_approval'), ('is_approver', '=', False)]}"/>
+                        <button name="%(action_disapprove_pr_reason_view)d" type="action"
+                                string="Disapprove Request"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', ('approval_status', '!=', 'pr_approval'), ('is_approver', '=', False)]}"/>
+
+                        <button name="%(purchase_requisition.action_purchase_requisition_to_so)d" type="action"
+                                string="New Quotation"
+                                attrs="{'invisible': [('state', '!=', 'open')]}"/>
+                        <button name="%(purchase_requisition.action_purchase_requisition_to_so)d" type="action"
+                                string="New Quotation" class="btn-primary"
+                                attrs="{'invisible': [('state', 'not in', ('in_progress', 'ongoing', 'to_approve', 'approved'))]}"/>
+                        <button name="action_in_progress" states="draft" string="Confirm" type="object"
+                                class="btn-primary"/>
+                        <button name="action_open" states="in_progress,to_approve" string="Validate" type="object"
+                                class="btn-primary"/>
+                        <button name="action_done" states="open,ongoing,to_approve" string="Close" type="object"
+                                class="btn-primary"/>
+                        <button name="action_draft" states="cancel" string="Reset to Draft" type="object"/>
+                        <button name="action_cancel" states="draft,in_progress,ongoing,'to_approve" string="Cancel" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,draft,in_progress,to_approve"
+                           attrs="{'invisible': [('is_quantity_copy', '=', 'none')]}"/>
+                        <field name="state_blanket_order" widget="statusbar" statusbar_visible="ongoing,to_approve"
+                           attrs="{'invisible': [('is_quantity_copy', '!=', 'none')]}"/>
+                    </header>
+                </xpath>
+
+
+
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="department_id"/>
+                    <field name="approver_id"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="purchase_request_to_approve" model="ir.actions.act_window">
+            <field name="name">Purchase Requests</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="purchase_request_approval_tree"/>
+            <field name="domain">[('to_approve','=',True)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Purchase request to approve
+                </p>
+            </field>
+        </record>
+
+        <record id="purchase_requests_approval_dashboard" model="ir.actions.act_window">
+            <field name="name">Purchase Request Approval Dashboard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="purchase_request_approval_tree"/>
+            <field name="domain">[('to_approve','=',True)]</field>
+        </record>
+
+        <menuitem action="purchase_requests_approval_dashboard" id="menu_purchase_requests_approval_dashboard"
+                  parent="purchase.menu_procurement_management"
+                  sequence="17"/>
+
+        <record model="ir.actions.act_window" id="purchase_requisition.action_purchase_requisition">
+            <field name="name">Purchase Agreements</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" ref="purchase_requisition.view_purchase_requisition_tree"/>
+            <field name="search_view_id" ref="purchase_requisition.view_purchase_requisition_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Start a new purchase agreement
+                </p>
+                <p>
+                    Example of purchase agreements include call for tenders and blanket orders.
+                </p>
+                <p>
+                    In a call for tenders, you can record the products you need to buy
+                    and generate the creation of RfQs to vendors. Once the tenders have
+                    been registered, you can review and compare them and you can
+                    validate some and cancel others.
+                </p>
+                <p>
+                    For a blanket order, you can record an agreement for a specifc period
+                    (e.g. a year) and you order products within this agreement, benefiting
+                    from the negociated prices.
+                </p>
+            </field>
+        </record>
+    </data>
+
+</odoo>

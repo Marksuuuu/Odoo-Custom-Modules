@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="account_form_inherit" model="ir.ui.view">
+            <field name="name">account_extension_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="team_accounting.view_product_form_inherit"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='print_for_invoice_voucher']" position="replace">
+                    <button name="print_invoice_voucher" type="object" class="oe_highlight"
+                            string="Print Invoice Voucher"
+                            attrs="{'invisible': ['|', '|', ('is_debit_note', 'not in', (True, False)), ('type', 'not in', 'in_invoice, out_invoice'),('state', 'not in', 'posted')]}"/>
+                </xpath>
+
+                <xpath expr="//button[@name='print_invoice_voucher']" position="after">
+                    <button name="print_credit_voucher_normal" type="object" class="oe_highlight"
+                            string="Print Credit Voucher (With Fee) Borderless"
+                            attrs="{'invisible': ['|', '|', ('is_debit_note', '=', True), ('type', 'not in', 'out_refund'),('state', 'not in', 'posted')]}"/>
+                </xpath>
+
+                <xpath expr="//button[@name='print_credit_voucher_normal']" position="after">
+                    <button name="print_debit_voucher_normal" type="object" class="oe_highlight"
+                            string="Print Debit Voucher (With Fee) Borderless"
+                            attrs="{'invisible': ['|', ('is_debit_note', '=', False), ('state', 'not in', 'posted')]}"/>
+                </xpath>
+
+                <xpath expr="//button[@name='print_credit_voucher_normal']" position="after">
+                    <button name="print_debit_credit_voucher_without_fee" type="object" class="oe_highlight"
+                            string="Print Debit / Credit Voucher (W/O Fee) Borderless"
+                            attrs="{'invisible': ['|', ('is_debit_note', '=', False), ('state', 'not in', 'posted')]}"/>
+                </xpath>
+
+                <xpath expr="//button[@name='print_credit_voucher_normal']" position="after">
+                    <button name="print_debit_credit_voucher_without_fee" type="object" class="oe_highlight"
+                            string="Print Debit / Credit Voucher (W/O Fee) Borderless"
+                            attrs="{'invisible': ['|', '|', ('is_debit_note', '=', True), ('type', 'not in', 'out_refund'),('state', 'not in', 'posted')]}"/>
+                </xpath>
+                <xpath expr="//button[@name='print_for_payable_voucher']" position="replace">
+                    <button name="print_payable_voucher_ext" type="object" class="oe_highlight"
+                            string="Print Payable Voucher"
+                            attrs="{'invisible': ['|',('type', 'not in', 'in_invoice'),('state', 'not in', 'posted')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="team_accounting_inherit_name" model="ir.ui.view">
+            <field name="name">team_accounting_inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="team_accounting.view_product_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='print_for_credit_note_voucher']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('is_debit_note', '=', True), ('type', 'not in',
+                        'out_refund'),('state', 'not in', 'posted')]}
+                    </attribute>
+                </xpath>
+                <xpath expr="//button[@name='print_for_credit_note_voucher_v2']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('is_debit_note', '=', True), ('type', 'not in',
+                        'out_refund'),('state', 'not in', 'posted')]}
+                    </attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- Add "Child Lot" to supplier invoices -->
+        <record id="view_invoice_child_lot" model="ir.ui.view">
+            <field name="name">view_invoice_child_lot</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="before">
+                    <field name="child_lot"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="account_test_form_inherit" model="ir.ui.view">
+            <field name="name">account_extension_form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_draft']" position="before">
+                    <!--                    <button name="get_qty_done_from_mo" type="object" class="oe_highlight"-->
+                    <!--                            string="TESTING"/>-->
+                </xpath>
+                <!--                <xpath expr="//button[@name='button_draft']" position="replace">-->
+                <!--                    <button name="check_for_microchips" type="object" class="oe_highlight"-->
+                <!--                            string="Test"/>-->
+                <!--                </xpath>-->
+                <xpath expr="//field[@name='invoice_date']" position="attributes">
+                    <!--                    <attribute name="required">False</attribute>-->
+                </xpath>
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="hawb"/>
+                    <field name="forwarder"/>
+                    <field name="total_cartons"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

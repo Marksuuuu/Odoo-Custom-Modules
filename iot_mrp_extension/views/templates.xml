@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend" name="id_iot_mrp_extension" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/iot_mrp_extension/static/src/js/main.js"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

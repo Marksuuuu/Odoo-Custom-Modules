@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+                id="purchase_request_report_id"
+                model="purchase.requisition"
+                string="Purchase Request Form"
+                name="approval_module_extension.purchase_requests_container_template_id"
+                file="approval_module_extension.purchase_requests_container_template_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="purchase_order_report_id"
+                model="purchase.order"
+                string="Purchase Order"
+                name="approval_module_extension.purchase_order_container_template_id"
+                file="approval_module_extension.purchase_order_container_template_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="inventory_invoice_voucher"
+                model="stock.picking"
+                string="Invoice Voucher"
+                name="approval_module_extension.inventory_invoice_template_voucher_id"
+                file="approval_module_extension.inventory_invoice_template_voucher_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="picking_operations"
+                model="stock.picking"
+                string="Picking Operations "
+                name="approval_module_extension.picking_operations_container_template_id"
+                file="approval_module_extension.picking_operations_container_template_id"
+                report_type="qweb-pdf"
+                menu="False"
+        />
+
+    </data>
+</odoo>

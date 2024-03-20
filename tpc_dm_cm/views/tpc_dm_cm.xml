@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="tpc_dm_cm_kanban_view" model="ir.ui.view">
+            <field name="name">tpc.dm.cm.kanban</field>
+            <field name="model">tpc.dm.cm</field>
+            <field name="arch" type="xml">
+                <kanban create="false" edit="false">
+                    <templates>
+                        <t t-name="kanban-box" style="min-height: 200px; max-height: 100px; max-width: 500px;">
+
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="row align-items-center">
+
+                                    <div t-if="record.state.raw_value == 'approved'"
+                                         class="col-5 justify-content-center">
+                                        <lord-icon
+                                                src="https://cdn.lordicon.com/kjwoqegd.json"
+                                                trigger="loop"
+                                                delay="9000"
+                                                state="hover-up"
+                                                style="width:150px;height:150px">
+                                        </lord-icon>
+                                    </div>
+
+                                    <div t-if="record.state.raw_value == 'disapprove'"
+                                         class="col-5 justify-content-center">
+                                        <lord-icon
+                                                src="https://cdn.lordicon.com/kjwoqegd.json"
+                                                trigger="loop"
+                                                delay="9000"
+                                                style="width:150px;height:150px">
+                                        </lord-icon>
+                                    </div>
+
+                                    <div t-if="record.state.raw_value == 'to_approve'"
+                                         class="col-5 justify-content-center">
+                                        <lord-icon
+                                                src="https://cdn.lordicon.com/ghhwiltn.json"
+                                                trigger="loop"
+                                                delay="9000"
+                                                style="width:150px;height:150px">
+                                        </lord-icon>
+                                    </div>
+
+                                    <div t-if="record.state.raw_value == 'billed'"
+                                         class="col-5 justify-content-center">
+                                        <lord-icon
+                                                src="https://cdn.lordicon.com/ofklvwkr.json"
+                                                trigger="loop"
+                                                delay="9000"
+                                                style="width:150px;height:150px">
+                                        </lord-icon>
+                                    </div>
+
+				    <div t-if="record.state.raw_value == 'paid'"
+                                         class="col-5 justify-content-center">
+                                        <lord-icon
+                                            src="https://cdn.lordicon.com/ksdjzsym.json"
+                                            trigger="loop"
+                                            delay="9000"
+                                            style="width:150px;height:150px">
+                                        </lord-icon>
+                                    </div>
+
+                                    <div t-if="record.state.raw_value == 'cancel'"
+                                         class="col-5 justify-content-center">
+                                        <lord-icon
+                                                src="https://cdn.lordicon.com/krenhavm.json"
+                                                trigger="loop"
+                                                delay="9000"
+                                                style="width:150px;height:150px">
+                                        </lord-icon>
+                                    </div>
+
+
+                                    <div class="col-7">
+
+                                        <div class="o_primary mb-3 mt-2">
+                                            <a type="object" name="billing_request">
+                                                <h1>
+                                                    <field name="state" widget="text" options="{'sanitize': True}"/>
+                                                </h1>
+                                            </a>
+                                        </div>
+
+                                        <div class="row align-items-center">
+
+                                            <div t-if="record.state.raw_value in ['approved', 'disapprove', 'to_approve', 'cancel']"
+                                                 class="col-6 mb-3">
+                                                <button class="btn btn-primary" name="get_action_request" type="object">
+                                                    NEW REQUEST
+                                                </button>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <div t-if="record.total_count.raw_value > 0">
+                                                    <a type="object" name="view_for_review">
+                                                        <span style="font-size:13px; font-weight:bold; font-style: italic;">
+                                                            <span>TO REVIEW:
+                                                                <field name="total_count"/>
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <div t-else="record.total_count.raw_value == 0">
+                                                    <a type="object" name="view_for_review">
+                                                        <span style="font-size:13px; font-weight:bold; font-style: italic;">
+                                                            <span>TO REVIEW:
+                                                                <field name="total_count"/>
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record id="tpc_dm_cm_form_view" model="ir.ui.view">
+            <field name="name">tpc_dm_cm_form</field>
+            <field name="model">tpc.dm.cm</field>
+            <field name="arch" type="xml">
+                <form string="Form">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="state"/>
+                            <h1>
+                                <field name="state" placeholder="Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="state"/>
+                                <button name="count" string="COUNT" type="object"></button>
+                                <button name="get_names" string="NAME" type="object"></button>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tpc_dm_cm_tree_view" model="ir.ui.view">
+            <field name="name">tpc_dm_cm_tree</field>
+            <field name="model">tpc.dm.cm</field>
+            <field name="arch" type="xml">
+                <tree string="Tree">
+                    <field name="state"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

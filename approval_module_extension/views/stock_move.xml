@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="stock_move_line_add_attachments" model="ir.ui.view">
+            <field name="name">stock_move_line_add_attachments</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+
+                <!-- Use XPath to insert the new field after the existing field -->
+                <xpath expr="//field[@name='product_uom_id']" position="after">
+                    <!-- Define the new field -->
+                    <field name="reference_doc" string="Attachments" widget="many2many_binary" required="1"/>
+                    <field name="file_links" invisible="1"/>
+                </xpath>
+
+            </field>
+        </record>
+
+         <record id="stock_move_line_o2m_inherit_add_attachment" model="ir.ui.view">
+            <field name="name">stock_move_line_o2m_inherit_add_attachment</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_uom_id']" position="after">
+                    <field name="reference_doc" widget="many2many_binary"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

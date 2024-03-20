@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_freight_line_tree_1" model="ir.ui.view">
+            <field name="name">_view_tree</field>
+            <field name="model">mrp.freight.line</field>
+            <field name="arch" type="xml">
+                <tree string="Freight Tree" create="false" edit="false">
+                    <field name="name"/>
+                    <field name="stock_no"/>
+                    <field name="delivery_type_1"/>
+                    <field name="shipment_weight" attrs="{'invisible':[('delivery_type_1', '=', 'sea')]}"/>
+                    <field name="shipment_volume" attrs="{'invisible':[('delivery_type_1', '=', 'air')]}"/>
+                    <field name="total_percentage"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="mrp_freight_line_form_1" model="ir.ui.view">
+            <field name="name">mrp_freight_view_form_1</field>
+            <field name="model">mrp.freight.line</field>
+            <field name="arch" type="xml">
+                <form string="Freight Form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="delivery_type_1"/>
+                            </group>
+                            <group>
+                                <field name="shipment_weight" attrs="{'invisible':[('delivery_type_1', '=', 'sea')]}"/>
+                                <field name="shipment_volume" attrs="{'invisible':[('delivery_type_1', '=', 'air')]}"/>
+                                <field name="total_cost"/>
+                                <field name="total_percentage"/>
+                                <field name="total_cost"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <record id="mrp_freight_line_action_1" model="ir.actions.act_window">
+            <field name="name">Stock Freight</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.freight.line</field>
+            <field name="view_mode">tree,form</field>
+             <field name="context">{'group_by':'name'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+         </record>
+
+
+        <menuitem name="Freight Data" id="mrp_freight_line_menu" parent="stock.menu_stock_inventory_control" action="mrp_freight_line_action_1"/>
+
+    </data>
+</odoo>

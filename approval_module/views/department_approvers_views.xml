@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="department_approvals_tree" model="ir.ui.view">
+            <field name="name">department.approvers.tree</field>
+            <field name="model">department.approvers</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="dept_name"/>
+                    <field name="approval_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_set_approvers_form" model="ir.ui.view">
+            <field name="name">department.approvers.form</field>
+            <field name="model">department.approvers</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="dept_name" string="Department" class="oe_edit_only"/>
+                            <h1>
+                                <field name="dept_name"/>
+                            </h1>
+                        </div>
+                        <field name="approval_type"/>
+                        <br> </br>
+                        <field name="no_of_approvers" style="width: 50%"/>
+                        <notebook>
+                            <page string="First Approver">
+                                <field name="set_first_approvers">
+                                    <tree editable="bottom">
+                                        <field name="first_approver" string="Name"/>
+                                        <field name="approver_email" attrs="{'invisible': [('type', '!=', 'first')]}"/>
+                                         <field name="type" optional="hide"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+                            <page string="Second Approver" attrs="{'invisible': [('no_of_approvers', '&lt;', '2')]}">
+                                <field name="set_second_approvers">
+                                    <tree editable="bottom">
+                                        <field name="second_approver" string="Name"/>
+                                        <field name="approver_email" attrs="{'invisible': [('type', '!=', 'second')]}"/>
+                                        <field name="type" optional="hide"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+                            <page string="Third Approver" attrs="{'invisible': [('no_of_approvers', '&lt;', '3')]}">
+                                <field name="set_third_approvers">
+                                    <tree editable="bottom">
+                                        <field name="third_approver" string="Name"/>
+                                        <field name="approver_email" attrs="{'invisible': [('type', '!=', 'third')]}"/>
+                                        <field name="type" optional="hide"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+                            <page string="Fourth Approver" attrs="{'invisible': [('no_of_approvers', '&lt;', '4')]}">
+                                <field name="set_fourth_approvers">
+                                    <tree editable="bottom">
+                                        <field name="fourth_approver" string="Name"/>
+                                        <field name="approver_email" attrs="{'invisible': [('type', '!=', 'fourth')]}"/>
+                                        <field name="type" optional="hide"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+                            <page string="Fifth Approver" attrs="{'invisible': [('no_of_approvers', '&lt;', '5')]}">
+                                <field name="set_fifth_approvers">
+                                    <tree editable="bottom">
+                                        <field name="fifth_approver" string="Name"/>
+                                        <field name="approver_email" attrs="{'invisible': [('type', '!=', 'fifth')]}"/>
+                                        <field name="type" optional="hide"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_department_approvers" model="ir.actions.act_window">
+            <field name="name">Department Approvers</field>
+            <field name="res_model">department.approvers</field>
+<!--            <field name="view_id" ref="purchase_approval_types_tree"/>-->
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Generate Customer Details
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

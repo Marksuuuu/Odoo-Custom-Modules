@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+                string="Process Traveller"
+                id="action_report_production_order"
+                model="mrp.production"
+                name="mrp_extension.process_traveler_report_container"
+                file="mrp_extension.report.mrp_production_templates"
+                report_type="qweb-pdf"
+                print_report_name="'Production Order - %s' % object.name"
+        />
+    </data>
+</odoo>

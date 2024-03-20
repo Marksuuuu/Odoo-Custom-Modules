@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="stock_move_line_o2m_inherit" model="ir.ui.view">
+            <field name="name">stock_move_line_o2m_inherit</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="before">
+                    <field name="check_if_shipping_or_transfer" invisible="1"/>
+                    <field name="manufacturing_order"
+                           attrs="{'column_invisible': ['|', '|', ('parent.check_if_wiv', '=', True), ('parent.check_if_pick', '=', True)]}"/>
+                    <field name="sales_order"
+                           attrs="{'column_invisible': ['|', '|', ('parent.check_if_wiv', '=', True), ('parent.check_if_else', '=', True), ('parent.check_if_pick', '=', True)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='location_id']" position="after">
+                    <field name="client_order_ref"
+                           attrs="{'column_invisible': ['|', '|', ('parent.check_if_wiv', '=', True), ('parent.check_if_else', '=', True), ('parent.check_if_pick', '=', True)]}"/>
+                    <field name="mrp_qty_done"
+                           attrs="{'column_invisible': ['|', '|', ('parent.check_if_wiv', '=', True), ('parent.check_if_else', '=', True), ('parent.check_if_pick', '=', True)]}"/>
+                    <field name="date_code"
+                           attrs="{'column_invisible': ['|', '|', ('parent.check_if_wiv', '=', True), ('parent.check_if_else', '=', True), ('parent.check_if_pick', '=', True)]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='product_uom_id']" position="after">
+                    <field name="expiry_date"
+                           attrs="{'column_invisible': [('parent.check_if_pick', '=', False)]}"/>
+                    <field name="received_date"
+                           attrs="{'column_invisible': [('parent.check_if_pick', '=', False)]}"/>
+                </xpath>
+
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

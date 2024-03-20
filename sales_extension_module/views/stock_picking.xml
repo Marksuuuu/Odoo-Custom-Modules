@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+<!--        <record id="sales_extension_form_inherit" model="ir.ui.view">-->
+        <!--            <field name="name">sales_extension_form</field>-->
+        <!--            <field name="model">stock.picking</field>-->
+        <!--            <field name="inherit_id" ref="stock.view_picking_form"/>-->
+        <!--            <field name="priority" eval="8"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <xpath expr="//field[@name='origin']" position="after">-->
+        <!--                    <field name="is_shipping" invisible="0"/>-->
+
+        <!--                </xpath>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+
+        <record id="stock_picking_extension_form_inherit" model="ir.ui.view">
+            <field name="name">stock_picking_extension_form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="delivery.view_picking_withcarrier_out_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_cancel']" position="after">
+<!--                    <button type="object" name="check_so" string="CHECK"/>-->
+                </xpath>
+                <xpath expr="//group[@name='carrier_data']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('is_transfer_voucher', '=', False)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='carrier_id']" position="after">
+                    <field name="is_transfer_voucher" invisible="1"/>
+                    <!--                    <field name="flt_vessel"/>-->
+                </xpath>
+                <!--                <xpath expr="//field[@name='origin']" position="replace">-->
+                <!--                    <field name="origin" widget="many2many_tags"/>-->
+                <!--                </xpath>-->
+                <xpath expr="//label[@for='weight']" position="attributes">
+                    <attribute name="string">Total Weight</attribute>
+                </xpath>
+                <xpath expr="//label[@for='shipping_weight']" position="attributes">
+                    <attribute name="string">Total Cartons</attribute>
+                </xpath>
+                <xpath expr="//field[@name='shipping_weight']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+                <xpath expr="//field[@name='location_dest_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'not in', 'assigned')]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='weight']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+

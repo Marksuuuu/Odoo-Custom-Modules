@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_mrp_freight,mrp.freight.user,model_mrp_freight,,1,1,1,1
+access_mrp_freight,mrp.freight,model_mrp_freight,,1,1,1,1
+
+access_mrp_freight_line,mrp.freight.line.user,model_mrp_freight_line,,1,1,1,1
+access_mrp_freight_line,mrp.freight.line,model_mrp_freight_line,,1,1,1,1
+

@@ -1,0 +1,42 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+
+access_tpc_dm_cm,access.tpc.dm.cm,model_tpc_dm_cm,,1,1,1,1
+
+
+access_tpc_dm_cm_line,access.tpc.dm.cm.line,model_tpc_dm_cm_line,,1,1,1,1
+
+access_tpc_dm_cm_request,access.tpc.dm.request,model_tpc_dm_cm_request,,1,1,1,1
+
+
+access_tpc_dm_cm_request_line,access.tpc.dm.request.line,model_tpc_dm_cm_request_line,,1,1,1,1
+
+
+access_tpc_dm_cm_request_email,access.tpc.dm.request.email,model_tpc_dm_cm_request_email,,1,1,1,1
+
+
+access_tpc_dm_cm_particulars,access.tpc.dm.particulars,model_tpc_dm_cm_particulars,,1,1,1,1
+
+
+access_email_control,access.email.control,model_email_control,,1,1,1,1
+
+
+access_source_trade_non_trade,access.source.trade.non.trade,model_source_trade_non_trade,,1,1,1,1
+
+
+access_source_sales_line,access.source.sales.line,model_source_sales_line,,1,1,1,1
+
+
+access_source_trade_non_trade_line,access.source.trade.non.trade.line,model_source_trade_non_trade_line,,1,1,1,1
+
+
+access_account_move_line_dm_cm, access.account.move.line.dm.cm,model_account_move_line_dm_cm,,1,1,1,1
+
+access_file_types, access.file.types,model_file_types,,1,1,1,1
+
+
+access_account_move_attachments, access.account.move.attachments,model_account_move_attachments,,1,1,1,1
+
+
+
+

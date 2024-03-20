@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <templates id="template" xml:space="preserve">
+            <t t-name="web.WebClient" t-extend="web.WebClient">
+                <t t-jquery="script" t-lang="js" t-src="/mrp_auto_redirect/static/src/js/custom_redirect.js"/>
+            </t>
+        </templates>
+    </data>
+</odoo>

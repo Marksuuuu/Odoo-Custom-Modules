@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="purchase_approval_view" model="ir.ui.view">
+        <field name="name">purchase.approval.kanban</field>
+        <field name="model">purchase.approval.types</field>
+        <field name="arch" type="xml">
+            <kanban create="0">
+                <templates>
+                    <t t-name="kanban-box">
+
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="row">
+                                <div t-if="record.name.raw_value == 'Purchase Requests'" class="col-3 justify-content-center">
+                                    <img src="/approval_module/static/src/img/purchase.png" alt="avatar"
+                                         class="rounded-circle img-fluid"
+                                         style="width: 100px;"/>
+                                </div>
+                                <div t-if="record.name.raw_value == 'Purchase Orders'" class="col-3 justify-content-center">
+                                    <img src="/approval_module/static/src/img/purchase_r.png" alt="avatar"
+                                         class="rounded-circle img-fluid"
+                                         style="width: 100px;"/>
+                                </div>
+                                <div class="col-9">
+
+                                    <div class="o_primary mb-5 mt-2">
+
+                                        <a type="object" name="view_purchase">
+                                            <h1>
+                                                <field name="name"/>
+                                            </h1>
+                                        </a>
+                                    </div>
+
+
+                                    <div>
+                                        <div class="row">
+                                            <div t-if="record.name.raw_value == 'Purchase Requests'" class="col-6 mb-3">
+                                                <button class="btn btn-primary" name="get_action_purchase_request"
+                                                        type="object">
+                                                    NEW REQUEST
+                                                </button>
+                                            </div>
+
+                                             <div t-if="record.name.raw_value == 'Purchase Orders'" class="col-6 mb-3">
+                                                <button class="btn btn-primary" name="get_action_purchase_order"
+                                                        type="object">
+                                                    NEW REQUEST
+                                                </button>
+                                            </div>
+                                            <div class="col-6">
+                                                <div t-if="record.purchase_request_count.raw_value &gt; 0 and record.name.raw_value == 'Purchase Requests'"
+                                                     class="row">
+                                                    <div class="col-9 align-items-center">
+                                                        <a type="object" name="view_purchase_for_review">
+                                                            <h5>TO REVIEW :</h5>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <h5>
+                                                            <field name="purchase_request_count"/>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+
+                                                <div t-if="record.purchase_order_count.raw_value &gt; 0 and record.name.raw_value == 'Purchase Orders'"
+                                                     class="row">
+                                                    <div class="col-9">
+                                                        <a type="object" name="view_purchase_for_review">
+                                                            <h5>TO REVIEW :</h5>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3 align-items-center">
+                                                        <h5>
+                                                            <field name="purchase_order_count"/>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="approval_action" model="ir.actions.act_window">
+        <field name="name">Approvals</field>
+        <field name="res_model">purchase.approval.types</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="purchase_approval_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="approvals_root"
+              name="Approvals"
+              sequence="50"/>
+
+
+    <menuitem id="approvals_menu_root"
+              name="Dashboard"
+              parent="approvals_root"
+              action="approval_action"
+              sequence="1"/>
+
+    <menuitem id="approvals_menu_approve"
+              name="For Approval"
+              parent="approvals_root"
+              sequence="2"/>
+
+    <menuitem id="approvals_menu_conf"
+              name="Configuration"
+              parent="approvals_root"
+              sequence="10"/>
+
+    <menuitem id="menu_purchase_orders_action"
+              name="Purchase Orders"
+              parent="approvals_menu_approve"
+              action="view_purchase_order"
+              sequence="2"/>
+
+    <menuitem id="menu_purchase_request_action"
+              name="Purchase Requests"
+              parent="approvals_menu_approve"
+              action="purchase_request_to_approve"
+              sequence="1"/>
+
+    <menuitem id="menu_approval_type_action"
+              name="Approval Types"
+              parent="approvals_menu_conf"
+              action="action_approval_type"
+              sequence="2"/>
+
+    <menuitem id="menu_action_department_approvers"
+              name="Department Approvers"
+              parent="approvals_menu_conf"
+              action="action_department_approvers"
+              sequence="3"/>
+
+    <menuitem id="menu_action_view_change_history"
+              name="Reason for Change History"
+              parent="approvals_menu_conf"
+              action="action_view_change_history"
+              sequence="4"/>
+
+</odoo>

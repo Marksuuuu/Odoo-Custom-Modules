@@ -1,0 +1,200 @@
+<templates>
+   <t t-name="SaleCust">
+       <div>
+           <div>
+               <h3>
+                   P and L
+               </h3>
+           </div>
+           <div>
+               <div class="filter_view_tb"></div>
+           </div>
+           <br></br>
+           <div>
+               <div class="table_view"></div>
+           </div>
+       </div>
+   </t>
+   <t t-name="SaleTable">
+       <div>
+           <div class="table_main_view">
+               <div style="float-left">
+                   <td><button type="button" class="btn btn-primary" id="pdf"
+                            style="position: relative;height:30px;color:white;background-color: #00A0AD;border-color: #00A0AD; padding:3px;">
+                        Print (PDF)
+                    </button></td>
+                   <td><button type="button" class="btn btn-danger" id="test1"
+                            style="position: relative;height:30px;color:white;background-color: #00A0AD;border-color: #00A0AD; padding:3px;">
+                        Print (XLSX)
+                    </button></td>
+               </div>
+               <table cellspacing="0" width="100%">
+                   <thead>
+                        <tr>
+                            <th>Sale Order</th>
+                            <th>SBU</th>
+                            <th>CUSTOMER</th>
+                            <th>PKG</th>
+                            <th>DEVICES</th>
+                            <th>DESCRIPTION</th>
+                            <th>WIP ENTITY NAME</th>
+                            <th>START QUANTITY</th>
+                            <th>RUNNING QUANTITY</th>
+                            <th>STATUS</th>
+                            <th>START DATE</th>
+                            <th>ORIG SOD</th>
+                        </tr>
+                   </thead>
+                   <tbody>
+                       <t t-foreach="report_lines" t-as="data">
+                           <tr style="border: 1.5px solid black;" class="gl-line"
+                                data-toggle="collapse"
+                                t-att-data-account-id="data['id']"
+                                t-attf-data-target=".a{{data['id']}}">
+                                <td style="border: 0px solid black;">
+
+                                    <t t-esc="data['sale_order']"/>
+                                    <i class="fa fa-caret-down" role="img" aria-label="Unfolded" title="Unfolded"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['sbu']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['CUSTOMER']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['pkg']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['DEVICES']"/>
+                                </td>
+
+
+                                <td>
+                                    <t t-esc="data['description']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['WIP_ENTITY_NAME']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['START_QUANTITY']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['RUNNING_QUANTITY']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['STATUS']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['START_DATE']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['ORIG_SOD']"/>
+                                </td>
+
+                            </tr>
+                       </t>
+                   </tbody>
+               </table>
+           </div>
+       </div>
+   </t>
+       <div>
+           <div>
+               <h3>
+                   P and L
+               </h3>
+           </div>
+           <div>
+               <div class="filter_view_tb_new"/>
+           </div>
+           <br/>
+           <div>
+               <div class="table_view_new"/>
+           </div>
+       </div>
+   <t t-name="SaleTableNew">
+       <div>
+           <div class="table_main_view">
+               <div style="float-left">
+                   <td><button type="button" class="btn btn-primary" id="pdf"
+                            style="position: relative;height:30px;color:white;background-color: #00A0AD;border-color: #00A0AD; padding:3px;">
+                        Print (PDF)
+                    </button></td>
+                   <td><button type="button" class="btn btn-danger" id="test1"
+                            style="position: relative;height:30px;color:white;background-color: #00A0AD;border-color: #00A0AD; padding:3px;">
+                        Print (XLSX)
+                    </button></td>
+               </div>
+               <table cellspacing="0" width="100%">
+                   <thead>
+                        <tr>
+                            <th>Sale Order</th>
+                            <th>SBU</th>
+                            <th>CUSTOMER</th>
+                            <th>PKG</th>
+                            <th>DEVICES</th>
+                            <th>DESCRIPTION</th>
+                            <th>WIP ENTITY NAME</th>
+                            <th>START QUANTITY</th>
+                            <th>RUNNING QUANTITY</th>
+                            <th>STATUS</th>
+                            <th>START DATE</th>
+                            <th>ORIG SOD</th>
+                        </tr>
+                   </thead>
+                   <tbody>
+                       <t t-foreach="report_lines_data" t-as="data">
+                           <tr style="border: 1.5px solid black;" class="gl-line"
+                                data-toggle="collapse"
+                                t-att-data-account-id="data['id']"
+                                t-attf-data-target=".a{{data['id']}}">
+                                <td style="border: 0px solid black;">
+
+                                    <t t-esc="data['sale_order']"/>
+                                    <i class="fa fa-caret-down" role="img" aria-label="Unfolded" title="Unfolded"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['sbu']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['CUSTOMER']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['pkg']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['DEVICES']"/>
+                                </td>
+
+
+                                <td>
+                                    <t t-esc="data['description']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['WIP_ENTITY_NAME']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['START_QUANTITY']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['RUNNING_QUANTITY']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['STATUS']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['START_DATE']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="data['ORIG_SOD']"/>
+                                </td>
+
+                            </tr>
+                       </t>
+                   </tbody>
+               </table>
+           </div>
+       </div>
+   </t>
+</templates>

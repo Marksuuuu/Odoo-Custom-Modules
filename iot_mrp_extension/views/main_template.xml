@@ -1,0 +1,113 @@
+<odoo>
+    <template id="main_template_id" name="My Page">
+        <!-- Your HTML content goes here -->
+        <head>
+            <meta charset="utf-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+            <meta name="description" content=""/>
+            <meta name="author" content=""/>
+            <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico"/>
+
+            <title>Odoo - LMS</title>
+
+            <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/album/"/>
+
+            <!-- Bootstrap core CSS -->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+                  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+                  crossorigin="anonymous"/>
+
+            <!-- Custom styles for this template -->
+            <link href="album.css" rel="stylesheet"/>
+        </head>
+
+        <body>
+
+            <main role="main">
+
+                <section class="jumbotron text-center">
+                    <div class="container">
+                        <form method="post" action="/lms-login" class="oe_form">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="form-group">
+                                <label for="search_input">
+                                    <h1 class='text-muted' style="font-family: Helvetica, Arial, sans-serif;">Login Form</h1>
+                                </label>
+                                <input type="number" class="form-control" name="search_input" id="search_input"
+                                       aria-describedby="rfid" placeholder="Please scan your ID to Login"/>
+                            </div>
+                            <button type="submit" class="btn btn-sm btn-block"
+                                    style="background-color: #286090; color: white;">Login
+                            </button>
+                            <button type="button" class="btn btn-sm btn-block"
+                                    style="background-color: #5bc0de; color: white;">Alternative Login
+                            </button>
+                        </form>
+                    </div>
+                </section>
+                <h2 class="text-muted">Transactions</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">Count</th>
+                                <th scope="col">Emp Name</th>
+                                <th scope="col">Transaction</th>
+                                <th scope="col">Area</th>
+                                <th scope="col">Time Elapsed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="mrp_workcenter_productivity" t-as="o">
+                                <tr>
+                                    <td>
+                                        <t t-esc="o.id"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="o.user_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="o.workorder_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="o.workcenter_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="o.duration"/>
+                                    </td>
+                                </tr>
+
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+            </main>
+
+            <footer class="text-muted">
+                <div class="container">
+                    <p class="float-right">
+                        <a href="#">Back to top</a>
+                    </p>
+                    <p>Album example is &amp;copy; Bootstrap, but please download and customize it for yourself!</p>
+                    <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a
+                            href="../../getting-started/">getting started guide</a>.
+                    </p>
+                </div>
+            </footer>
+
+            <!-- Bootstrap core JavaScript
+            ================================================== -->
+            <!-- Placed at the end of the document so the pages load faster -->
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+                    crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+                    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                    crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+                    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                    crossorigin="anonymous"></script>
+        </body>
+    </template>
+</odoo>

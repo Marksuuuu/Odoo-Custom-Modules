@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="approval_module_inherit_extension" model="ir.ui.view">
+            <field name="name">approval_module_inherit_extension</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="approval_module_extension.purchase_order_view_form_inherit"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='1226']" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_user</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="purchase_order_view_form_inherit" model="ir.ui.view">
+            <field name="name">purchase_order_view_form_inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_cancel']" position="after">
+                    <button name="get_connection_for_stock_picking" type="object" string="ObjectButton"/>
+                </xpath>
+
+                <!--                <xpath expr="//button[contains(@string, 'Change Approver')]" position="attributes">-->
+                <!--                    <attribute name="groups">purchase.group_purchase_manager</attribute>-->
+                <!--                </xpath>-->
+
+
+                <xpath expr="//field[@name='requisition_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='to_mui_cip']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='department_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='approver_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <!--                Other Information-->
+                <xpath expr="//field[@name='incoterm_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='picking_type_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <!-- Other Information-->
+
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="buyer"/>
+                </xpath>
+
+                <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='fiscal_position_id']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='notes']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='order_line']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('approved', 'disapprove'))]}</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

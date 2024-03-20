@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="tpc_dm_cm_request_kanban" model="ir.ui.view">
+            <field name="name">tpc_dm_cm_request_kanban_view</field>
+            <field name="model">tpc.dm.cm.request</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban">
+                    <!--                    <field name="name"/>-->
+                    <!--                    <field name="user_id"/>-->
+
+                    <!--                    <field name="name"/>-->
+                    <!--                    <field name="user_id"/>-->
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_kanban_box">
+                                <!-- Your content goes here -->
+                                <div class="o_kanban_record">
+                                    <!--                                <field name="name"/>-->
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="file_type_view_tree" model="ir.ui.view">
+            <field name="name">file_type_view_tree</field>
+            <field name="model">file.types</field>
+            <field name="arch" type="xml">
+                <tree string="File Types" editable="bottom">
+                    <field name="name"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

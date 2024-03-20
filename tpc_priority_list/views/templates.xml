@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend" inherit_id="web.assets_backend" name="Priority List">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/tpc_priority_list/static/src/js/priority_list_script.js"/>
+                <!--                <script type="text/javascript" src="/tpc_priority_list/static/src/js/bootstrap.bundle.min.js"/>-->
+                <link rel="stylesheet" type="text/css" href="/tpc_priority_list/static/src/css/dashboard.css"/>
+                <!--                <link rel="stylesheet" type="text/css" href="/tpc_priority_list/static/src/css/bootstrap.min.css"/>-->
+            </xpath>
+        </template>
+
+        <!--        <template id="my_template" inherit_id="web.external_layout">-->
+        <!--            <xpath expr="//head" position="inside">-->
+        <!--                <script type="text/javascript" src="/tpc_priority_list/static/src/js/priority_list_script.js"/>-->
+        <!--                <script type="text/javascript" src="/tpc_priority_list/static/src/js/bootstrap.bundle.min.js"/>-->
+        <!--                <link rel="stylesheet" type="text/css" href="/tpc_priority_list/static/src/css/dashboard.css"/>-->
+        <!--                <link rel="stylesheet" type="text/css" href="/tpc_priority_list/static/src/css/bootstrap.min.css"/>-->
+        <!--            </xpath>-->
+
+        <!--            &lt;!&ndash; Your QWeb template content here &ndash;&gt;-->
+
+        <!--        </template>-->
+    </data>
+</odoo>
+

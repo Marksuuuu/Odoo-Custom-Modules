@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="stock_scrap_inherit_view" model="ir.ui.view">
+            <field name="name">stock_scrap_inherit_view</field>
+            <field name="model">stock.scrap</field>
+            <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//group" position="after">
+                    <group string="Approval Details">
+                        <group>
+                            <field name="department_id"/>
+                            <field name="approver_id" required="1"/>
+                        </group>
+                    </group>
+                </xpath>
+
+
+
+                <xpath expr="//field[@name='product_id']" position="before">
+                    <field name="user_id" string="Responsible"
+                           attrs="{'readonly' : [('state', 'in', ('approved', 'disapprove'))]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="show_submit_request" invisible="1"/>
+                    <field name="approval_status" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="to_approve" invisible="1"/>
+                    <field name="to_approve_po" invisible="1"/>
+                </xpath>
+                <xpath expr="//header" position="replace">
+                    <header>
+                        <field name="user_id" invisible="1"/>
+                        <field name="is_approver" invisible="1"/>
+                        <field name="approval_status" invisible="1"/>
+
+                         <button name="action_validate" states="approved" string="Validate" type="object"
+                                class="oe_highlight" context="{'not_unlink_on_discard': True}"/>
+
+                        <button name="submit_for_approval" type="object"
+                                string="Submit Request"
+                                class="oe_highlight"
+                                confirm="Submit Purchase Request to Initial Approver?"
+                                attrs="{'invisible': [('show_submit_request', '=', False)]}"/>
+
+
+
+                        <button name="approve_request" type="object"
+                                string="Approve Request"
+                                class="oe_highlight"
+                                confirm="Are you sure you want to approve?"
+                                attrs="{'invisible': ['|', ('approval_status', '!=', 'po_approval'), ('is_approver', '=', False)]}"/>
+
+                        <button name="action_rfq_send" states="sent" string="Re-Send by Email" type="object"
+                                context="{'send_rfq':True}"/>
+                        <button name="button_draft" states="cancel" string="Set to Draft" type="object"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,to_approve,approved,disapprove,done"
+                               readonly="1"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

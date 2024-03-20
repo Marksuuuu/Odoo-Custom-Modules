@@ -1,0 +1,27 @@
+@api.model
+def create(self, vals):
+    existing_record = self.search([('file_name', '=', vals.get('file_name'))])
+    if existing_record:
+        raise exceptions.ValidationError('The name must be unique!')
+
+    records = super(DocumentFileUploadLine, self).create(vals)
+
+    for record in records:
+        if record.file_upload and record.file_name:
+            # Perform actions for each record
+            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            temp_file = tempfile.NamedTemporaryFile(delete=False)
+            temp_file.write(base64.b64decode(record.file_upload))
+            temp_file.close()
+            file_url = f"{base_url}/web/content/{record._name}/{record.id}/file_upload/{record.file_name}"
+            record.file_copy = file_url
+            relative_path = os.path.join(
+                'team_document_management/static/repository',
+                record.document_id.department,
+                record.document_id.created_by.name,
+                record.document_id.directory_name,
+                record.file_name
+            )
+            record.write({'file_path': relative_path})
+
+    return records

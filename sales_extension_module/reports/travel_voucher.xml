@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="travel_voucher_container_id">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        @font-face {
+                        font-family: 'LibreBarcode39-Regular';
+                        src: url('/sales_extension_module/static/src/font/LibreBarcode39-Regular.ttf')
+                        format('truetype');
+                        font-weight: normal;
+                        font-style: normal;
+                        }
+                        @font-face {
+                        font-family: 'LibreBarcode39Text-Regular';
+                        src: url('/sales_extension_module/static/src/font/LibreBarcode39Text-Regular.ttf')
+                        format('truetype');
+                        font-weight: normal;
+                        font-style: normal;
+                        }
+                        #first-tbl * {
+                        border-color: write;
+                        }
+                        .barcode {
+                        font-family: 'LibreBarcode39Text-Regular', Arial, Helvetica, sans-serif;
+                        font-size: 60px;
+                        float: right;
+                        }
+                    </style>
+
+
+                </xpath>
+                <table class="table table-borderless" id="first-tbl">
+                    <thead>
+                        <tr>
+                            <td scope="col" colspan="2"/>
+                            <td scope="col">
+                                <div style="float: right;">
+                                    <p class="barcode" t-field="o.name"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+
+                    <thead>
+                        <tr>
+                            <td scope="col">
+                                <t t-set="data" t-value="o.get_company()"/>
+                                <t t-foreach="data" t-as="line">
+                                    <span t-esc="line.name"/>
+                                </t>
+                            </td>
+                            <td scope="col">Date Generated:</td>
+                            <td>
+                                <span t-esc="o.scheduled_date.strftime('%B %d,%Y')"/>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <t t-set="data" t-value="o.get_company()"/>
+                                <t t-foreach="data" t-as="val">
+                                    <span>
+                                        <span t-esc="val.street"/>
+                                        <span t-esc="val.street2"/>
+                                        <span t-esc="val.city"/>
+                                        <span t-esc="val.state_id.name"/>
+                                        <span t-esc="val.zip"/>
+                                        <span t-esc="val.country_id.name"/>
+                                    </span>
+                                </t>
+                            </td>
+                            <td>Ship to Address:</td>
+                            <td>
+                                <span t-esc="o.search_so_address()"/>
+                                <!--                                <t t-esc="o.get_company()"/>-->
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Customer</td>
+                            <td colspan="2">
+                                <span t-esc="o.partner_id.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Location</td>
+                            <td colspan="2">Shipping</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-bordered">
+                    <thead>
+                        <td>LINE</td>
+                        <td>ITEM#</td>
+                        <td>LOT#</td>
+                        <td>CHILD LOT#</td>
+                        <td>S.O#</td>
+                        <td>R.O# / P.O#</td>
+                        <td>M.O#</td>
+                        <td>DATE CODE</td>
+                        <td>QTY TO SHIP</td>
+                        <td>QTY TO INVOICE</td>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.move_line_ids_without_package" t-as="val">
+                            <t t-set="origin_so" t-value="o.get_origin_so()"/>
+                            <t t-foreach="origin_so" t-as="line">
+                                <tr>
+                                    <td><t t-esc="line_index + 1"/>.
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.lot_id.name"/>
+                                    </td>
+                                    <td>N/A</td>
+                                    <td>
+                                        <t t-esc="val.origin"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="val.sales_order"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="val.client_order_ref"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="o.date_code"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="val.product_uom_qty"/>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <!-- Add more cells if needed for other attributes -->
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+
+                    <tbody>
+                        <td colspan="8">
+                            <span style="float: right;">TOTAL QUANTITY</span>
+                        </td>
+                        <td>
+                            <t t-set="sum_row2" t-value="0"/>
+                            <t t-foreach="o.move_line_ids_without_package" t-as="line">
+                                <t t-set="sum_row2" t-value="sum_row2+line.product_uom_qty"/>
+                            </t>
+                            <t t-esc="sum_row2"/>
+                        </td>
+                        <td>
+                            <!--                            <t t-set="sum_row2" t-value="0"/>-->
+                            <!--                            <t t-foreach="o.move_line_ids_without_package" t-as="line">-->
+                            <!--                                <t t-set="sum_row2" t-value="sum_row2+line.qty_done"/>-->
+                            <!--                            </t>-->
+                            <!--                            <t t-esc="sum_row2"/>-->
+                        </td>
+                    </tbody>
+                </table>
+
+                <table class="table table-borderless" id="first-tbl">
+                    <tbody>
+                        <td>Remarks:</td>
+                        <td>
+                            <span t-esc="o.note"/>
+                        </td>
+                    </tbody>
+                </table>
+                <table class="table table-borderless" id="first-tbl">
+                    <thead>
+                        <td>Transfered by:</td>
+                        <td></td>
+                        <td>Received by</td>
+                        <td></td>
+                    </thead>
+                    <tbody>
+                        <td>Date:</td>
+                        <td></td>
+                        <td>Date:</td>
+                        <td></td>
+                    </tbody>
+                </table>
+            </t>
+        </template>
+        <template id="travel_voucher_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="sales_extension_module.travel_voucher_container_id" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

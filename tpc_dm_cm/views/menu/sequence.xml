@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Create a sequence with date placeholders -->
+        <record id="sequence_your_model" model="ir.sequence">
+            <field name="name">Your Model Sequence</field>
+            <field name="code">your.sequence.code</field>
+            <field name="padding">4</field>
+            <field name="prefix">BRF/%(year)s%(month)s%(day)s#</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="particulars_model" model="ir.sequence">
+            <field name="name">Your Model Sequence</field>
+            <field name="code">particulars.code</field>
+            <field name="padding">4</field>
+            <field name="prefix">PRTS/%(year)s%(month)s%(day)s#</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>

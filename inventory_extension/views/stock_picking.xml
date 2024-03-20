@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="stock_picking_extension_form_inventory_extension" model="ir.ui.view">
+            <field name="name">stock_picking_extension_form_inventory_extension</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="delivery.view_picking_withcarrier_out_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_cancel']" position="after">
+                    <!--                    <button type="object" name="get_connection" string="Create Shipping" class="oe_highlight"/>-->
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_picking_inherit_view_form" model="ir.ui.view">
+            <field name="name">stock_picking_inherit_view_form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_cancel']" position="after">
+                    <!--                    <button name="get_po" type="object" string="test"/>-->
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="is_shipping_bool" invisible="1"/>
+                </xpath>
+
+
+
+                <xpath expr="//field[@name='origin']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('get_connection_field', '=', True)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="client_order_ref"/>
+                    <field name="get_connection_field" string="PO Reference"
+                           attrs="{'invisible': [('origin', '=', False)]}"/>
+                    <!--                    <field name="mrp_qty_done"/>-->
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="stock_picking_inherit_tree" model="ir.ui.view">
+            <field name="name">stock_picking_inherit_tree</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name="client_order_ref" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+

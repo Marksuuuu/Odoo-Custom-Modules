@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="credit_note_voucher_container_id">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        @font-face {
+                        font-family: 'CourierPrime-Regular';
+                        src: url('/sales_extension_module/static/src/font/CourierPrime-Regular.ttf')
+                        format('truetype');
+                        font-weight: normal;
+                        font-style: normal;
+                        }
+                        table,tr,th,td,h6{
+                        border: 1px solid white;
+                        font-size:18px;
+                        font-family: 'CourierPrime-Regular', monospace;
+                        }
+                        .compact-table td,
+                        .compact-table th {
+                        padding: 0px /* Adjust the padding as needed */
+                        }
+                    </style>
+                </xpath>
+
+                <div class="table-responsive-xs">
+                    <table class="table table-borderless table-sm compact-table">
+                        <thead>
+                            <tr>
+                                <td style="width: 180px; ">&#160;</td>
+                                <td style="width: 43%">
+                                    <t t-if="o.partner_id">
+                                        <div t-field="o.partner_id"/>
+                                    </t>
+                                </td>
+                                <td style="width: 120px">&#160;</td>
+                                <td class="text-center">
+                                    <!-- <span t-esc="o.name"/> -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>
+                                    <t t-foreach="o.partner_id" t-as="val">
+                                        <span>
+                                            <span t-esc="val.street"/>
+                                        </span>
+                                    </t>
+                                </td>
+                                <td>&#160;</td>
+                                <td class="text-center">
+                                    <span t-esc="o.date.strftime('%m/%d/%Y')"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                    <t t-foreach="o.partner_id" t-as="val">
+                                        <span>
+                                             <span t-esc="val.city"/>,<span t-esc="val.state_id.name"/>
+                                        </span>
+                                    </t>
+                                </td>
+                                <td>Terms</td>
+                                <td class="text-center">
+                                    <t t-if="not o.invoice_payment_term_id">
+                                        <span t-esc="o.invoice_date_due.strftime('%m/%d/%Y')"/>
+                                    </t>
+                                    <t t-elif="o.invoice_payment_term_id">
+                                        <div t-field="o.invoice_payment_term_id.name"/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>
+                                    <t t-foreach="o.partner_id" t-as="val">
+                                        <span>
+                                            <span t-esc="val.country_id.name"/>,<span t-esc="val.zip"/>
+                                        </span>
+                                    </t>
+                                </td>
+                                <td>Due Date</td>
+                                <td class="text-center">
+                                    <span t-esc="o.invoice_date_due.strftime('%m/%d/%Y')"/>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>
+                                    &#160;
+                                </td>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td colspan="3">&#160;</td>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <td colspan="4">&#160;</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                    <table class="table table-borderless compact-table">
+                        <thead>
+                            <tr>
+                                <td colspan="2">&#160;</td>
+                            </tr>
+                            <tr>
+                                <td  colspan="2">&#160;</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">&#160;</td>
+                                <td style="width: 200px; text-align: center;">&#160;</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="height:550px">
+                                    <h6 style="text-transform:uppercase;">To Debit
+                                        your Account For:
+                                    </h6>
+                                    <t t-foreach="o.line_ids" t-as="val">
+                                        <span style='font-size:19px;' t-esc="val.name"/>,
+                                    </t>
+                                    <div class="text-center" style='margin-top: 20px'>
+                                        <h6>
+                                            <span style='font-size:19px;'>AMOUNT PHP :</span>
+                                            <span style='font-size:19px;' t-esc="o.fetch_recheck_data"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                        </h6>
+                                        <h6>
+                                            <span style='font-size:19px;'>FOREX RATE :</span>
+                                            <span style='font-size:19px;' t-esc="o.saving_forex_php_value"/>
+                                            <h6>-------------------</h6>
+                                        </h6>
+                                        <h6>
+                                            <span style='font-size:19px;'>AMOUNT USD :</span>
+                                            <span style='font-size:19px;' t-esc="o.deduct_value"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                        </h6>
+
+                                        <h6>
+                                            <span style='font-size:19px;'>ADD : 5% PROCESSING FEE :</span>
+                                            <span style='font-size:19px;' t-esc="o.add_percent"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                        </h6>
+                                        <h6>
+                                            <h6>-------------------</h6>
+                                            <span>TOTAL US$ :</span>
+                                            <span t-esc="o.adding_usd_with_percent_value"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                            <h6>-------------------</h6>
+                                        </h6>
+                                        <!--                    divided_usd + o.usd_to_php-->
+                                        <h6>
+                                            <span style='font-size:19px;'>AMOUNT :</span>
+                                            <span style='font-size:19px;' t-esc="o.word_move"/>
+                                        </h6>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <h6 class="text-center align-center mt-2">
+                                        <span style='font-size:19px;' class="align-center">USD:</span>
+                                        <span style='font-size:19px;' t-esc="o.adding_usd_with_percent_value"
+                                              t-options='{"widget": "float", "precision": 2}' class="align-center"/>
+                                    </h6>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-borderless table-sm compact-table text-center">
+                        <thead>
+                            <tr>
+                                <td colspan="4" style="text-align: left">&#160;</td>
+                            </tr>
+                            <tr>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+                                <td>&#160;</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.line_ids" t-as="val">
+                                <tr>
+                                    <td>
+                                        <t t-foreach="val.account_id" t-as="val2">
+                                            <span t-esc="val2.code"/>
+                                        </t>
+
+                                    </td>
+                                    <td>
+                                        <t t-foreach="val.account_id" t-as="val2">
+                                            <span t-esc="val2.name"/>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-if="val.debit_data == 0">
+                                            <span>&#160;</span>
+                                        </t>
+                                        <t t-else="val.debit_data">
+                                            <span style='font-size:19px;' t-esc="val.debit_data"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <t t-if="val.credit_data == 0">
+                                            <span>&#160;</span>
+                                        </t>
+                                        <t t-else="val.credit_data">
+                                            <span style='font-size:19px;' t-esc="val.credit_data"
+                                                  t-options='{"widget": "float", "precision": 2}'/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <table class="table table-borderless table-sm compact-table text-center">
+                        <thead>
+                            <tr style="height: 100px;">
+                                <td class="align-bottom"> </td>
+                                <td class="align-bottom"> </td>
+                                <td class="align-bottom"> </td>
+                            </tr>
+                        </thead>
+                    </table>
+
+
+                </div>
+            </t>
+        </template>
+        <template id="credit_note_template_voucher_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-call="sales_extension_module.debit_note_voucher_container_id" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+
+
