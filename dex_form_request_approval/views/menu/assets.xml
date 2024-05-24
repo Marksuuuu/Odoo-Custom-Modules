@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend" name="tpc_dm_cm.assets_backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/dex_form_request_approval/static/src/script.js"/>
+                <script type="text/javascript" src="/dex_form_request_approval/static/src/lordicon/lordicon.js"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

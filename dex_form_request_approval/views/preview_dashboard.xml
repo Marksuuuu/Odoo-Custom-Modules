@@ -1,0 +1,80 @@
+<odoo>
+    <data>
+        <record id="view_preview_dashboard_kanban" model="ir.ui.view">
+            <field name="name">preview.dashboard.kanban</field>
+            <field name="model">preview.dashboard</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_dashboard o_responsive_kanban" create="false" edit="false" delete="false">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="oe_kanban_card">
+                                    <!-- Lord-icon on the left -->
+
+                                    <div class="o_kanban_icon">
+                                        <div class="o_kanban_record_title"
+                                             style="text-align: center; font-size: 15px; margin-bottom: 20px; font-weight: bold; text-transform: uppercase;">
+                                            <a type="object" name="view_for_review">
+                                                <field name="model_name"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_card_body">
+                                        <!-- Aligning status columns -->
+                                        <style>
+                                            .kanban-btn {
+                                            width: 100%;
+                                            height: 50px; /* Adjust as needed */
+                                            margin-bottom: 5px; /* Adjust spacing between buttons */
+                                            }
+                                            #e{
+                                            text-transform: uppercase;
+                                            font-weight: bold;
+                                            }
+                                        </style>
+                                        <div>
+                                            <button class="btn btn-warning kanban-btn" type="object" name="to_approve">
+                                                <span style="text-transform: uppercase; font-weight: bold;">To Approve
+                                                    ( <field name="total_count_to_approve"/> )
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-danger kanban-btn" type="object" name="disapproved">
+                                                <span style="text-transform: uppercase; font-weight: bold;">Disapproved
+                                                    ( <field name="total_count_disapprove"/> )
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-success kanban-btn" type="object" name="approved">
+                                                <span style="text-transform: uppercase; font-weight: bold;">Approved
+                                                    ( <field name="total_count_approved"/> )
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-secondary kanban-btn" type="object" name="draft">
+                                                <span style="text-transform: uppercase; font-weight: bold;">Draft
+                                                    ( <field name="total_count_draft"/> )
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-dark kanban-btn" type="object" name="cancelled">
+                                                <span style="text-transform: uppercase; font-weight: bold;">Cancelled
+                                                    ( <field name="total_count_cancel"/> )
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Title aligned to the right -->
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+    </data>
+</odoo>

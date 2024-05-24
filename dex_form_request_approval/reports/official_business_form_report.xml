@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="official_business_form_report_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        * {
+                            font-size: 15px;
+                        }
+
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-family: sans-serif;
+                        }
+
+                        th, td {
+                            border: 1px solid black;
+                            text-align: center;
+                            padding: 0 !important;
+                            vertical-align: top; /* Align content at the top */
+                        }
+
+                        th, td, tr {
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+
+                        .table td, .table th {
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    </style>
+                </xpath>
+                <div class="container" style="width:100%;">
+                    <div class="table-responsive" style="border: 3px solid black;">
+                        <h1 style="text-align: center;"><img
+                                src="dex_form_request_approval/static/src/img/dexterton_logo_072023.png"/></h1>
+                        <div style="background-color: #0068AD; padding: 2px; text-align: center;"><h6
+                                style="color: white; font-weight: bold;">OFFICIAL BUSINESS FORM</h6></div>
+
+
+                        <table class="table table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">Date Filed: <t t-esc="o.create_date"/></th>
+                                    <th colspan="2">Date of Field Work: <t t-esc="o.create_date"/></th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th colspan="2"><p style="float: left;">Name: <t
+                                            t-esc="o.requesters_id.name"/></p></th>
+                                    <th><p style="float: left;">POSITION: <t
+                                            t-esc="o.requesters_id.job_id.name"/></p></th>
+                                    <th colspan="2"><p style="float: left;">DEPARTMENT: <t
+                                            t-esc="o.requesters_id.department_id.name"/></p></th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <td colspan="2" style="vertical-align: middle;">ITINERARY/DESTINATION</td>
+                                    <th rowspan="3" style="vertical-align: middle;">PURPOSE</th>
+                                    <td colspan="2" style="vertical-align: middle;">ESTIMATED TIME</td>
+
+                                </tr>
+                                <tr>
+                                    <th>FROM</th>
+                                    <th>TO</th>
+                                    <th>FROM</th>
+                                    <th>TO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <div t-foreach="o.obf_lines" t-as="val">
+                                    <tr>
+                                        <td><t t-esc="val._from"></t></td>
+                                        <td><t t-esc="val._to"></t></td>
+                                        <td><t t-esc="val._purpose"></t></td>
+                                        <td><t t-esc="val._departure"></t></td>
+                                        <td><t t-esc="val._estimated_arrival"></t></td>
+                                    </tr>
+                                </div>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+
+                        <table class="table table-borderless" style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <td>__________________________</td>
+                                    <td>__________________________</td>
+                                    <td>__________________________</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;"><i>EMPLOYEE SIGNATURE</i></td>
+                                    <td style="font-weight: bold;"><i>APPROVED BY</i></td>
+                                    <td style="font-weight: bold;"><i>NOTICE BY</i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <hr/>
+                        <span>FOR HR Admin USE ONLY:</span><br/>
+
+                        <table class="table table-borderless">
+                            <tbody style="float: left;">
+                                <tr><td style="float: left;">______________________________________</td></tr>
+                                <tr><td>Received by (Name/Signature/Date)</td></tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-borderless">
+                            <tbody style="float: left;">
+                                <tr>
+                                    <td style="text-align: left;">
+                                        <h6>
+                                            <i>NOTE: Employees leaving the company premises shall be required at all
+                                                times to accomplish <u>2 Copies</u> of this form.</i>
+                                            <br/>
+                                            <i><b>OFFICIAL BUSINESS FORM</b> before departure.</i>
+                                            <br/>
+                                            <i>Accomplished forms without the official signature shall be considered
+                                                invalidated <br/> and thereby departure may be classified as <b>
+                                                    UNAUTHORIZED</b>.</i>
+                                        </h6>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="container" style="width:100%; margin-top: 50px;">
+                    <hr style="border: 2px dashed black;"/>
+                </div>
+
+                <div class="container" style="width:100%;">
+                    <div class="table-responsive" style="border: 3px solid black;">
+                        <h1 style="text-align: center;"><img
+                                src="dex_form_request_approval/static/src/img/dexterton_logo_072023.png"/></h1>
+                        <div style="background-color: #0068AD; padding: 2px; text-align: center;"><h6
+                                style="color: white; font-weight: bold;">OFFICIAL BUSINESS FORM</h6></div>
+
+
+                        <table class="table table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">Date Filed: <t t-esc="o.create_date"/></th>
+                                    <th colspan="2">Date of Field Work: <t t-esc="o.create_date"/></th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th colspan="2"><p style="float: left;">Name: <t
+                                            t-esc="o.requesters_id.name"/></p></th>
+                                    <th><p style="float: left;">POSITION: <t
+                                            t-esc="o.requesters_id.job_id.name"/></p></th>
+                                    <th colspan="2"><p style="float: left;">DEPARTMENT: <t
+                                            t-esc="o.requesters_id.department_id.name"/></p></th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <td colspan="2" style="vertical-align: middle;">ITINERARY/DESTINATION</td>
+                                    <th rowspan="3" style="vertical-align: middle;">PURPOSE</th>
+                                    <td colspan="2" style="vertical-align: middle;">ESTIMATED TIME</td>
+
+                                </tr>
+                                <tr>
+                                    <th>FROM</th>
+                                    <th>TO</th>
+                                    <th>FROM</th>
+                                    <th>TO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <div t-foreach="o.obf_lines" t-as="val">
+                                    <tr>
+                                        <td><t t-esc="val._from"></t></td>
+                                        <td><t t-esc="val._to"></t></td>
+                                        <td><t t-esc="val._purpose"></t></td>
+                                        <td><t t-esc="val._departure"></t></td>
+                                        <td><t t-esc="val._estimated_arrival"></t></td>
+                                    </tr>
+                                </div>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+
+                        <table class="table table-borderless" style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <td>__________________________</td>
+                                    <td>__________________________</td>
+                                    <td>__________________________</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;"><i>EMPLOYEE SIGNATURE</i></td>
+                                    <td style="font-weight: bold;"><i>APPROVED BY</i></td>
+                                    <td style="font-weight: bold;"><i>NOTICE BY</i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <hr/>
+                        <span>FOR HR Admin USE ONLY:</span><br/>
+
+                        <table class="table table-borderless">
+                            <tbody style="float: left;">
+                                <tr><td style="float: left;">______________________________________</td></tr>
+                                <tr><td>Received by (Name/Signature/Date)</td></tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-borderless">
+                            <tbody style="float: left;">
+                                <tr>
+                                    <td style="text-align: left;">
+                                        <h6>
+                                            <i>NOTE: Employees leaving the company premises shall be required at all
+                                                times to accomplish <u>2 Copies</u> of this form.</i>
+                                            <br/>
+                                            <i><b>OFFICIAL BUSINESS FORM</b> before departure.</i>
+                                            <br/>
+                                            <i>Accomplished forms without the official signature shall be considered
+                                                invalidated <br/> and thereby departure may be classified as <b>
+                                                    UNAUTHORIZED</b>.</i>
+                                        </h6>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+
+        </template>
+        <template id="official_business_form_action_menu_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.approved_by.lang"/>
+                    <t t-call="dex_form_request_approval.official_business_form_report_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+

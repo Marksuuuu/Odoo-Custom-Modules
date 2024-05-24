@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <report
+                id="auf_report_id"
+                model="overtime.authorization.form"
+                string="Overtime Authorization Form Report"
+                name="dex_form_request_approval.overtime_authorization_form_action_menu_id"
+                file="dex_form_request_approval.overtime_authorization_form_action_menu_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="obf_report_id"
+                model="official.business.form"
+                string="Official Business Form Report"
+                name="dex_form_request_approval.official_business_form_action_menu_id"
+                file="dex_form_request_approval.official_business_form_action_menu_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="irf_report_id"
+                model="it.request.form"
+                string="It Request Form Report"
+                name="dex_form_request_approval.it_request_form_action_menu_id"
+                file="dex_form_request_approval.it_request_form_action_menu_id"
+                report_type="qweb-pdf"
+                menu="True"
+        />
+
+        <report
+                id="gaf_report_id"
+                model="gasoline.allowance.form"
+                string="Gasoline Allowance Form Report"
+                name="dex_form_request_approval.gasoline_allowance_form_action_menu_id"
+                file="dex_form_request_approval.gasoline_allowance_form_action_menu_id"
+                report_type="qweb-pdf"
+                menu="True"
+                paperformat="paperformat_landscape"
+        />
+    </data>
+</odoo>

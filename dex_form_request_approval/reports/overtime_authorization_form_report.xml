@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="overtime_authorization_form_report_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-family: sans-serif;
+                        }
+
+                        th, td {
+                            border: 1px solid black;
+                            text-align: center;
+                            padding: 0 !important;
+                        }
+
+                        th, td, tr {
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+
+                        .table td, .table th {
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    </style>
+                </xpath>
+                <div class="container" style="width:100%;">
+                    <div class="table-responsive" style="border: 3px solid black;">
+                        <h1 style="text-align: center;"><img
+                                src="dex_form_request_approval/static/src/img/dexterton_logo_072023.png"/></h1>
+                        <div style="background-color: #0068AD; padding: 2px; text-align: center;"><h6
+                                style="color: white; font-weight: bold;">OVERTIME AUTHORIZATION FORM</h6></div>
+                        <table class="table table-borderless" style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <td width="50">Name</td>
+                                    <td style="text-align: left;">____________________________________</td>
+                                    <td width="60">Date:</td>
+                                    <td style="text-align: left;">____________________________________</td>
+                                </tr>
+                                <tr>
+                                    <td>Department</td>
+                                    <td colspan="3" style="text-align: left;">____________________________________</td>
+                                </tr>
+                                <tr>
+                                    <td>Position</td>
+                                    <td colspan="3" style="text-align: left;">____________________________________</td>
+                                </tr>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="vertical-align: middle;">Merged Rows</th>
+                                    <td colspan="2" style="vertical-align: middle;">Text inside row 1</td>
+                                    <th rowspan="2" style="vertical-align: middle;">Merged Rows</th>
+                                    <th rowspan="2" style="vertical-align: middle;">Merged Rows</th>
+                                </tr>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>John</td>
+                                    <td>Doe</td>
+                                    <td>john@example.com</td>
+                                    <td>john@example.com</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Jane</td>
+                                    <td>Smith</td>
+                                    <td>john@example.com</td>
+                                    <td>jane@example.com</td>
+                                </tr>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+
+                        <table class="table table-borderless" style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <td>__________________________</td>
+                                    <td>__________________________</td>
+                                    <td>__________________________</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;"><i>EMPLOYEE SIGNATURE</i></td>
+                                    <td style="font-weight: bold;"><i>APPROVED BY</i></td>
+                                    <td style="font-weight: bold;"><i>NOTICE BY</i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <hr/>
+                        <span>FOR HR Admin USE ONLY:</span><br/>
+
+                        <table class="table table-borderless">
+                            <tbody style="float: left;">
+                                <tr><td style="float: left;">______________________________________</td></tr>
+                                <tr><td>Received by (Name/Signature/Date)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="container" style="width:100%; margin-top: 20px;">
+                    <hr style="border: 2px dashed black"/>
+                </div>
+
+                <div class="container" style="width:100%; margin-top: 20px;">
+                    <div class="table-responsive" style="border: 3px solid black;">
+                        <h1 style="text-align: center;"><img
+                                src="dex_form_request_approval/static/src/img/dexterton_logo_072023.png"/></h1>
+                        <div style="background-color: #0068AD; padding: 2px; text-align: center;"><h6
+                                style="color: white; font-weight: bold;">OVERTIME AUTHORIZATION FORM</h6></div>
+                        <table class="table table-borderless" style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <td width="50">Name</td>
+                                    <td style="text-align: left;">____________________________________</td>
+                                    <td width="60">Date:</td>
+                                    <td style="text-align: left;">____________________________________</td>
+                                </tr>
+                                <tr>
+                                    <td>Department</td>
+                                    <td colspan="3" style="text-align: left;">____________________________________</td>
+                                </tr>
+                                <tr>
+                                    <td>Position</td>
+                                    <td colspan="3" style="text-align: left;">____________________________________</td>
+                                </tr>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="vertical-align: middle;">Merged Rows</th>
+                                    <td colspan="2" style="vertical-align: middle;">Text inside row 1</td>
+                                    <th rowspan="2" style="vertical-align: middle;">Merged Rows</th>
+                                    <th rowspan="2" style="vertical-align: middle;">Merged Rows</th>
+                                </tr>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>John</td>
+                                    <td>Doe</td>
+                                    <td>john@example.com</td>
+                                    <td>john@example.com</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Jane</td>
+                                    <td>Smith</td>
+                                    <td>john@example.com</td>
+                                    <td>jane@example.com</td>
+                                </tr>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+
+                        <table class="table table-borderless" style="width:100%;">
+                            <tbody>
+                                <tr>
+                                    <td>__________________________</td>
+                                    <td>__________________________</td>
+                                    <td>__________________________</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;"><i>EMPLOYEE SIGNATURE</i></td>
+                                    <td style="font-weight: bold;"><i>APPROVED BY</i></td>
+                                    <td style="font-weight: bold;"><i>NOTICE BY</i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <hr/>
+                        <span>FOR HR Admin USE ONLY:</span><br/>
+
+                        <table class="table table-borderless">
+                            <tbody style="float: left;">
+                                <tr><td style="float: left;">______________________________________</td></tr>
+                                <tr><td>Received by (Name/Signature/Date)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+
+        </template>
+        <template id="overtime_authorization_form_action_menu_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.approved_by.lang"/>
+                    <t t-call="dex_form_request_approval.overtime_authorization_form_report_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="preview_dashboard_action_id" model="ir.actions.act_window">
+            <field name="name">Preview Dashboard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">preview.dashboard</field>
+            <field name="view_mode">kanban</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="approver_setup_action_id" model="ir.actions.act_window">
+            <field name="name">Approver Setup</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">approver.setup</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'group_by': 'approval_type'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="form_request_types_action_id" model="ir.actions.act_window">
+            <field name="name">Form Request Type Setup</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">form.request.types</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="official_business_form_action_id" model="ir.actions.act_window">
+            <field name="name">Official Business Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">official.business.form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="it_request_form_action_id" model="ir.actions.act_window">
+            <field name="name">IT Request Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">it.request.form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="overtime_authorization_form_action_id" model="ir.actions.act_window">
+            <field name="name">Overtime Authorization Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">overtime.authorization.form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="gasoline_allowance_form_action_id" model="ir.actions.act_window">
+            <field name="name">Gasoline Allowance Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">gasoline.allowance.form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="online_purchases_form_action_id" model="ir.actions.act_window">
+            <field name="name">Online Purchases</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">on.line.purchases</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="request_for_cash_advance_form_action_id" model="ir.actions.act_window">
+            <field name="name">Request for Cash Advance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">request.for.cash.advance</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="grab_request_form_form_action_id" model="ir.actions.act_window">
+            <field name="name">Grab Request Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">grab.request.form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="client_pickup_permit_form_action_id" model="ir.actions.act_window">
+            <field name="name">Client Pickup Permit</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">client.pick.up.permit</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+        <record id="payment_request_form_action_id" model="ir.actions.act_window">
+            <field name="name">Payment Request Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">payment.request.form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('create_uid', '=', uid)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+
+
+            </field>
+        </record>
+
+
+        <!-- This Menu Item will appear in the Upper bar, That's why It needs NO parent or action -->
+        <menuitem id="dex_form_request_approval_root_id" name="Dex Form Request" sequence="11"/>
+
+
+        <menuitem name="Dashboard" id="preview_dashboard_categ_id" parent="dex_form_request_approval_root_id"
+                  action="preview_dashboard_action_id" sequence="10"/>
+
+        <menuitem name="Request Form(s)" id="create_request_main_categ_id" parent="dex_form_request_approval_root_id"
+                  sequence="20"/>
+        <menuitem name="Configuration" id="configuration_categ_id" parent="dex_form_request_approval_root_id"
+                  sequence="30" groups="dex_form_request_approval.group_from_request_manager"/>
+
+        <!-- This Menu Item must have a parent and an action -->
+
+        <menuitem id="official_business_form_root_action_id" name="Official Business Form"
+                  parent="create_request_main_categ_id" action="official_business_form_action_id" sequence="1"/>
+
+        <menuitem id="it_request_form_root_action_id" name="IT Request Form"
+                  parent="create_request_main_categ_id" action="it_request_form_action_id" sequence="2"/>
+
+        <menuitem id="overtime_authorization_root_action_id" name="Overtime Authorization Form"
+                  parent="create_request_main_categ_id" action="overtime_authorization_form_action_id" sequence="3"/>
+
+        <menuitem id="gasoline_allowance_form_root_action_id" name="Gasoline Allowance Form"
+                  parent="create_request_main_categ_id" action="gasoline_allowance_form_action_id" sequence="4"/>
+
+        <menuitem id="online_purchases_form_root_action_id" name="Online Purchases Form"
+                  parent="create_request_main_categ_id" action="online_purchases_form_action_id" sequence="5"/>
+
+        <menuitem id="request_for_cash_advance_form_root_action_id" name="Request for Cash Advance Form"
+                  parent="create_request_main_categ_id" action="request_for_cash_advance_form_action_id" sequence="6"/>
+
+        <menuitem id="grab_request_form_form_root_action_id" name="Grab Request Form"
+                  parent="create_request_main_categ_id" action="grab_request_form_form_action_id" sequence="7"/>
+
+        <menuitem id="client_pickup_permit_form_root_action_id" name="Client Pickup Permit Form"
+                  parent="create_request_main_categ_id" action="client_pickup_permit_form_action_id" sequence="8"/>
+
+        <menuitem id="payment_request_form_root_action_id" name="Payment Request Form"
+                  parent="create_request_main_categ_id" action="payment_request_form_action_id" sequence="9"/>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="approver_setup_action_menu_id" name="Approver Setup" parent="configuration_categ_id"
+                  action="approver_setup_action_id" sequence="10"
+                  groups="dex_form_request_approval.group_from_request_manager"/>
+
+        <!--        <menuitem id="form_request_type_action_menu_id" name="Form Request Type" parent="configuration_categ_id"-->
+        <!--                  action="form_request_types_action_id" sequence="20"/>-->
+
+    </data>
+</odoo>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="it_request_form_report_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        * {
+                            font-size: 18px;
+                        }
+
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-family: sans-serif;
+                        }
+
+                        th, td {
+                            border: 1px solid black;
+                            text-align: center;
+                            padding: 0 !important;
+                            vertical-align: top; /* Align content at the top */
+                        }
+
+                        th, td, tr {
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+
+                        .table td, .table th {
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    </style>
+                </xpath>
+                <div class="container" style="width:100%; margin-top: 50px;">
+                    <div style="padding: 0px; text-align: center;"><h6 style="color: black; font-weight: bold;">
+                        DEXTERTON CORPORATION</h6></div>
+                    <div style="padding: 0px; text-align: center;"><h6 style="color: black; font-weight: bold;">157 Sgt.
+                        E. Rivera St 1115 Quezon City</h6></div>
+                    <div style="padding: 0px; text-align: center;"><h6
+                            style="color: red; font-weight: bold; border: 1px solid black;">IT REQUEST FORM</h6></div>
+
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td colspan="3"><span style="float: right; margin-right: 10px;">User's Copy</span></td>
+
+                            </tr>
+                            <tr>
+                                <td style="width: 500px">NAME: <t t-esc="o.requesters_id.name"/></td>
+                                <td style="width: 500px;">IT IN CHARGE:</td>
+                                <td style="width: 300px;">Date: <t t-esc="o.create_date"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td style="width: 700px"><span style="letter-spacing: 6px;">PURPOSE</span></td>
+                                <td style="width: 300px"><span>DEPT HEAD</span></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.itf_lines" t-as="val">
+                                <tr>
+                                    <td style="width: 700px"><span style="letter-spacing: 6px;"><t
+                                            t-esc="val._purpose"></t></span></td>
+                                    <td style="width: 300px"><span><span style="letter-spacing: 6px;"><t
+                                            t-esc="val._dept_head.name"></t></span></span></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <td style="width: 80px; text-align: left;">Scope:</td>
+                                <td colspan="2" style="text-align: left;">This form is generally for
+                                    SOFTWARE/PROGRAM <br/> only such as access rights, additional reports and program
+                                    modification. <br/> Other HARDWARE related like PC repairs does not need this.</td>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="8">Direction:</td>
+                                <td style="width: 18px;">1.</td>
+                                <td style="text-align: left;">Fill up each copy and state the pupose of your, request
+                                    date needed and additional remarks to justify <br/> your request on description box
+                                    and have it signed and acknowledged by your Department Head.</td>
+                            </tr>
+                            <tr>
+                                <td>2.</td>
+                                <td style="text-align: left;">Once signed, kindly obtain from Misis or Mancom.</td>
+                            </tr>
+                            <tr>
+                                <td>3.</td>
+                                <td style="text-align: left;">Forward approved form to Verney and have it verified</td>
+                            </tr>
+                            <tr>
+                                <td>4.</td>
+                                <td style="text-align: left;">Signed Request form must be forwarded to IT in charge to
+                                    execute request needed</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <table class="table table-borderless" style="width:100%;">
+                        <tbody>
+                            <tr>
+                                <td>__________________________</td>
+                                <td>__________________________</td>
+                                <td>__________________________</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;"><i>EMPLOYEE SIGNATURE</i></td>
+                                <td style="font-weight: bold;"><i>Lilian Go/Mancom</i></td>
+                                <td style="font-weight: bold;"><i>Verney Kiok Kan</i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="container" style="width:100%; margin-top: 50px;">
+                    <hr style="border: 2px dashed black;"/>
+                </div>
+
+                <div class="container" style="width:100%; margin-top: 50px;">
+                    <div style="padding: 0px; text-align: center;"><h6 style="color: black; font-weight: bold;">
+                        DEXTERTON CORPORATION</h6></div>
+                    <div style="padding: 0px; text-align: center;"><h6 style="color: black; font-weight: bold;">157 Sgt.
+                        E. Rivera St 1115 Quezon City</h6></div>
+                    <div style="padding: 0px; text-align: center;"><h6
+                            style="color: red; font-weight: bold; border: 1px solid black;">IT REQUEST FORM</h6></div>
+
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td colspan="3"><span style="float: right; margin-right: 10px;">User's Copy</span></td>
+
+                            </tr>
+                            <tr>
+                                <td style="width: 500px">NAME: </td>
+                                <td style="width: 500px;">IT IN CHARGE:</td>
+                                <td style="width: 300px;">Date:</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td style="width: 700px"><span style="letter-spacing: 6px;">PURPOSE</span></td>
+                                <td style="width: 300px"><span>DEPT HEAD</span></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.itf_lines" t-as="val">
+                                <tr>
+                                    <td style="width: 700px"><span style="letter-spacing: 6px;"><t
+                                            t-esc="val._purpose"></t></span></td>
+                                    <td style="width: 300px"><span><span style="letter-spacing: 6px;"><t
+                                            t-esc="val._dept_head.name"></t></span></span></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <td style="width: 80px; text-align: left;">Scope:</td>
+                                <td colspan="2" style="text-align: left;">This form is generally for
+                                    SOFTWARE/PROGRAM <br/> only such as access rights, additional reports and program
+                                    modification. <br/> Other HARDWARE related like PC repairs does not need this.</td>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="8">Direction:</td>
+                                <td style="width: 18px;">1.</td>
+                                <td style="text-align: left;">Fill up each copy and state the pupose of your, request
+                                    date needed and additional remarks to justify <br/> your request on description box
+                                    and have it signed and acknowledged by your Department Head.</td>
+                            </tr>
+                            <tr>
+                                <td>2.</td>
+                                <td style="text-align: left;">Once signed, kindly obtain from Misis or Mancom.</td>
+                            </tr>
+                            <tr>
+                                <td>3.</td>
+                                <td style="text-align: left;">Forward approved form to Verney and have it verified</td>
+                            </tr>
+                            <tr>
+                                <td>4.</td>
+                                <td style="text-align: left;">Signed Request form must be forwarded to IT in charge to
+                                    execute request needed</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <table class="table table-borderless" style="width:100%;">
+                        <tbody>
+                            <tr>
+                                <td>__________________________</td>
+                                <td>__________________________</td>
+                                <td>__________________________</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;"><i>EMPLOYEE SIGNATURE</i></td>
+                                <td style="font-weight: bold;"><i>Lilian Go/Mancom</i></td>
+                                <td style="font-weight: bold;"><i>Verney Kiok Kan</i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </t>
+
+        </template>
+        <template id="it_request_form_action_menu_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.approved_by.lang"/>
+                    <t t-call="dex_form_request_approval.it_request_form_report_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+

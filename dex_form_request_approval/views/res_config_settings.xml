@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_dex_form_request_approval" model="ir.ui.view">
+            <field name="name">res_config_settings_view_form_dex_form_request_approval</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="dex_form_request_approval"
+                         id="dex_form_request_approval" string="Form Request Settings"
+                         data-key="dex_form_request_approval"
+                         groups="dex_form_request_approval.group_from_request_manager">
+                        <h2>Address Configuration</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="host">Host</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="host" class="text-center oe_inline"
+                                                   placeholder="e.g https://example.com"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="port">Port</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="port" class="text-center oe_inline" placeholder="22"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your port like 69
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <h2>Credentials Configuration</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="sender">Sender</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="sender" class="text-center oe_inline"
+                                                   placeholder="Sender"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your sender like sender@domain.com
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="username">Username</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="username" class="text-center oe_inline"
+                                                   placeholder="Username"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your username like sample_username_69
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="login_url">Url</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="login_url" class="text-center oe_inline"
+                                                   placeholder="Url"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your url like http://mail.domain.com/
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="o_form_label" for="password">Password</label>
+                                        <div class="text-muted content-group mt16">
+                                            <field name="password" password="True" class="text-center oe_inline"
+                                                   placeholder="Password"/>
+                                        </div>
+                                        <div class="text-muted">
+                                            Enter your password like sample_password_69
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--                        <h2>Setup Purchase Representative</h2>-->
+                        <!--                        <div class="row mt16 o_settings_container">-->
+                        <!--                            <div class="col-12 col-lg-6 o_setting_box">-->
+                        <!--                                <div class="o_setting_left_pane"/>-->
+                        <!--                                <div class="o_setting_right_pane">-->
+                        <!--                                    <div class="form-group">-->
+                        <!--                                        <span class="text-muted">-->
+                        <!--                                            <field name="purchase_rep"/>-->
+                        <!--                                        </span>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+
+                        <h2>Read Me</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="form-group">
+                                        <span class="text-muted">
+                                            <i>Kindly request credentials from your administrator or network
+                                                administrator. Exercise caution when entering data to ensure the
+                                                security of your information.
+                                                <br/>
+                                                <br/>
+                                                Your cooperation is greatly appreciated.
+                                                <br/>
+                                                Thank you,
+                                                <br/>
+                                                -John Raymark
+                                            </i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

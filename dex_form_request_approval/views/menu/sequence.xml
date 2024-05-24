@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="create_request_form_approval_sequence_itf" model="ir.sequence">
+            <field name="name">Create Request Form Sequence IT Request Form</field>
+            <field name="code">create.sequence.form.sequence.itf</field>
+            <field name="padding">6</field>
+            <field name="prefix">ITF%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="create_request_form_approval_sequence_jrf" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Job Request Form</field>
+            <field name="code">create.sequence.form.sequence.jrf</field>
+            <field name="padding">6</field>
+            <field name="prefix">JRF%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="create_request_form_approval_sequence_rfca" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Request for Cash Advance</field>
+            <field name="code">create.sequence.form.sequence.rfca</field>
+            <field name="padding">6</field>
+            <field name="prefix">RFCA%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="create_request_form_approval_sequence_rfa" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Request for Automation</field>
+            <field name="code">create.sequence.form.sequence.rfa</field>
+            <field name="padding">6</field>
+            <field name="prefix">RFA%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="create_request_form_approval_sequence_oaf" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Overtime Authorization Form</field>
+            <field name="code">create.sequence.form.sequence.oaf</field>
+            <field name="padding">6</field>
+            <field name="prefix">OAF%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="create_request_form_approval_sequence_obf" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Official Business Form</field>
+            <field name="code">create.sequence.form.sequence.obf</field>
+            <field name="padding">6</field>
+            <field name="prefix">OBF%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="create_request_form_approval_sequence_gaf" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Gasoline Allowance Form</field>
+            <field name="code">create.sequence.form.sequence.gaf</field>
+            <field name="padding">6</field>
+            <field name="prefix">GAF%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="create_request_form_approval_sequence_grf" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Grab Request Form</field>
+            <field name="code">create.sequence.form.sequence.grf</field>
+            <field name="padding">6</field>
+            <field name="prefix">GRF/%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="create_request_form_approval_sequence_cpp" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Client Pickup Permit</field>
+            <field name="code">create.sequence.form.sequence.cpp</field>
+            <field name="padding">6</field>
+            <field name="prefix">CPP%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="online_purchase_form_approval_sequence_cpp" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Online Purchase Form</field>
+            <field name="code">create.sequence.form.sequence.opf</field>
+            <field name="padding">6</field>
+            <field name="prefix">OPF%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="payment_request_form_approval_sequence_cpp" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Payment Request Form</field>
+            <field name="code">create.sequence.form.sequence.prf</field>
+            <field name="padding">6</field>
+            <field name="prefix">PRF%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+
+    </data>
+</odoo>

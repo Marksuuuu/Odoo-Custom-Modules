@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="dex_import_tool_view_form" model="ir.ui.view">
+            <field name="name">dex_import_tool_view_form</field>
+            <field name="model">dex.import</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                         <field name="xlsx_file"/>
+                    </group>
+
+                    <footer class="oe_right">
+                        <button string="Save" type="object" class="btn-primary" name="import_excel"
+                                confirm="Are you sure?"/>
+                         <button name="download_excel" string="Xlsx Format" type="object" class="btn-primary"/>
+                        <button string="Discard" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="dex_import_tool_view" model="ir.actions.act_window">
+            <field name="name">Dex Import</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dex.import</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="dex_import_root_id" name="Import Tool" sequence="15"/>
+
+        <menuitem id="dex_import_menu" name="Import" sequence="0" parent="dex_import_root_id" action="dex_import_tool_view"/>
+
+
+    </data>
+</odoo>
