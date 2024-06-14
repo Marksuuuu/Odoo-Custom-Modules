@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model='ir.model.access' id='access_job_request_form_user'>
+            <field name='name'>dex_job_request_form_odoo.access_job_request_user</field>
+            <field name='model_id' ref='dex_job_request_form_odoo.model_job_request'/>
+            <field name='group_id' ref='dex_job_request_form_odoo.dex_job_request_group_odoo_for_user'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>0</field>
+        </record>
+
+        <record model='ir.model.access' id='access_job_request_form_manager'>
+            <field name='name'>dex_job_request_form_odoo.access_job_request_manager</field>
+            <field name='model_id' ref='dex_job_request_form_odoo.model_job_request'/>
+            <field name='group_id' ref='dex_job_request_form_odoo.dex_job_request_odoo_group_for_manager'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>1</field>
+        </record>
+
+        <record model='ir.model.access' id='access_job_request_data_user'>
+            <field name='name'>dex_job_request_form_odoo.access_job_request_data_user</field>
+            <field name='model_id' ref='dex_job_request_form_odoo.model_job_request_data'/>
+            <field name='group_id' ref='dex_job_request_form_odoo.dex_job_request_group_odoo_for_user'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>0</field>
+        </record>
+
+        <record model='ir.model.access' id='access_job_request_data_manager'>
+            <field name='name'>dex_job_request_form_odoo.access_job_request_data_manager</field>
+            <field name='model_id' ref='dex_job_request_form_odoo.model_job_request_data'/>
+            <field name='group_id' ref='dex_job_request_form_odoo.dex_job_request_odoo_group_for_manager'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>1</field>
+        </record>
+
+
+    </data>
+
+</odoo>

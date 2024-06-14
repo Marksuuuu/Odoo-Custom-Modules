@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="job_request_form_report_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <link rel="stylesheet"
+                          href="dex_job_request_form_odoo/static/css/style.css"/>
+                </xpath>
+                <div class="container">
+                    <h1 style="text-transform:uppercase; font-size: 36px; font-weight: bold; margin-bottom: 70px;">JOB REQUISITION FORM -
+                        <span t-esc="o.name"/>
+                    </h1>
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <div class="text-box">
+                            <span t-esc="o.create_date"/>
+                        </div>
+                        <label for="requested-by">Requested By:</label>
+                        <div class="text-box">
+                            <span t-esc="o.requesters_id.name"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority-level">Priority Level:</label>
+                        <div class="text-box">
+                            <span t-esc="o.priority_level"/>
+                        </div>
+                        <label for="move-order-no">Move Order No:</label>
+                        <div class="text-box">
+                            <span t-esc="o.move_order_no"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="assigned-to">Assigned To / Function:</label>
+                        <t t-if="o.workers_requested">
+                            <div class="text-box">
+                                <span t-esc="o.workers_requested"/>
+                            </div>
+                        </t>
+                        <t t-if="not o.workers_requested">
+                            <div class="text-box">
+                                <span t-esc="', '.join(o.get_workers())"/>
+                            </div>
+                        </t>
+                        <label for="sales-order">Sales Order:</label>
+                        <div class="text-box">
+                            <span t-esc="o.so_no"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="brand">Brand / Item Description:</label>
+                        <div class="text-box full-width">
+                            <span t-esc="o.brand_desc"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="job-request">Job Request:</label>
+                        <div class="text-box full-width">
+                            <t t-if="o.task">
+                                <span t-esc="o.task"/>
+                            </t>
+                            <t t-if="not o.task">
+                            </t>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <div class="text-box full-width">
+                            <t t-if="o.location">
+                                <span t-esc="o.location"/>
+                            </t>
+                            <t t-if="not o.location">
+                            </t>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="instructions">Special Instructions:</label>
+                        <div class="text-box full-width">
+                            <t t-if="o.special_inst">
+                                <span t-esc="o.special_inst"/>
+                            </t>
+                            <t t-if="not o.special_inst">
+                            </t>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="actual-start-date">Actual Start Date:</label>
+                        <div class="text-box">
+                            <t t-if="o.date_from_user">
+                                <span t-esc="o.date_from_user"/>
+                            </t>
+                            <t t-if="not o.date_from_user">
+                            </t>
+                        </div>
+                        <t t-if="o.priority_level == 'specified_date'">
+                            <label for="date-needed">Date Needed:</label>
+                            <div class="text-box">
+                                <span t-esc="o.date_needed"/>
+                            </div>
+                        </t>
+                        <t t-if="not o.priority_level">
+                            <label for="date-needed">&#160;</label>
+                            <div class="text-box" style="border:1px solid white">&#160;</div>
+                        </t>
+                    </div>
+                    <div class="form-group">
+                        <label for="actual-work-days">Actual Work Days:</label>
+                        <div class="text-box">
+                            <t t-if="o.estimate">
+                                <span t-esc="o.estimate"/>
+                            </t>
+                            <t t-if="not o.estimate">
+                            </t>
+                        </div>
+                        <label for="date-finished">Date Finished:</label>
+                        <div class="text-box">
+                            <t t-if="o.actual_end_date">
+                                <span t-esc="o.actual_end_date"/>
+                            </t>
+                            <t t-if="not o.actual_end_date">
+                            </t>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inspected-by">Checked and / Inspected By:</label>
+                        <div class="text-box full-width">
+                            <span t-esc="o.current_user_that_logged_in()"/>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <hr style="text-align: center; width: 1210px"/>
+
+                        <div class="form-group">
+                            <div class="align-label">
+                                <label class="section-title">WITH REPLACEMENT:</label>
+                            </div>
+                            <div class="checkbox-section">
+                                <label for="signature-2">YES:</label>
+                                <div class="text-box half-width"></div>
+                                <label for="signature-2">NO:</label>
+                                <div class="text-box half-width"></div>
+                                <label for="signature-1">SIGNATURE:</label>
+                                <div class="text-box half-width" style="margin-left: 20px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="form-group">
+                            <div class="align-label">
+                                <label class="section-title">ITEM IS IN GOOD CONDITION:</label>
+                            </div>
+                            <div class="checkbox-section">
+                                <label for="signature-2">YES:</label>
+                                <div class="text-box half-width"></div>
+                                <label for="signature-2">NO:</label>
+                                <div class="text-box half-width"></div>
+                                <label for="signature-2">SIGNATURE:</label>
+                                <div class="text-box half-width" style="margin-left: 20px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div class="form-group">
+                            <div class="align-label">
+                                <label class="section-title">ITEM IS SUBJECT FOR REPAIR:</label>
+                            </div>
+                            <div class="checkbox-section">
+                                <label for="signature-2">YES:</label>
+                                <div class="text-box half-width"></div>
+                                <label for="signature-2">NO:</label>
+                                <div class="text-box half-width"></div>
+                                <label for="signature-3">SIGNATURE:</label>
+                                <div class="text-box half-width" style="margin-left: 20px"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="text-align: center; width: 1210px"/>
+                    <p style="text-align: center; font-style: italic;">*This portion is for repair approvals only</p>
+
+                    <div class="form-group">
+                        <label for="job-request">APPROVED BY:</label>
+                        <div class="text-box full-width">MANCOM</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">CHECKED BY:</label>
+                        <div class="text-box full-width">PRODUCT COORDINATOR</div>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 100px; font-style: italic;">*This report are generated by
+                    <span t-esc="o.current_user_that_logged_in()"/>
+                    @
+                    <span t-esc="o.current_time_now()"/>
+                </p>
+            </t>
+
+        </template>
+        <template id="job_request_form_action_menu_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.approved_by.lang"/>
+                    <t t-call="dex_job_request_form_odoo.job_request_form_report_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+

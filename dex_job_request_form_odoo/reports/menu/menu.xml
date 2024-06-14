@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <report
+                id="jrf_odoo_report_id"
+                model="job.request"
+                string="Job Request Form Report"
+                name="dex_job_request_form_odoo.job_request_form_action_menu_id"
+                file="dex_job_request_form_odoo.job_request_form_action_menu_id"
+                report_type="qweb-pdf"
+                menu="False"/>
+        <!--                paperformat="paperformat_landscape"-->
+    </data>
+</odoo>

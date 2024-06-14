@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="job_request_action_id" model="ir.actions.act_window">
+            <field name="name">Job Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">job.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="job_request_menu_action_id" name="Job Request Form"
+                  parent="dex_form_request_approval.create_request_main_categ_id" action="job_request_action_id" sequence="10"/>
+
+    </data>
+</odoo>

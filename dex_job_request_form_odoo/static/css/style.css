@@ -1,0 +1,134 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    width: 1300px;
+    margin: 0 auto;
+    background: white;
+}
+
+h1 {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: -webkit-box; /* wkhtmltopdf uses this */
+    /*-webkit-box-pack: center; !* wkhtmltopdf uses this *!*/
+    /*-webkit-justify-content: center;*/
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    width: 100px;
+    font-weight: bold;
+    display: -webkit-box; /* wkhtmltopdf uses this */
+    display: -webkit-flex;
+    /*-webkit-box-pack: center; !* wkhtmltopdf uses this *!*/
+    /*-webkit-justify-content: center;*/
+    justify-content: center;
+    align-items: center;
+}
+
+.form-group .text-box {
+    width: 500px;
+    padding: 10px;
+    height: 60px;
+    margin-right: 10px;
+    border: 1px solid #000;
+    background-color: #fff;
+}
+
+.form-group .half-width {
+    width: 220px;
+}
+
+.form-group .full-width {
+    width: 87.5%;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+.section-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.checkbox-group {
+    display: -webkit-box; /* wkhtmltopdf uses this */
+    display: -webkit-flex;
+    /*-webkit-box-pack: center; !* wkhtmltopdf uses this *!*/
+    /*-webkit-justify-content: center;*/
+    justify-content: center;
+    align-items: center;
+}
+
+.checkbox-group label {
+    margin-right: 10px;
+}
+
+.checkbox-group .box {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #000;
+    display: inline-block;
+}
+
+.box {
+    width: 150px;
+    padding: 5px;
+    height: 60px;
+    margin-right: 10px;
+    border: 1px solid #000;
+    background-color: #fff;
+    display: inline-block;
+}
+
+.signature-group {
+    display: -webkit-box; /* wkhtmltopdf uses this */
+    display: -webkit-flex;
+    /*-webkit-box-pack: center; !* wkhtmltopdf uses this *!*/
+    /*-webkit-justify-content: center;*/
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.signature-group .signature {
+    width: 250px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
+.align-label {
+    display: -webkit-box; /* wkhtmltopdf uses this */
+    display: -webkit-flex;
+    /*-webkit-box-pack: center; !* wkhtmltopdf uses this *!*/
+    /*-webkit-justify-content: center;*/
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+}
+
+.checkbox-section {
+    display: -webkit-box; /* wkhtmltopdf uses this */
+    display: -webkit-flex;
+    /*-webkit-box-pack: center; !* wkhtmltopdf uses this *!*/
+    /*-webkit-justify-content: center;*/
+    justify-content: center;
+    align-items: center;
+    width: 89%;
+}

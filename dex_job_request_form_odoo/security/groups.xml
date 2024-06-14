@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="job_request_form_main_group_id">
+            <field name="name">Job Request Form</field>
+        </record>
+
+        <record model="ir.module.category" id="security_job_request">
+            <field name="name">Form Security</field>
+            <field name="parent_id" ref="dex_job_request_form_odoo.job_request_form_main_group_id"/>
+        </record>
+
+
+        <record id="dex_job_request_group_odoo_for_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="dex_job_request_form_odoo.security_job_request"/>
+            <field name="implied_ids" eval="[(5,0,0)]"/>
+        </record>
+
+        <record id="dex_job_request_odoo_group_for_manager" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="dex_job_request_form_odoo.security_job_request"/>
+            <field name="implied_ids"
+                   eval="[(4,ref('dex_job_request_form_odoo.dex_job_request_group_odoo_for_user'),0)]"/>
+        </record>
+
+    </data>
+
+</odoo>

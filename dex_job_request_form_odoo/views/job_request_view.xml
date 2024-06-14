@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="job_request_form_form_view" model="ir.ui.view">
+            <field name="name">job_request_form_form_view</field>
+            <field name="model">job.request</field>
+            <field name="arch" type="xml">
+                <form duplicate="false">
+                    <header>
+                        <button name='submit_for_approval' string="Submit" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', ['draft'])]}"
+                                confirm="Are you sure?"/>
+                        <button name='on_hold' string="On Hold" type="object" class="oe_highlight"
+                                attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'not in', ['assigned', 'done', 'ongoing'])]}"
+                                confirm="Are you sure?"/>
+                        <button name='assigned' string="Assigned" type="object" class="oe_highlight"
+                                attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'not in', ['queue', 'on_hold'])]}"
+                                confirm="Are you sure?"/>
+                        <button name='cancel' string="Cancel" type="object" class="oe_highlight"
+                                attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'in', ['queue','done'])]}"
+                                confirm="Are you sure?"/>
+                        <button name='rejected' string="Rejected" type="object" class="oe_highlight"
+                                attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'not in', ['assigned'])]}"
+                                confirm="Are you sure?"/>
+                        <button name='ongoing' string="Ongoing" type="object" class="oe_highlight"
+                                attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'not in', ['assigned', 'on_hold'])]}"
+                                confirm="Are you sure?"/>
+                        <button name='work_done' string="Done" type="object" class="oe_highlight"
+                                attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'not in', ['ongoing', 'assigned', 'on_hold'])]}"
+                                confirm="Are you sure?"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,queue,assigned,ongoing,on_hold,cancelled,rejected,done"
+                               option="{'clickable': '1'}"/>
+                    </header>
+
+                    <sheet name="sheet_0">
+                        <div class="oe_title">
+                            <label for="name" string="Control No." class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group name="invisible_fields" invisible="1">
+                                <field name="initial_approver_job_title"/>
+                                <field name="second_approver_job_title"/>
+                                <field name="third_approver_job_title"/>
+                                <field name="fourth_approver_job_title"/>
+                                <field name="final_approver_job_title"/>
+                                <field name="approver_count"/>
+                                <field name="check_status"/>
+                                <field name="create_user_id"/>
+                                <field name="current_user_groups"/>
+                                <field name="current_user_groups1"/>
+                                <field name="is_change"/>
+                            </group>
+                            <group>
+                                <field name="requesters_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                                <field name="requesters_email"/>
+                            </group>
+                            <group>
+                                <field name="requesters_department"/>
+                                <field name="department_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                                <field name="form_request_type"/>
+                                <field name="priority_level" required="1"
+                                       attrs="{'required': [('current_user_groups', '=', 'manager')], 'readonly': [('state', 'not in', ['draft'])]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <sheet name="sheet_1">
+                        <group>
+                            <group>
+                                <label for="workers_requested"
+                                       attrs="{'readonly': ['|', ('current_user_groups', '=', 'manager'), ('state', 'in', ['draft'])]}"/>
+                                <div class="o_row" name="workers_requested"
+                                     attrs="{'readonly': [('current_user_groups', '=', 'manager')]}">
+                                    <field name="workers_requested"
+                                           attrs="{'readonly': ['|', ('current_user_groups', '=', 'manager'), ('state', 'not in', ['draft'])]}"/>
+                                    <button name="%(dex_job_request_form_odoo.dex_form_request_job_request_view)d"
+                                            string="Change Request" type="action"
+                                            attrs="{'invisible': [('current_user_groups1', '=', 'user')]}"/>
+                                </div>
+                                <field name="workers_assigned_when_changed"
+                                       attrs="{'invisible': [('is_change', '!=', True)]}" readonly="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="login"/>
+                                    </tree>
+                                </field>
+
+                                <field name="reason_to_change" readonly="1"/>
+                                <field name="brand_desc"
+                                       attrs="{'readonly': ['|', ('state', 'not in', ['draft']), ('current_user_groups', '=', 'manager')]}"/>
+                            </group>
+                            <group>
+                                <field name="date_from_user" string="Estimated Start Date"
+                                       attrs="{'required': [('current_user_groups', '=', 'manager')], 'readonly': ['|', ('current_user_groups', '=', 'user'), ('state', 'not in', ['draft'])], 'invisible': ['&amp;', ('current_user_groups', '=', 'user'), ('state', 'in', ['draft', 'queue'])]}"/>
+                                <field name="estimate" string="Estimated Work Days"
+                                       attrs="{'required': [('current_user_groups', '=', 'manager')], 'readonly': [('state', 'not in', ['draft'])]}"/>
+                            </group>
+                            <group attrs="{'invisible': [('state', 'not in', ['done', 'ongoing', 'on_hold'])]}">
+                                <field name="actual_start_date" string="Actual Start Date"
+                                       attrs="{'readonly': [('current_user_groups1', '=', 'user')], 'required': ['&amp;', ('current_user_groups', '=', 'manager'), ('state', 'in', ['done', 'ongoing', 'on_hold'])]}"/>
+                                <field name="actual_end_date" string="Actual End Date"
+                                       attrs="{'readonly': [('current_user_groups1', '=', 'user')], 'required': ['&amp;', ('current_user_groups', '=', 'manager'), ('state', 'in', ['done', 'ongoing', 'on_hold'])]}"/>
+                                <field name="actual_total_date" string="Actual Total Date"
+                                       attrs="{'readonly': [('current_user_groups1', '=', 'user')], 'required': ['&amp;', ('current_user_groups', '=', 'manager'), ('state', 'in', ['done', 'ongoing', 'on_hold'])]}"/>
+                            </group>
+                            <group>
+                                <field name="move_order_no"
+                                       attrs="{'readonly': ['|', ('current_user_groups', '=', 'user'), ('state', 'not in', ['draft'])]}"/>
+                                <field name="so_no"
+                                       attrs="{'readonly': ['|', ('current_user_groups', '=', 'user'), ('state', 'not in', ['draft'])]}"/>
+                                <field name="connection_wo" readonly="1"
+                                       attrs="{'invisible': [('connection_wo', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="task" style="height: 50px"
+                                   attrs="{'readonly': [('state', 'not in', ['draft'])], 'required': [('current_user_groups', '=', 'user')]}"/>
+                        </group>
+                        <group>
+                            <field name="location" style="height: 25px"
+                                   attrs="{'required': [('current_user_groups', '=', 'user')], 'readonly': [('state', 'not in', ['draft'])]}"/>
+                        </group>
+                        <group>
+                            <field name="special_inst" style="height: 50px"
+                                   attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                        </group>
+                        <group>
+                            <field name="date_needed" style="height: 25px"
+                                   attrs="{'invisible': [('priority_level', '!=', 'specified_date')], 'readonly': [('state', 'not in', ['draft'])]}"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="job_request_form_tree_view" model="ir.ui.view">
+            <field name="name">job_request_form_tree_view</field>
+            <field name="model">job.request</field>
+            <field name="arch" type="xml">
+                <tree string="Tree" decoration-danger="state in ('cancel','rejected')"
+                      decoration-muted="state in ('draft')"
+                      decoration-success="state in ('done','ongoing')"
+                      decoration-warning="state in ('on_hold')"
+                      decoration-primary="state in ('draft', 'queue', 'assigned')">
+
+                    <field name="current_user_groups1" invisible="1"/>
+                    <field name="create_date"/>
+                    <field name="name"/>
+                    <field name="priority_level" widget="badge"
+                           decoration-primary="priority_level in ['within_a_week', 'anytime']"
+                           decoration-warning="priority_level == 'urgent'"
+                           decoration-danger="priority_level == 'critical'"
+                           decoration-muted="priority_level in ['specified_date']"/>
+                    <field name="task"/>
+                    <field name="date_from_user"/>
+                    <field name="actual_start_date"/>
+                    <field name="actual_end_date"/>
+                    <field name="actual_total_date"/>
+                    <field name="state"/>
+                    <button name="generate_pdf" type="object" string="Generate PDF" class="btn btn-warning"
+                            attrs="{'invisible': [('current_user_groups1', '=', 'user')]}"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>
