@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="gasoline_allowance_form_report_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        /* Custom CSS for alignment */
+                        .overlay {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                        }
+
+                        .center-content {
+                            display: flex;
+                            justify-content: center;
+                        }
+
+                        * {
+                            font-size: 18px;
+                        }
+
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-family: sans-serif;
+                        }
+
+                        th, td {
+                            border: 1px solid black;
+                            text-align: center;
+                            padding: 0 !important;
+                            vertical-align: top; /* Align content at the top */
+                        }
+
+                        th, td, tr {
+                            padding: 0 !important;
+                            margin: 0 !important;
+                        }
+
+                        .table td, .table th {
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    </style>
+                </xpath>
+                <div class="container" style="width: 100%">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th rowspan="3" style="vertical-align: middle; width: 400px;"><img
+                                        src="dex_form_request_approval/static/src/img/dexterton_logo_072023.png"/></th>
+                                <th style="width: 170px;">Control Number</th>
+                                <th><t t-esc="o.name"/></th>
+                            </tr>
+                            <tr>
+                                <th>Date</th>
+                                <th><t t-esc="o.create_date"/></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">
+                                    <div style="border: 1px solid black; width: 500px; font-size: 25px; margin: auto;">
+                                        GASOLINE ALLOWANCE FORM</div>
+                                </th>
+
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <td>Employee Name:</td>
+                                <td><t t-esc="o.requesters_id.name"/></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Vehicle Type:</td>
+                                <td><t t-esc="o.vehicle_type"/></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Itinerary / Destination:</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3"></td>
+                                <td colspan="2">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>From</th>
+                                                <th>To</th>
+                                                <th>Purpose</th>
+                                                <th>Estimated KM</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="o.gaf_lines" t-as="val">
+                                                <tr>
+                                                    <td><t t-esc="val._from"/></td>
+                                                    <td><t t-esc="val._to"/></td>
+                                                    <td><t t-esc="val._purpose"/></td>
+                                                    <td><t t-esc="val._estimated_km"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 100px; text-align: left;">Total</th>
+                                                <th><t t-esc="o.total_gas()"/></th>
+                                            </tr>
+                                            <tr>
+                                                <th style="width: 100px; text-align: left;">Rate/km (php)</th>
+                                                <th><t t-esc="o.rate_per_km"/></th>
+                                            </tr>
+                                            <tr>
+                                                <th style="width: 100px; text-align: left;">Total Gasoline
+                                                    Allowance</th>
+                                                <th><t t-esc="o.total_gasoline_allowance"/></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Requested By:</th>
+                                <th><t t-esc="o.requesters_id.name"/></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th style="font-size: 10px; vertical-align: top;">SIGNATURE OVER PRINTED NAME</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <th>Noted By:</th>
+                                <th><t t-esc="o.initial_approver_name"/></th>
+                                <th>Approved By:</th>
+                                <th><t t-esc="o.second_approver_name"/></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th style="font-size: 10px; vertical-align: top;">DEPARTMENT HEAD</th>
+                                <th></th>
+                                <th style="font-size: 10px; vertical-align: top;">FINANCE HEAD</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </t>
+
+        </template>
+        <template id="gasoline_allowance_form_action_menu_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.approved_by.lang"/>
+                    <t t-call="dex_form_request_approval.gasoline_allowance_form_report_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+

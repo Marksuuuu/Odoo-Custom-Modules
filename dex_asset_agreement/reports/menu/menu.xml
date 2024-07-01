@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_jo" model="report.paperformat">
+            <field name="name">PF JO</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+                id="jrf_odoo_report_id"
+                model="job.request"
+                string="Job Request Form Report"
+                name="dex_job_request_form_odoo.job_request_form_action_menu_id"
+                file="dex_job_request_form_odoo.job_request_form_action_menu_id"
+                report_type="qweb-pdf"
+                menu="False"
+                paperformat="paperformat_jo"
+
+        />
+    </data>
+
+
+</odoo>

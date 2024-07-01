@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="create_dex_asset_agreement" model="ir.sequence">
+            <field name="name">Create Agreement Sequence</field>
+            <field name="code">dex.asset.agreement.sequence</field>
+            <field name="padding">6</field>
+            <field name="prefix">DAA%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="create_asset" model="ir.sequence">
+            <field name="name">Create Asset</field>
+            <field name="code">dex.asset.sequence</field>
+            <field name="padding">6</field>
+            <field name="prefix">DA%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+    </data>
+</odoo>

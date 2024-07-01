@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="agreement_form_view" model="ir.ui.view">
+            <field name="name">agreement_form_view</field>
+            <field name="model">agreement</field>
+            <field name="arch" type="xml">
+                <form duplicate="false">
+                    <header>
+                        <button name="show_agreement" type="object" string="SHOW AGREEMENT"/>
+                    </header>
+                    <sheet name="sheet_0">
+                        <div class="oe_title">
+                            <label for="name" string="Control No." class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                            <group>
+                                <field name="name_of_person"/>
+                                <field name="department_of_person"/>
+                                <field name="unit"/>
+                            </group>
+                            <group>
+                                <field name="serial_number"/>
+                            </group>
+
+                            <group>
+                                <field name="digital_signature" widget="signature"/>
+                            </group>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="agreement_tree_view" model="ir.ui.view">
+            <field name="name">agreement_tree_view</field>
+            <field name="model">agreement</field>
+            <field name="arch" type="xml">
+                <tree string="Tree">
+                    <field name="create_date"/>
+                    <field name="name"/>
+                    <field name="name_of_person"/>
+                    <field name="unit"/>
+                    <button name="show_agreement" type="object" string="SHOW AGREEMENT"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

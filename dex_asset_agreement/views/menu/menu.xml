@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="dex_asset_agreement_action_id" model="ir.actions.act_window">
+            <field name="name">Dex Asset Agreement</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">agreement</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+
+            <record id="dex_asset_action_id" model="ir.actions.act_window">
+            <field name="name">Dex Asset</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asset</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="dex_asset_agreement_menu_action_id" name="Dex Asset Agreement" sequence="15"/>
+
+        <menuitem id="dex_asset_agreement_root_menu_action_id" parent="dex_asset_agreement_menu_action_id" action="dex_asset_agreement_action_id" name="Dex Asset Agreement" sequence="0"/>
+        <menuitem id="dex_asset_root_menu_action_id" parent="dex_asset_agreement_menu_action_id" action="dex_asset_action_id" name="Dex Asset" sequence="1"/>
+
+    </data>
+</odoo>

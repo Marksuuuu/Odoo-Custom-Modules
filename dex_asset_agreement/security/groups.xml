@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="dex_asset_agreement_group_id">
+            <field name="name">Asset Agreement</field>
+        </record>
+
+        <record model="ir.module.category" id="security_agreement_security">
+            <field name="name">Asset Agreement Security</field>
+            <field name="parent_id" ref="dex_asset_agreement.dex_asset_agreement_group_id"/>
+        </record>
+
+
+        <record id="agreement_security_group_for_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="dex_asset_agreement.security_agreement_security"/>
+            <field name="implied_ids" eval="[(5,0,0)]"/>
+        </record>
+
+        <record id="agreement_security_group_for_manager" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="dex_asset_agreement.security_agreement_security"/>
+            <field name="implied_ids"
+                   eval="[(4,ref('dex_asset_agreement.agreement_security_group_for_user'),0)]"/>
+        </record>
+
+    </data>
+
+</odoo>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="agreement_wizard_form" model="ir.ui.view">
+            <field name="name">Agreement Wizard</field>
+            <field name="model">agreement.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <div>
+                        <p>
+                            I,<field name="name_of_person" readonly="1"/>. of IT QC (department) hereby acknowledge that
+                            I have received a cellphone unit,
+                            <field name="unit" readonly="1"/>
+                            with serial number<field name="serial_number" readonly="1"/>, as part of my working package
+                            with
+                            <b>Dexterton Corporation</b>
+                        </p>
+                        <br/>
+                        <br/>
+                        <p>
+                            I, acknowledge that this cellphone unit has been issued to me in line with the property of
+                            Dexterton Corporation
+                        </p>
+                        <br/>
+                        <br/>
+                        <p>
+                            Furthermore, I acknowledge receipt of the following accessories for the said Cellphone /
+                            Tablet unit:
+                        </p>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ITEM</th>
+                                    <th scope="col">DESCRIPTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Cellphone / Tablet / Laptop - Model No.</td>
+                                    <td>
+                                        <field name="unit" readonly="1"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Serial No.</td>
+                                    <td>
+                                        <field name="serial_number" readonly="1"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Charger with USB Cable</td>
+                                    <td>
+                                        <field name="is_have_postpaid_number" readonly="1"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Postpaid Number</td>
+                                    <td>
+                                        <field name="charger_with_usb_cable" readonly="1"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Other Peripherals (Mouse, Cables, ETC.)</td>
+                                    <td>
+                                        <field name="other_peripherals" readonly="1"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Remarks</td>
+                                    <td>
+                                        <field name="remarks" readonly="1"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>
+                            In Receiving the above-mentioned equipment in line with may duties and responsibilities, I
+                            assume responsibility in its proper maintenance and upkeep, and agree to abide by Company
+                            <br/>
+                            policies related to IT and IT procedures. I understand that any damage and/or loss which may
+                            result from my neglect and/or carelessness shall be charged to my personal account to the
+                            extent legally applicable.
+                            <br/>
+                            I will shoulder any data charges that may incur on the plan since it is my responsibility to
+                            strictly monitor the data usage of the cellphone entrusted to me.
+                            <br/>
+                            <br/>
+                            Upon surrendering the cellphone to the IT department, I understand that all data saved on
+                            its storage will not be recovered. It will be my responsibility to back up any photos or
+                            files I will be needing future use.
+                        </p>
+                        <br/>
+                        <br/>
+                        <div style="float: left; margin-right: 20px;">
+                            <p><field name="digital_signature" widget="image" class="oe_avatar" readonly="1"
+                                      style="width: 200px; height: 100px; border: 1px solid white;"/>Signature of
+                                Employee:
+                            </p>
+                            <p>Date of Receipt:
+                                <field name="create_date"/>
+                            </p>
+                        </div>
+
+
+                    </div>
+
+                    <footer class="oe_right">
+                        <button string="Save" type="object" class="btn-primary" name="view_agreement"
+                                confirm="Are you sure?"/>
+                        <button string="Discard" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="agreement_wizard_view" model="ir.actions.act_window">
+            <field name="name">Agreement Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">agreement.wizard</field>
+            <field name="view_mode">form</field>
+        </record>
+    </data>
+</odoo>
