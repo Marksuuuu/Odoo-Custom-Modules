@@ -19,19 +19,22 @@ class ApprovalFieldsPlugin(models.AbstractModel):
     def _get_department_domain(self):
         return []
 
+    def _get_default_currency_id(self):
+        return self.env.company.currency_id.id
+
     @api.model
     def _get_default_journal(self):
         context = self._context
         company_id = context.get('force_company', context.get('default_company_id', self.env.company.id))
         journal_id = context.get('default_journal_id')
 
-        move_type = context.get('default_type', 'entry')
+        move_type = context.get('default_type', 'in_invoice')
         sale_types = self.get_sale_types(include_receipts=True)
         purchase_types = self.get_purchase_types(include_receipts=True)
 
         if journal_id:
             journal = self.env['account.journal'].browse(journal_id)
-            if move_type != 'entry' and journal.type != ('sale' if move_type in sale_types else 'purchase'):
+            if move_type != 'in_invoice' and journal.type != ('sale' if move_type in sale_types else 'purchase'):
                 raise UserError(_("Cannot create an invoice of type %s with a journal having %s as type.") % (
                     move_type, journal.type))
         else:
@@ -62,6 +65,10 @@ class ApprovalFieldsPlugin(models.AbstractModel):
                                  domain="[('company_id', '=', company_id)]",
                                  default=_get_default_journal)
 
+    currency_id = fields.Many2one('res.currency', default=_get_default_currency_id)
+
+
+
     type = fields.Selection(selection=[
         ('entry', 'Journal Entry'),
         ('out_invoice', 'Customer Invoice'),
@@ -70,17 +77,16 @@ class ApprovalFieldsPlugin(models.AbstractModel):
         ('in_refund', 'Vendor Credit Note'),
         ('out_receipt', 'Sales Receipt'),
         ('in_receipt', 'Purchase Receipt'),
-    ], string='Type', required=True, store=True, index=True, readonly=True, tracking=True,
+    ], string='Type', required=True, store=True, index=True, readonly=True,
         default="entry", change_default=True)
 
     name = fields.Char(string='Control No.', copy=False, readonly=True, index=True,
-                       default=lambda self: _('New'), tracking=True)
+                       default=lambda self: _('New'))
     requesters_id = fields.Many2one('hr.employee', string='Requesters', required=True,
-                                    default=lambda self: self.env.user.employee_id.id, tracking=True)
-    requesters_email = fields.Char(related='requesters_id.work_email', string='Requesters Email', required=True,
-                                   tracking=True, store=True)
+                                    default=lambda self: self.env.user.employee_id.id)
+    requesters_email = fields.Char(related='requesters_id.work_email', string='Requesters Email', store=True)
     requesters_department = fields.Many2one(related='requesters_id.department_id', string='Requesters Department',
-                                            store=True, tracking=True)
+                                            store=True, required=False)
 
     # to be overridden by child models
 
@@ -88,40 +94,40 @@ class ApprovalFieldsPlugin(models.AbstractModel):
                                     tracking=True, required=True)
 
     form_request_type = fields.Selection(related='department_id.approval_type', string='Form Request Type', store=True,
-                                         readonly=True, tracking=True)
+                                         readonly=True)
 
-    approval_stage = fields.Integer(default=1, tracking=True)
+    approval_stage = fields.Integer(default=1)
     approval_link = fields.Char(string='Approval Link')
 
     state = fields.Selection(
         selection=[('draft', 'Draft'), ('to_approve', 'To Approve'), ('approved', 'Approved'),
                    ('disapprove', 'Disapproved'), ('cancel', 'Cancelled')],
-        default='draft', tracking=True)
+        default='draft')
 
     approval_status = fields.Selection(
         selection=[('draft', 'Draft'), ('to_approve', 'To Approve'), ('approved', 'Approved'),
                    ('disapprove', 'Disapproved'), ('cancel', 'Cancelled')], string='Status', default='draft',
         tracking=True)
 
-    initial_approver_email = fields.Char(string='Initial Approver Email', tracking=True)
-    second_approver_email = fields.Char(string='Second Approver Email', tracking=True)
-    third_approver_email = fields.Char(string='Third Approver Email', tracking=True)
-    fourth_approver_email = fields.Char(string='Fourth Approver Email', tracking=True)
-    final_approver_email = fields.Char(string='Final Approver Email', tracking=True)
+    initial_approver_email = fields.Char(string='Initial Approver Email')
+    second_approver_email = fields.Char(string='Second Approver Email')
+    third_approver_email = fields.Char(string='Third Approver Email')
+    fourth_approver_email = fields.Char(string='Fourth Approver Email')
+    final_approver_email = fields.Char(string='Final Approver Email')
 
-    initial_approver_name = fields.Char(string='Initial Approver Name', tracking=True)
-    second_approver_name = fields.Char(string='Second Approver Name', tracking=True)
-    third_approver_name = fields.Char(string='Third Approver name', tracking=True)
-    fourth_approver_name = fields.Char(string='Fourth Approver name', tracking=True)
-    final_approver_name = fields.Char(string='Final Approver name', tracking=True)
+    initial_approver_name = fields.Char(string='Initial Approver Name')
+    second_approver_name = fields.Char(string='Second Approver Name')
+    third_approver_name = fields.Char(string='Third Approver name')
+    fourth_approver_name = fields.Char(string='Fourth Approver name')
+    final_approver_name = fields.Char(string='Final Approver name')
 
-    disapproval_reason = fields.Char(string="Reason for Disapproval", tracking=True)
-    disapproved_by = fields.Many2one('res.users', string="Disapproved By", tracking=True)
-    disapproved_date = fields.Datetime(string="Disapproved Date", tracking=True)
+    disapproval_reason = fields.Char(string="Reason for Disapproval")
+    disapproved_by = fields.Many2one('res.users', string="Disapproved By")
+    disapproved_date = fields.Datetime(string="Disapproved Date")
 
-    cancellation_reason = fields.Char(string="Reason for Cancellation", tracking=True)
-    cancelled_by = fields.Many2one('res.users', string="Cancelled By", tracking=True)
-    cancelled_date = fields.Datetime(string="Cancelled Date", tracking=True)
+    cancellation_reason = fields.Char(string="Reason for Cancellation")
+    cancelled_by = fields.Many2one('res.users', string="Cancelled By")
+    cancelled_date = fields.Datetime(string="Cancelled Date")
 
     initial_approver_job_title = fields.Char(compute='get_approver_title', store=True)
     second_approver_job_title = fields.Char(compute='get_approver_title', store=True)

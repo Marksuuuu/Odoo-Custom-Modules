@@ -121,7 +121,7 @@
                                             </tr>
                                             <tr>
                                                 <th style="width: 100px; text-align: left;">Rate/km (php)</th>
-                                                <th><t t-esc="o.rate_per_km"/></th>
+                                                <th><t t-esc="o.vehicle_rate"/></th>
                                             </tr>
                                             <tr>
                                                 <th style="width: 100px; text-align: left;">Total Gasoline

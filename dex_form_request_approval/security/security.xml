@@ -34,6 +34,9 @@
         <!--            <field name="domain_force">[('create_uid','=',user.id)]</field>-->
         <!--        </record>-->
 
+        <!--access.payment.request.form.lines_manager,access_payment_request_form_lines_manager,model_payment_request_form_lines,dex_form_request_approval.group_from_request_manager,1,1,1,1-->
+        <!--access.payment.request.form.lines_user,access_payment_request_form_lines_user,model_payment_request_form_lines,dex_form_request_approval.group_from_request_user,1,1,1,0-->
+
 
     </data>
 

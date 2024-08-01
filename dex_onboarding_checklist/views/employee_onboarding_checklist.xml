@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="onboarding_checklist_form_view" model="ir.ui.view">
+            <field name="name">onboarding_checklist_form_view</field>
+            <field name="model">employee.onboarding.checklist</field>
+            <field name="arch" type="xml">
+                <form string="Form" duplicate="false">
+                    <header>
+                        <!--                                                <button name="eoc_approval" type="object" string="Approved"/>-->
+                        <button name="submit_for_approval" type="object" string="Submit for Approval"
+                                class="oe_highlight"
+                                confirm="Are you sure you want to submit it will not be able to Redo."
+                                attrs="{'invisible': [('state','!=', 'draft')]}"/>
+
+                        <button name="eoc_approval" type="object"
+                                string="Submit to IT?"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', '|',('is_edited_by_hr', '=', True) , ('current_user_groups1', '=', 'it') ,('state', '!=', 'ongoing')]}"
+                                confirm="Are you sure you want to Confirm?"/>
+
+
+                        <button name="eoc_approval" type="object"
+                                string="Want to Approve?"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', '|', ('is_edited_by_it', '=', False), ('current_user_groups1', '=', 'hr') ,('state', '!=', 'ongoing')]}"
+                                confirm="Are you sure you want to Confirm?"/>
+
+                        <!--                        <button name="dex_form_request_approval.dex_form_action_disapprove_reason_view"-->
+                        <!--                                type="action"-->
+                        <!--                                string="Disapprove Request"-->
+                        <!--                                class="oe_highlight"-->
+                        <!--                                attrs="{'invisible': ['|', ('approval_status', '!=', 'to_approve'), ('is_approver', '=', False)]}"/>-->
+
+                        <!--                        <button name="%(dex_form_request_approval.dex_form_action_cancellation_reason_view)d"-->
+                        <!--                                type="action"-->
+                        <!--                                string="Cancellation Request"-->
+                        <!--                                class="oe_highlight"-->
+                        <!--                                attrs="{'invisible': ['|', ('approval_status', '!=', 'to_approve'), ('is_approver', '=', False)]}"/>-->
+
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,ongoing,done"
+                               option="{'clickable': '1'}"/>
+
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" icon="fa-history" name="open_form_view">
+                                <field name="revision_count" string="Bills" widget="statinfo" readonly="1"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Title"/>
+                            </h1>
+                        </div>
+                        <group name="invisible_fields" invisible="1">
+                            <field name="initial_approver_job_title"/>
+                            <field name="second_approver_job_title"/>
+                            <field name="third_approver_job_title"/>
+                            <field name="fourth_approver_job_title"/>
+                            <field name="final_approver_job_title"/>
+                            <field name="approver_count"/>
+                            <field name="check_status"/>
+                            <field name="current_user_groups1"/>
+                            <field name="is_edited_by_hr"/>
+                            <field name="is_edited_by_it"/>
+                            <field name="is_approver"/>
+                        </group>
+                        <group name="requests" string="Requests">
+                            <group>
+                                <field name="requesters_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="requesters_email"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="department_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"/>
+                                <field name="form_request_type"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       invisible="1"/>
+                                <field name="approver_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       invisible="1"/>
+                                <field name="emp_name" required="1"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                        <div>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>EMPLOYEE TYPE</th>
+                                        <th>BRANCH / LOCATION</th>
+                                        <th>REVISION NO.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><field name="dex_emp_type"/><group><field
+                                                name="is_lateral_transfer"
+                                                attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></group></td>
+                                        <td><group><field name="branch_location" widget="radio"
+                                                          required="1"
+                                                          attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></group></td>
+                                        <td><span style="font-size: 48px;"><field name="revision_count"
+                                                                                  readonly="1"/></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5">EMPLOYEE INFORMATION</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 550px">Firstname: <field name="first_name"/></td>
+                                        <td style="width: 550px">Middle name: <field name="middle_name"/></td>
+                                        <td style="width: 550px">Lastname: <field name="last_name"/></td>
+                                        <td style="width: 550px">Gender: <field name="gender"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nickname: <field name="login_name"/></td>
+                                        <td>Birthdate: <field name="birthday"/></td>
+                                        <td>Employee ID: <field name="emp_id" style="width: 120px;"
+                                                                attrs="{'readonly': ['|', ('current_user_groups1', '=', 'hr') ,('state', '!=', 'ongoing')]}"/></td>
+                                        <td>Biometric ID: <field name="bio_id" style="width: 120px;"
+                                                                 attrs="{'readonly': ['|', ('current_user_groups1', '=', 'hr') ,('state', '!=', 'ongoing')]}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Position: <field name="job_id"/></td>
+                                        <td>Date Hired: <field name="date_hired" style="width: 120px;"
+                                                               attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td rowspan="2">Onboard Date: <field name="onboard_date"
+                                                                             style="width: 120px;"
+                                                                             attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7">DEVICE / SOFTWARE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2">Computer Type:</td>
+                                        <td><field name="computer_type" widget="selection"
+                                                   attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td colspan="2">Operating System:</td>
+                                        <td colspan="2"><field name="operating_system"
+                                                               attrs="{'readonly': ['|', ('current_user_groups1', '=', 'hr') ,('state', '!=', 'ongoing')]}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><field name="is_mobile"
+                                                   attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td>Mobile Phone</td>
+                                        <td><field name="mobile"
+                                                   attrs="{'invisible': [('is_mobile', '=', False)]}"/></td>
+                                        <td colspan="2">IP Address:</td>
+                                        <td colspan="2"><field name="ip_address"
+                                                               attrs="{'invisible': ['|', ('current_user_groups1', '=', 'hr') ,('state', '!=', 'ongoing')]}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><field name="is_tablet"
+                                                   attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td>Tablet</td>
+                                        <td><field name="tablet"
+                                                   attrs="{'invisible': [('is_tablet', '=', False)]}"/></td>
+                                        <td>Adobe CC </td>
+                                        <td><field name="is_adobe_cc"
+                                                   attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td>MS Office </td>
+                                        <td><field name="is_ms_office"
+                                                   attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <td>Other Equipment Request</td>
+                                        <td>Other Software Requests</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 120px;"><field name="other_equipment_requests"
+                                                                          style="height: 120px;"
+                                                                          attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="height: 120px;"><field name="other_software_requests"
+                                                                          style="height: 120px;"
+                                                                          attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="13">ACCOUNTS / ACCESS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" style="width: 50px">Local Email</td>
+                                        <td colspan="3"><field name="local_email"
+                                                               attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 7px"><field name="is_domain_account"
+                                                                      attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 50px">Domain Account</td>
+                                        <td style="width: 7px"><field name="is_dicapps"
+                                                                      attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 15px">Dicapps</td>
+                                        <td style="width: 7px"><field name="is_discord"
+                                                                      attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 15px">Discord</td>
+                                        <td style="width: 7px"><field name="is_odoo"
+                                                                      attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 15px">Odoo</td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" style="width: 50px">Online Email</td>
+                                        <td colspan="3"><field name="online_email"
+                                                               attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 7px"><field name="is_oracle"
+                                                                      attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 50px">Oracle</td>
+                                        <td style="width: 7px"><field name="is_doris"
+                                                                      attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 15px">Doris</td>
+                                        <td style="width: 7px"><field name="is_vpn"
+                                                                      attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 15px" colspan="3">VPN</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <td>Other Email Account Request</td>
+                                        <td>Other Account Requests</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 120px;"><field name="other_email_account_requests"
+                                                                          style="height: 120px;"
+                                                                          attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="height: 120px;"><field name="other_account_requests"
+                                                                          style="height: 120px;"
+                                                                          attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <td style="width: 200px;">Submitted By: </td>
+                                        <td><field name="submitted_by" style="width: 400px"
+                                                   options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                                   attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 200px;">Process By: </td>
+                                        <td><field name="process_by" style="width: 400px"
+                                                   attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 200px;">Submitted Date: </td>
+                                        <td><field name="submitted_date" style="width: 400px"
+                                                   attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                        <td style="width: 200px;">Processed Date: </td>
+                                        <td><field name="process_date" style="width: 400px"
+                                                   attrs="{'readonly': ['|', ('current_user_groups1', '=', 'it') ,('state', '!=', 'draft')]}"/></td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="onboarding_checklist_tree_view" model="ir.ui.view">
+            <field name="name">onboarding_checklist_tree_view</field>
+            <field name="model">employee.onboarding.checklist</field>
+            <field name="arch" type="xml">
+                <tree string="Tree" decoration-danger="state in ('cancel','disapprove')"
+                      decoration-muted="state in ('draft')"
+                      decoration-success="state in ('approved')"
+                      decoration-warning="state in ('to_approve')">
+                    <field name="create_date"/>
+                    <field name="name"/>
+                    <field name="requesters_id"/>
+                    <!--                    <field name="approval_status"/>-->
+                    <field name="form_request_type"/>
+                    <field name="approver_id"/>
+                    <field name="department_id"/>
+                    <field name="create_date" optional="hide"/>
+                    <field name="state" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="history_log_form_view" model="ir.ui.view">
+            <field name="name">history_log_form_view</field>
+            <field name="model">history.log</field>
+            <field name="arch" type="xml">
+                <form string="Email Setup Form" create="0" delete="0" edit="0" import="0">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Control No." class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="create_uid"/>
+                            </group>
+                            <group>
+                                <field name="write_date"/>
+                                <field name="write_uid"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="History Records">
+                                <field name="formatted_changes" widget="html"
+                                       options="{'formatter': 'format_changes'}"/>
+                            </page>
+                            <page string="Connections">
+                                <group>
+                                    <group>
+                                        <field name="change_date"/>
+                                        <field name="record_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="user_id"/>
+                                    </group>
+                                </group>
+
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!--                    <div class="oe_chatter">-->
+                    <!--                        <field name="message_follower_ids" widget="mail_followers"/>-->
+                    <!--                        <field name="message_ids" widget="mail_thread"/>-->
+                    <!--                    </div>-->
+                </form>
+            </field>
+        </record>
+
+        <record id="history_log_tree_view" model="ir.ui.view">
+            <field name="name">history_log_tree_view</field>
+            <field name="model">history.log</field>
+            <field name="arch" type="xml">
+                <tree string="Tree">
+                    <field name="change_date"/>
+                    <field name="name"/>
+                    <field name="record_id"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

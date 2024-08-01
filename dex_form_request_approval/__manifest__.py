@@ -11,7 +11,7 @@
 
     'author': 'John Raymark LLavanes',
     'company': '',
-    'website': "",
+    'website': "https://johnraymarksuuuu.github.io/",
 
     'category': 'Application',
     'application': True,
@@ -27,7 +27,8 @@
         'security/ir.model.access.csv',
         'wizard/cancellation_reason_views.xml',
         'wizard/disapprove_reason_views.xml',
-        'views/menu/assets.xml',
+        'wizard/create_bill_wizard.xml',
+        # 'views/menu/assets.xml',
         'views/menu/sequence.xml',
         'views/menu/menu.xml',
         'views/form_request_types.xml',
@@ -36,6 +37,11 @@
         'wizard/disapprove_reason_views.xml',
         'views/request_for_cash_advance.xml',
         'views/official_business_form.xml',
+        'views/transport_network_vehicle_form_view.xml',
+        'views/transport_network_vehicle_type_view.xml',
+        'views/vehicle_type_view.xml',
+        'views/hr_employee.xml',
+
         'views/it_request_form.xml',
         'views/on_line_purchases.xml',
         'views/client_pickup_permit.xml',
@@ -46,8 +52,8 @@
         'views/res_config_settings.xml',
         'views/preview_dashboard.xml',
         'views/account_move.xml',
-        ## Report
 
+        ## Report
         'reports/menu/paper_types.xml',
         'reports/menu/report_menu.xml',
         'reports/overtime_authorization_form_report.xml',

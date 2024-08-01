@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="onboarding_checklist_action_id" model="ir.actions.act_window">
+            <field name="name">Onboarding Checklist</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">employee.onboarding.checklist</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+
+        <record id="history_log_action_id" model="ir.actions.act_window">
+            <field name="name">History Log</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">history.log</field>
+            <field name="context">{'group_by': 'record_id'}</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="onboarding_checklist_menu_action_id" name="Onboarding Checklist Form"
+                  parent="dex_form_request_approval.create_request_main_categ_id" action="onboarding_checklist_action_id"
+                  sequence="11"/>
+
+          <menuitem id="history_log_root_id" name="History Logs" parent="dex_form_request_approval.configuration_categ_id"
+                  sequence="4" action="history_log_action_id"/>
+
+
+
+
+
+    </data>
+</odoo>

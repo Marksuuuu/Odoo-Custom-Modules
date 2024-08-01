@@ -11,7 +11,7 @@
                                 attrs="{'invisible': [('state', 'not in', ['draft'])]}"
                                 confirm="Are you sure?"/>
                         <button name='on_hold' string="On Hold" type="object" class="oe_highlight"
-                                attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'not in', ['assigned', 'done', 'ongoing'])]}"
+                                attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'not in', ['assigned', 'ongoing'])]}"
                                 confirm="Are you sure?"/>
                         <button name='assigned' string="Assigned" type="object" class="oe_highlight"
                                 attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'not in', ['queue', 'on_hold'])]}"
@@ -28,6 +28,11 @@
                         <button name='work_done' string="Done" type="object" class="oe_highlight"
                                 attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'not in', ['ongoing', 'assigned', 'on_hold'])]}"
                                 confirm="Are you sure?"/>
+
+                        <button name="dex_job_request_form_odoo.dex_form_request_prompt_msg"
+                                string="Change Estimated?" type="action"
+                                attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'in', ['done', 'queue', 'draft'])]}"/>
+
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,queue,assigned,ongoing,on_hold,cancelled,rejected,done"
                                option="{'clickable': '1'}"/>
@@ -53,19 +58,38 @@
                                 <field name="current_user_groups"/>
                                 <field name="current_user_groups1"/>
                                 <field name="is_change"/>
+                                <field name="field_edited"/>
                             </group>
                             <group>
                                 <field name="requesters_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                                 <field name="requesters_email"/>
                             </group>
                             <group>
-                                <field name="requesters_department"/>
-                                <field name="department_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                                <field name="requesters_department" invisible="1"/>
+                                <field name="department_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"
+                                       invisible="1"/>
                                 <field name="form_request_type"/>
                                 <field name="priority_level" required="1"
                                        attrs="{'required': [('current_user_groups', '=', 'manager')], 'readonly': [('state', 'not in', ['draft'])]}"/>
                             </group>
+                            <group>
+                                <field name="is_need_to_forward_to_others"/>
+                                <field name="reason_to_change" invisible="1"/>
+                            </group>
                         </group>
+                        <notebook name="for_receivers">
+                            <!--                                  attrs="{'invisible': [('is_need_to_forward_to_others', '=', False)]}">-->
+                            <page string="Receivers">
+                                <field name="job_request_email_line_lines" force_save="1">
+                                    <tree string="Receivers" editable="bottom">
+                                        <field name="requesters_id"/>
+                                        <field name="requesters_email"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+
+                        </notebook>
                     </sheet>
                     <sheet name="sheet_1">
                         <group>
@@ -76,9 +100,11 @@
                                      attrs="{'readonly': [('current_user_groups', '=', 'manager')]}">
                                     <field name="workers_requested"
                                            attrs="{'readonly': ['|', ('current_user_groups', '=', 'manager'), ('state', 'not in', ['draft'])]}"/>
-                                    <button name="%(dex_job_request_form_odoo.dex_form_request_job_request_view)d"
+                                    <button name="dex_job_request_form_odoo.dex_form_request_job_request_view"
                                             string="Change Request" type="action"
                                             attrs="{'invisible': [('current_user_groups1', '=', 'user')]}"/>
+
+
                                 </div>
                                 <field name="workers_assigned_when_changed"
                                        attrs="{'invisible': [('is_change', '!=', True)]}" readonly="1">
@@ -93,17 +119,22 @@
                                        attrs="{'readonly': ['|', ('state', 'not in', ['draft']), ('current_user_groups', '=', 'manager')]}"/>
                             </group>
                             <group>
+
                                 <field name="date_from_user" string="Estimated Start Date"
-                                       attrs="{'required': [('current_user_groups', '=', 'manager')], 'readonly': ['|', ('current_user_groups', '=', 'user'), ('state', 'not in', ['draft'])], 'invisible': ['&amp;', ('current_user_groups', '=', 'user'), ('state', 'in', ['draft', 'queue'])]}"/>
+                                       attrs="{'invisible': ['|',('current_user_groups', '=', 'user'), ('state', 'not in', ['draft','queue', 'assigned'])], 'readonly': ['|', ('state', 'not in', ['draft', 'queue', 'assigned']), ('field_edited', '=', True)]}"/>
+                                <!--                                       attrs="{'invisible': ['&amp;', ('current_user_groups', '=', 'user'), ('state', 'not in', ['draft', 'queue', 'assigned'])], 'required': [('current_user_groups', '=', 'manager')], 'readonly': ['|', ('current_user_groups', '=', 'user'), ('state', 'not in', ['draft', 'queue', 'assigned'])]}"/>-->
+                                <!--                                <div class="o_row" name="workers_requested">-->
+
                                 <field name="estimate" string="Estimated Work Days"
                                        attrs="{'required': [('current_user_groups', '=', 'manager')], 'readonly': [('state', 'not in', ['draft'])]}"/>
+
+                                <!--                                </div>-->
                             </group>
                             <group attrs="{'invisible': [('state', 'not in', ['done', 'ongoing', 'on_hold'])]}">
-                                <field name="actual_start_date" string="Actual Start Date"
-                                       attrs="{'readonly': [('current_user_groups1', '=', 'user')], 'required': ['&amp;', ('current_user_groups', '=', 'manager'), ('state', 'in', ['done', 'ongoing', 'on_hold'])]}"/>
+                                <field name="actual_start_date" string="Actual Start Date"/>
                                 <field name="actual_end_date" string="Actual End Date"
                                        attrs="{'readonly': [('current_user_groups1', '=', 'user')], 'required': ['&amp;', ('current_user_groups', '=', 'manager'), ('state', 'in', ['done', 'ongoing', 'on_hold'])]}"/>
-                                <field name="actual_total_date" string="Actual Total Date"
+                                <field name="actual_total_date" string="Actual Total Days"
                                        attrs="{'readonly': [('current_user_groups1', '=', 'user')], 'required': ['&amp;', ('current_user_groups', '=', 'manager'), ('state', 'in', ['done', 'ongoing', 'on_hold'])]}"/>
                             </group>
                             <group>
@@ -145,19 +176,20 @@
             <field name="model">job.request</field>
             <field name="arch" type="xml">
                 <tree string="Tree" decoration-danger="state in ('cancel','rejected')"
-                      decoration-muted="state in ('draft')"
-                      decoration-success="state in ('done','ongoing')"
+                      decoration-info="state in ('draft')"
+                      decoration-success="state in ('done','ongoing', 'specified_date')"
                       decoration-warning="state in ('on_hold')"
                       decoration-primary="state in ('draft', 'queue', 'assigned')">
 
                     <field name="current_user_groups1" invisible="1"/>
                     <field name="create_date"/>
+                    <field name="requesters_id"/>
                     <field name="name"/>
                     <field name="priority_level" widget="badge"
-                           decoration-primary="priority_level in ['within_a_week', 'anytime']"
+                           decoration-primary="priority_level in ['within_a_week', 'anytime', 'specified_date']"
                            decoration-warning="priority_level == 'urgent'"
-                           decoration-danger="priority_level == 'critical'"
-                           decoration-muted="priority_level in ['specified_date']"/>
+                           decoration-info="priority_level == 'draft'"
+                           decoration-danger="priority_level == 'critical'"/>
                     <field name="task"/>
                     <field name="date_from_user"/>
                     <field name="actual_start_date"/>
@@ -165,7 +197,7 @@
                     <field name="actual_total_date"/>
                     <field name="state"/>
                     <button name="generate_pdf" type="object" string="Generate PDF" class="btn btn-warning"
-                            attrs="{'invisible': [('current_user_groups1', '=', 'user')]}"/>
+                            attrs="{'invisible': ['|', ('current_user_groups1', '=', 'user'), ('state', 'in', ('draft', 'queue'))]}"/>
                 </tree>
             </field>
         </record>

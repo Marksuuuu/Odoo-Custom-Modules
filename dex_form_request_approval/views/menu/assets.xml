@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="assets_backend" name="tpc_dm_cm.assets_backend" inherit_id="web.assets_backend">
+        <template id="assets_backend" name="dex_form_request_approval.assets_backend" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
                 <script type="text/javascript" src="/dex_form_request_approval/static/src/script.js"/>
                 <script type="text/javascript" src="/dex_form_request_approval/static/src/lordicon/lordicon.js"/>
+                <link rel="stylesheet" href="dex_job_request_form_odoo/static/css/bootstrap/bootstrap.min.css"/>
             </xpath>
         </template>
     </data>

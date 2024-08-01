@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="create_request_form_approval_sequence_eoc" model="ir.sequence">
+            <field name="name">Create Request Form Sequence Employee Onboarding Checklist</field>
+            <field name="code">create.sequence.form.sequence.eoc</field>
+            <field name="padding">6</field>
+            <field name="prefix">EOC%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+    </data>
+</odoo>

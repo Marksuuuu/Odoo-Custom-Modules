@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model='ir.model.access' id='employee_onboarding_checklist_request_it'>
+            <field name='name'>dex_onboarding_checklist.employee_onboarding_checklist_it</field>
+            <field name='model_id' ref='dex_onboarding_checklist.model_employee_onboarding_checklist'/>
+            <field name='group_id' ref='dex_onboarding_checklist.group_from_onboarding_it'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>1</field>
+        </record>
+
+        <record model='ir.model.access' id='employee_onboarding_checklist_request_hr'>
+            <field name='name'>dex_onboarding_checklist.employee_onboarding_checklist_hr</field>
+            <field name='model_id' ref='dex_onboarding_checklist.model_employee_onboarding_checklist'/>
+            <field name='group_id' ref='dex_onboarding_checklist.group_from_onboarding_hr'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>0</field>
+        </record>
+
+        <record model='ir.model.access' id='history_it'>
+            <field name='name'>dex_onboarding_checklist.history_it</field>
+            <field name='model_id' ref='dex_onboarding_checklist.model_history_log'/>
+            <field name='group_id' ref='dex_onboarding_checklist.group_from_onboarding_it'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>1</field>
+        </record>
+
+        <record model='ir.model.access' id='history_log_hr'>
+            <field name='name'>dex_onboarding_checklist.history_log_hr</field>
+            <field name='model_id' ref='dex_onboarding_checklist.model_history_log'/>
+            <field name='group_id' ref='dex_onboarding_checklist.group_from_onboarding_hr'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>0</field>
+        </record>
+
+
+    </data>
+
+</odoo>

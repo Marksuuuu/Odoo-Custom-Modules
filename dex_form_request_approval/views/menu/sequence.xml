@@ -92,14 +92,20 @@
             <field name="active">True</field>
         </record>
 
-        <record id="payment_request_form_approval_sequence_cpp" model="ir.sequence">
-            <field name="name">Create Request Form Sequence Payment Request Form</field>
-            <field name="code">create.sequence.form.sequence.prf</field>
+        <record id="transport_network_vehicle_form_approval_sequence_tnv" model="ir.sequence">
+            <field name="name">Create Request Form Transport Network Vehicle Form</field>
+            <field name="code">create.sequence.form.sequence.tnv</field>
             <field name="padding">6</field>
-            <field name="prefix">PRF%(month)s%(year)s-</field>
+            <field name="prefix">TNV%(month)s%(year)s-</field>
             <field name="implementation">no_gap</field>
             <field name="active">True</field>
         </record>
+
+
+
+
+
+
 
 
     </data>

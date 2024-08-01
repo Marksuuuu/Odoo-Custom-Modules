@@ -40,13 +40,13 @@ class PreviewDashboard(models.Model):
                 'draft': 'total_count_draft',
                 'cancel': 'total_count_cancel',
             },
-            'official.business.form': {
-                'to_approve': 'total_count_to_approve',
-                'disapprove': 'total_count_disapprove',
-                'approved': 'total_count_approved',
-                'draft': 'total_count_draft',
-                'cancel': 'total_count_cancel',
-            },
+            # 'official.business.form': {
+            #     'to_approve': 'total_count_to_approve',
+            #     'disapprove': 'total_count_disapprove',
+            #     'approved': 'total_count_approved',
+            #     'draft': 'total_count_draft',
+            #     'cancel': 'total_count_cancel',
+            # },
             'on.line.purchases': {
                 'to_approve': 'total_count_to_approve',
                 'disapprove': 'total_count_disapprove',
@@ -54,13 +54,13 @@ class PreviewDashboard(models.Model):
                 'draft': 'total_count_draft',
                 'cancel': 'total_count_cancel',
             },
-            'overtime.authorization.form': {
-                'to_approve': 'total_count_to_approve',
-                'disapprove': 'total_count_disapprove',
-                'approved': 'total_count_approved',
-                'draft': 'total_count_draft',
-                'cancel': 'total_count_cancel',
-            },
+            # 'overtime.authorization.form': {
+            #     'to_approve': 'total_count_to_approve',
+            #     'disapprove': 'total_count_disapprove',
+            #     'approved': 'total_count_approved',
+            #     'draft': 'total_count_draft',
+            #     'cancel': 'total_count_cancel',
+            # },
             'request.for.cash.advance': {
                 'to_approve': 'total_count_to_approve',
                 'disapprove': 'total_count_disapprove',
@@ -69,6 +69,13 @@ class PreviewDashboard(models.Model):
                 'cancel': 'total_count_cancel',
             },
             'it.request.form': {
+                'to_approve': 'total_count_to_approve',
+                'disapprove': 'total_count_disapprove',
+                'approved': 'total_count_approved',
+                'draft': 'total_count_draft',
+                'cancel': 'total_count_cancel',
+            },
+            'transport.network.vehicle.form': {
                 'to_approve': 'total_count_to_approve',
                 'disapprove': 'total_count_disapprove',
                 'approved': 'total_count_approved',
@@ -108,20 +115,23 @@ class PreviewDashboard(models.Model):
         elif self.model_name == 'Grab Request Form':
             action = self.env.ref('dex_form_request_approval.grab_request_form_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'to_approve')]
-        elif self.model_name == 'Official Business Form':
-            action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'to_approve')]
+        # elif self.model_name == 'Official Business Form':
+        #     action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
+        #     action['domain'] = [('state', '=', 'to_approve')]
         elif self.model_name == 'On Line Purchases':
             action = self.env.ref('dex_form_request_approval.online_purchases_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'to_approve')]
-        elif self.model_name == 'Overtime Authorization Form':
-            action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'to_approve')]
+        # elif self.model_name == 'Overtime Authorization Form':
+        #     action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
+        #     action['domain'] = [('state', '=', 'to_approve')]
         elif self.model_name == 'Request For Cash Advance':
             action = self.env.ref('dex_form_request_approval.request_for_cash_advance_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'to_approve')]
         elif self.model_name == 'It Request Form':
             action = self.env.ref('dex_form_request_approval.it_request_form_action_id').read()[0]
+            action['domain'] = [('state', '=', 'to_approve')]
+        elif self.model_name == 'Transport Network Vehicle Form':
+            action = self.env.ref('dex_form_request_approval.transport_network_vehicle_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'to_approve')]
         elif self.model_name == 'Payment Request Form':
             action = self.env.ref('dex_form_request_approval.payment_request_form_action_id').read()[0]
@@ -140,20 +150,23 @@ class PreviewDashboard(models.Model):
         elif self.model_name == 'Grab Request Form':
             action = self.env.ref('dex_form_request_approval.grab_request_form_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'cancel')]
-        elif self.model_name == 'Official Business Form':
-            action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'cancel')]
+        #         elif self.model_name == 'Official Business Form':
+        #             action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
+        #             action['domain'] = [('state', '=', 'cancel')]
         elif self.model_name == 'On Line Purchases':
             action = self.env.ref('dex_form_request_approval.online_purchases_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'cancel')]
-        elif self.model_name == 'Overtime Authorization Form':
-            action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'cancel')]
+        #         elif self.model_name == 'Overtime Authorization Form':
+        #             action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
+        #             action['domain'] = [('state', '=', 'cancel')]
         elif self.model_name == 'Request For Cash Advance':
             action = self.env.ref('dex_form_request_approval.request_for_cash_advance_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'cancel')]
         elif self.model_name == 'It Request Form':
             action = self.env.ref('dex_form_request_approval.it_request_form_action_id').read()[0]
+            action['domain'] = [('state', '=', 'cancel')]
+        elif self.model_name == 'Transport Network Vehicle Form':
+            action = self.env.ref('dex_form_request_approval.transport_network_vehicle_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'cancel')]
         elif self.model_name == 'Payment Request Form':
             action = self.env.ref('dex_form_request_approval.payment_request_form_action_id').read()[0]
@@ -172,20 +185,23 @@ class PreviewDashboard(models.Model):
         elif self.model_name == 'Grab Request Form':
             action = self.env.ref('dex_form_request_approval.grab_request_form_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'disapprove')]
-        elif self.model_name == 'Official Business Form':
-            action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'disapprove')]
+        #         elif self.model_name == 'Official Business Form':
+        #             action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
+        #             action['domain'] = [('state', '=', 'disapprove')]
         elif self.model_name == 'On Line Purchases':
             action = self.env.ref('dex_form_request_approval.online_purchases_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'disapprove')]
-        elif self.model_name == 'Overtime Authorization Form':
-            action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'disapprove')]
+        #         elif self.model_name == 'Overtime Authorization Form':
+        #             action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
+        #             action['domain'] = [('state', '=', 'disapprove')]
         elif self.model_name == 'Request For Cash Advance':
             action = self.env.ref('dex_form_request_approval.request_for_cash_advance_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'disapprove')]
         elif self.model_name == 'It Request Form':
             action = self.env.ref('dex_form_request_approval.it_request_form_action_id').read()[0]
+            action['domain'] = [('state', '=', 'disapprove')]
+        elif self.model_name == 'Transport Network Vehicle Form':
+            action = self.env.ref('dex_form_request_approval.transport_network_vehicle_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'disapprove')]
         elif self.model_name == 'Payment Request Form':
             action = self.env.ref('dex_form_request_approval.payment_request_form_action_id').read()[0]
@@ -204,20 +220,23 @@ class PreviewDashboard(models.Model):
         elif self.model_name == 'Grab Request Form':
             action = self.env.ref('dex_form_request_approval.grab_request_form_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'approved')]
-        elif self.model_name == 'Official Business Form':
-            action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'approved')]
+        #         elif self.model_name == 'Official Business Form':
+        #             action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
+        #             action['domain'] = [('state', '=', 'approved')]
         elif self.model_name == 'On Line Purchases':
             action = self.env.ref('dex_form_request_approval.online_purchases_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'approved')]
-        elif self.model_name == 'Overtime Authorization Form':
-            action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'approved')]
+        #         elif self.model_name == 'Overtime Authorization Form':
+        #             action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
+        #             action['domain'] = [('state', '=', 'approved')]
         elif self.model_name == 'Request For Cash Advance':
             action = self.env.ref('dex_form_request_approval.request_for_cash_advance_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'approved')]
         elif self.model_name == 'It Request Form':
             action = self.env.ref('dex_form_request_approval.it_request_form_action_id').read()[0]
+            action['domain'] = [('state', '=', 'approved')]
+        elif self.model_name == 'Transport Network Vehicle Form':
+            action = self.env.ref('dex_form_request_approval.transport_network_vehicle_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'approved')]
         elif self.model_name == 'Payment Request Form':
             action = self.env.ref('dex_form_request_approval.payment_request_form_action_id').read()[0]
@@ -236,20 +255,23 @@ class PreviewDashboard(models.Model):
         elif self.model_name == 'Grab Request Form':
             action = self.env.ref('dex_form_request_approval.grab_request_form_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'draft')]
-        elif self.model_name == 'Official Business Form':
-            action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'draft')]
+        #         elif self.model_name == 'Official Business Form':
+        #             action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
+        #             action['domain'] = [('state', '=', 'draft')]
         elif self.model_name == 'On Line Purchases':
             action = self.env.ref('dex_form_request_approval.online_purchases_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'draft')]
-        elif self.model_name == 'Overtime Authorization Form':
-            action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
-            action['domain'] = [('state', '=', 'draft')]
+        #         elif self.model_name == 'Overtime Authorization Form':
+        #             action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
+        #             action['domain'] = [('state', '=', 'draft')]
         elif self.model_name == 'Request For Cash Advance':
             action = self.env.ref('dex_form_request_approval.request_for_cash_advance_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'draft')]
         elif self.model_name == 'It Request Form':
             action = self.env.ref('dex_form_request_approval.it_request_form_action_id').read()[0]
+            action['domain'] = [('state', '=', 'draft')]
+        elif self.model_name == 'Transport Network Vehicle Form':
+            action = self.env.ref('dex_form_request_approval.transport_network_vehicle_form_action_id').read()[0]
             action['domain'] = [('state', '=', 'draft')]
         elif self.model_name == 'Payment Request Form':
             action = self.env.ref('dex_form_request_approval.payment_request_form_action_id').read()[0]
@@ -267,16 +289,18 @@ class PreviewDashboard(models.Model):
             action = self.env.ref('dex_form_request_approval.gasoline_allowance_form_action_id').read()[0]
         elif self.model_name == 'Grab Request Form':
             action = self.env.ref('dex_form_request_approval.grab_request_form_form_action_id').read()[0]
-        elif self.model_name == 'Official Business Form':
-            action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
+        #         elif self.model_name == 'Official Business Form':
+        #             action = self.env.ref('dex_form_request_approval.official_business_form_action_id').read()[0]
         elif self.model_name == 'On Line Purchases':
             action = self.env.ref('dex_form_request_approval.online_purchases_form_action_id').read()[0]
-        elif self.model_name == 'Overtime Authorization Form':
-            action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
+        #         elif self.model_name == 'Overtime Authorization Form':
+        #             action = self.env.ref('dex_form_request_approval.overtime_authorization_form_action_id').read()[0]
         elif self.model_name == 'Request For Cash Advance':
             action = self.env.ref('dex_form_request_approval.request_for_cash_advance_form_action_id').read()[0]
         elif self.model_name == 'It Request Form':
             action = self.env.ref('dex_form_request_approval.it_request_form_action_id').read()[0]
+        elif self.model_name == 'Transport Network Vehicle Form':
+            action = self.env.ref('dex_form_request_approval.transport_network_vehicle_form_action_id').read()[0]
         elif self.model_name == 'Payment Request Form':
             action = self.env.ref('dex_form_request_approval.payment_request_form_action_id').read()[0]
         else:

@@ -29,50 +29,60 @@ class JobAbstract(models.AbstractModel):
     department_id = fields.Many2one('approver.setup', string='Department', domain=lambda a: a._get_department_domain(),
                                     tracking=True)
 
-    form_request_type = fields.Selection(related='department_id.approval_type', string='Form Request Type', store=True,
-                                         readonly=True, tracking=True)
+    form_request_type = fields.Selection([
+        ('official_business', 'Official Business Form'),
+        ('it_request', 'IT Request Form'),
+        ('overtime_authorization', 'Overtime Authorization'),
+        ('gasoline_allowance', 'Gasoline Allowance'),
+        ('online_purchases', 'Online Purchases'),
+        ('cash_advance', 'Request for Cash Advance'),
+        ('grab_request', 'Grab Request Form'),
+        ('client_pickup', 'Client Pickup Permit'),
+        ('payment_request', 'Payment Request'),
+        ('job_request', 'Job Request')], string='Form Request Type', store=True,
+        readonly=True, tracking=True, default='job_request')
 
-    iden = fields.Char(string='ID' , tracking=True)
+    iden = fields.Char(string='ID', tracking=True)
 
-    worker = fields.Many2many('hr.employee', string='Worker' , tracking=True)
+    worker = fields.Many2many('hr.employee', string='Worker', tracking=True)
 
-    task = fields.Char(string='Task' , tracking=True)
+    task = fields.Char(string='Task', tracking=True)
 
     location = fields.Char(string='Location')
 
-    start = fields.Datetime(string='Start' , tracking=True)
+    start = fields.Datetime(string='Start', tracking=True)
 
-    done = fields.Boolean(string='Done' , tracking=True)
+    done = fields.Boolean(string='Done', tracking=True)
 
-    rowguid = fields.Char(string='Row GUID' , tracking=True)
+    rowguid = fields.Char(string='Row GUID', tracking=True)
 
-    assigned_by = fields.Many2one('res.users', string='Assigned By' , tracking=True)
+    assigned_by = fields.Many2one('res.users', string='Assigned By', tracking=True)
 
-    remarks = fields.Text(string='Remarks' , tracking=True)
+    remarks = fields.Text(string='Remarks', tracking=True)
 
-    estimate = fields.Float(string='Estimate' , tracking=True)
+    estimate = fields.Float(string='Estimate', tracking=True)
 
-    groups = fields.Char(string='Groups' , tracking=True)
+    groups = fields.Char(string='Groups', tracking=True)
 
-    reference_type = fields.Char(string='Reference Type' , tracking=True)
+    reference_type = fields.Char(string='Reference Type', tracking=True)
 
-    reference_id = fields.Integer(string='Reference ID' , tracking=True)
+    reference_id = fields.Integer(string='Reference ID', tracking=True)
 
-    total_min = fields.Float(string='Total Minutes' , tracking=True)
+    total_min = fields.Float(string='Total Minutes', tracking=True)
 
-    work_id = fields.Char(string='Work Order' , tracking=True)
+    work_id = fields.Char(string='Work Order', tracking=True)
 
-    branch = fields.Char(string='Branch' , tracking=True)
+    branch = fields.Char(string='Branch', tracking=True)
 
-    worker2 = fields.Char(string='Worker 2' , tracking=True)
+    worker2 = fields.Char(string='Worker 2', tracking=True)
 
-    brand_desc = fields.Char(string='Brand Description' , tracking=True)
+    brand_desc = fields.Char(string='Brand Description', tracking=True)
 
-    special_inst = fields.Text(string='Special Instructions' , tracking=True)
+    special_inst = fields.Text(string='Special Instructions', tracking=True)
 
-    move_order_no = fields.Char(string='Move Order Number' , tracking=True)
+    move_order_no = fields.Char(string='Move Order Number', tracking=True)
 
-    so_no = fields.Char(string='Sales Order Number' , tracking=True)
+    so_no = fields.Char(string='Sales Order Number', tracking=True)
 
     priority_level = fields.Selection(
         [('critical', 'Critical'), ('urgent', 'Urgent'), ('within_a_week', 'Within a Week'),

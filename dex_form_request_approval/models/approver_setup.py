@@ -17,6 +17,9 @@ class ApproverSetup(models.Model):
         ('grab_request', 'Grab Request Form'),
         ('client_pickup', 'Client Pickup Permit'),
         ('payment_request', 'Payment Request'),
+        ('job_request', 'Job Request'),
+        ('onboarding_checklist', 'Onboarding Request Form'),
+        ('transport_network_vehicle', 'Transport Network Vehicle'),
     ], string='Form Types', required=True)
     no_of_approvers = fields.Integer()
     set_first_approvers = fields.One2many('approver.setup.lines', 'first_approvers_id')
@@ -26,6 +29,9 @@ class ApproverSetup(models.Model):
     set_fifth_approvers = fields.One2many('approver.setup.lines', 'fifth_approvers_id')
 
     is_need_request_handlers = fields.Boolean(default=False)
+
+    is_need_to_billed = fields.Boolean(string='Required Bill?', default=False)
+
 
     requests_handlers = fields.Many2many('res.users')
 

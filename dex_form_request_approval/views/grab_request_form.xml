@@ -74,16 +74,16 @@
                                 <field name="approver_id"
                                        options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
                                        invisible="1"/>
-                            </group>
-                            <group>
-                                <field name="supplier_id"/>
-                                <field name="invoice_or_ref"/>
+                                <field name="currency_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"/>
                             </group>
                         </group>
                         <notebook>
                             <page name="request_items" string="Request Items">
                                 <field name="grf_lines" attrs="{'readonly': [('state', '!=', 'draft')]}">
                                     <tree string="Request Details" editable="bottom">
+                                        <field name="_from"/>
+                                        <field name="_to"/>
                                         <field name="_amount"/>
                                         <field name="_purpose"/>
                                     </tree>
@@ -105,6 +105,13 @@
                                 </group>
                             </page>
                         </notebook>
+                        <group class="oe_subtotal_footer">
+                            <div class="oe_subtotal_footer_separator oe_inline">
+                                <label for="grab_request_total"/>
+                            </div>
+                            <field name="grab_request_total" nolabel="1" class="oe_subtotal_footer_separator"
+                                   widget="monetary"/>
+                        </group>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
@@ -122,6 +129,7 @@
                       decoration-muted="state in ('draft')"
                       decoration-success="state in ('approved')"
                       decoration-warning="state in ('to_approve')">
+                    <field name="create_date"/>
                     <field name="name"/>
                     <field name="requesters_id"/>
                     <field name="approval_status"/>

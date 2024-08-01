@@ -121,6 +121,7 @@
                       decoration-muted="state in ('draft')"
                       decoration-success="state in ('approved')"
                       decoration-warning="state in ('to_approve')">
+                    <field name="create_date"/>
                     <field name="name"/>
                     <field name="requesters_id"/>
                     <field name="approval_status"/>

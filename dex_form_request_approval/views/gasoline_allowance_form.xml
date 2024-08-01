@@ -31,6 +31,8 @@
                                 class="oe_highlight"
                                 attrs="{'invisible': ['|', ('approval_status', '!=', 'to_approve'), ('is_approver', '=', False)]}"/>
 
+                        <button name="create_bill" string="Create Bill" type="object" class="oe_highlight"
+                                attrs="{'invisible': ['|','|', ('is_bill_created', '!=', False), ('state', '!=', 'approved') ,('parameter_match', '=', False)]}"/>
 
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,to_approve,approved,disapprove,cancel"
@@ -54,6 +56,12 @@
                             <field name="check_status"/>
                             <field name="approval_status"/>
                             <field name="is_approver"/>
+
+                            <field name="check_status"/>
+                            <field name="approval_status"/>
+                            <field name="is_approver"/>
+                            <field name="parameter_match"/>
+                            <field name="flag_counter"/>
                         </group>
                         <group name="requests" string="Requests">
                             <group>
@@ -63,6 +71,9 @@
                                 <field name="requesters_email"
                                        options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
                                        attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+
+                                <field name="is_bill_created"
+                                       attrs="{'invisible':[('is_bill_created','=',False)],'readonly': [('state', '!=', 'draft')]}"/>
                             </group>
                             <group>
                                 <field name="department_id"
@@ -76,8 +87,8 @@
                                        attrs="{'readonly': [('state', '!=', 'draft')]}" invisible="1"/>
                             </group>
                             <group name="for_gas" string="Gas Request Details">
-                                <field name="vehicle_type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                                <field name="rate_per_km" required="True"
+                                <field name="vehicle_type_ids" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="vehicle_rate" required="True"
                                        attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                             </group>
                         </group>
@@ -117,6 +128,7 @@
                             <field name="total_gasoline_allowance" nolabel="1" class="oe_subtotal_footer_separator"
                                    widget="monetary"/>
                         </group>
+
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
@@ -134,6 +146,7 @@
                       decoration-muted="state in ('draft')"
                       decoration-success="state in ('approved')"
                       decoration-warning="state in ('to_approve')">
+                    <field name="create_date"/>
                     <field name="name"/>
                     <field name="requesters_id"/>
                     <field name="approval_status"/>

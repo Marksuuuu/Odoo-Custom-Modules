@@ -16,6 +16,7 @@ class FromRequestTypes(models.Model):
             'Overtime Authorization Form',
             'Official Business Form',
             'Gasoline Allowance Form'
+            'Transport Network Vehicle'
         ]
         for rec in self:
             if rec.name not in allowed_types:

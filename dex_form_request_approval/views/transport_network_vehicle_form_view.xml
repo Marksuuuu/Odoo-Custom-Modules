@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="transport_network_vehicle_form_view_form_view" model="ir.ui.view">
+            <field name="name">transport_network_vehicle_form_view_form_view</field>
+            <field name="model">transport.network.vehicle.form</field>
+            <field name="arch" type="xml">
+                <form string="Form" duplicate="false">
+                    <header>
+                        <!--                        <button name="submit_to_final_approver" type="object" string="ObjectButton"/>-->
+                        <button name="submit_for_approval" type="object" string="Submit for Approval"
+                                class="oe_highlight"
+                                confirm="Are you sure you want to submit it will not be able to Redo."
+                                attrs="{'invisible': [('state','!=', 'draft')]}"/>
+                        <button name="approve_request" type="object"
+                                string="Approve Request"
+                                class="oe_highlight"
+                                confirm="Are you sure you want to Confirm?"
+                                attrs="{'invisible': ['|', ('approval_status', '!=', 'to_approve'), ('is_approver', '=', False)]}"/>
+
+
+                        <button name="dex_form_request_approval.dex_form_action_disapprove_reason_view"
+                                type="action"
+                                string="Disapprove Request"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', ('approval_status', '!=', 'to_approve'), ('is_approver', '=', False)]}"/>
+
+
+                        <button name="%(dex_form_request_approval.dex_form_action_cancellation_reason_view)d"
+                                type="action"
+                                string="Cancellation Request"
+                                class="oe_highlight"
+                                attrs="{'invisible': ['|', ('approval_status', '!=', 'to_approve'), ('is_approver', '=', False)]}"/>
+
+                        <button name="create_bill" string="Create Bill" type="object" class="oe_highlight"
+                                attrs="{'invisible': ['|','|', ('is_bill_created', '!=', False), ('state', '!=', 'approved') ,('parameter_match', '=', False)]}"/>
+
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,to_approve,approved,disapprove,cancel"
+                               option="{'clickable': '1'}"/>
+
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Posted" bg_color="bg-success"
+                                attrs="{'invisible': [('get_status_for_bill', 'not in', 'posted')]}"/>
+                        <widget name="web_ribbon" title="Draft" bg_color="bg-secondary"
+                                attrs="{'invisible': [('get_status_for_bill', 'not in', 'draft')]}"/>
+                        <widget name="web_ribbon" title="Cancel" bg_color="bg-danger"
+                                attrs="{'invisible': [('get_status_for_bill', 'not in', 'cancel')]}"/>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="Title"/>
+                            </h1>
+                        </div>
+
+                        <group name="invisible_fields" invisible="1">
+                            <field name="get_status_for_bill"/>
+                            <field name="initial_approver_job_title"/>
+                            <field name="second_approver_job_title"/>
+                            <field name="third_approver_job_title"/>
+                            <field name="fourth_approver_job_title"/>
+                            <field name="final_approver_job_title"/>
+
+                            <!--                            <field name="approver_count"/>-->
+                            <field name="check_status"/>
+                            <field name="approval_status"/>
+                            <field name="is_approver"/>
+                            <field name="parameter_match"/>
+                            <field name="flag_counter"/>
+                        </group>
+                        <group name="requests" string="Requests">
+                            <group>
+                                <field name="requesters_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="requesters_email"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="department_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="form_request_type"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       invisible="1"/>
+                                <field name="approver_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       invisible="1"/>
+
+                                <field name="company_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       invisible="1"/>
+
+                                <field name="journal_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       readonly="1"/>
+
+                                <field name="currency_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       readonly="1"/>
+
+                            </group>
+
+                            <group>
+                                <field name="transport_vehicle_type"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                       required="1"/>
+                                <field name="cargo_type" required="1"
+                                       attrs="{'invisible':[('transport_vehicle_type','=',False)],'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="is_bill_created"
+                                       attrs="{'invisible':[('is_bill_created','=',False)],'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="tnvf_id" string="Request Items">
+                                <field name="tnvf_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                    <tree string="Request Details" editable="bottom">
+                                        <field name="tnvf_personnel" required="1"
+                                               attrs="{'column_invisible': ['|',('parent.cargo_type', '=', False),('parent.cargo_type', '=', 'package')]}"/>
+                                        <field name="tnvf_package" required="1"
+                                               attrs="{'column_invisible': ['|',('parent.cargo_type', '=', False),('parent.cargo_type', '=', 'personnel')]}"/>
+                                        <field name="tnvf_from" required="1"/>
+                                        <field name="tnvf_to" required="1"/>
+                                        <field name="tnvf_amount" required="1"
+                                               attrs="{'column_invisible': [('parent.transport_vehicle_type', '=', False)]}"/>
+                                        <field name="tnvf_purpose" required="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <group class="oe_subtotal_footer">
+                            <div class="oe_subtotal_footer_separator oe_inline">
+                                <label for="total_rate"/>
+                            </div>
+                            <field name="total_rate" nolabel="1" class="oe_subtotal_footer_separator"
+                                   widget="monetary"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="transport_network_vehicle_form_view_tree_view" model="ir.ui.view">
+            <field name="name">transport_network_vehicle_form_view_tree_view</field>
+            <field name="model">transport.network.vehicle.form</field>
+            <field name="arch" type="xml">
+                <tree string="Tree" decoration-danger="state in ('cancel','disapprove')"
+                      decoration-muted="state in ('draft')"
+                      decoration-success="state in ('approved')"
+                      decoration-warning="state in ('to_approve')">
+                    <field name="create_date"/>
+                    <field name="name"/>
+                    <field name="requesters_id"/>
+                    <field name="approval_status"/>
+                    <field name="form_request_type"/>
+                    <field name="approver_id"/>
+                    <field name="department_id"/>
+                    <field name="create_date" optional="hide"/>
+                    <field name="state" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

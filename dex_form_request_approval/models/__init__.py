@@ -5,3 +5,5 @@ from . import approver_setup
 from . import preview_dashboard
 from . import form_request_types
 from . import res_config_settings
+from . import transport_network_vehicle_type
+from . import vehicle_type

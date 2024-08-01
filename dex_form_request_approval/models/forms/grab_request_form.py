@@ -28,9 +28,18 @@ class GrabRequestForm(models.Model):
 
     is_approver = fields.Boolean(compute="compute_approver")
 
+    grab_request_total = fields.Float(string="Total",
+                                         compute='_compute_total_amount_grab_request', store=True)
+
     def _get_department_domain(self):
         approval_types = self.env['approver.setup'].search([('approval_type', '=', 'grab_request')])
         return [('id', 'in', approval_types.ids)]
+
+    @api.depends('grf_lines')
+    def _compute_total_amount_grab_request(self):
+        for record in self:
+            total_vals = [line._amount for line in record.grf_lines]
+            record.grab_request_total = sum(total_vals)
 
     @api.onchange('requesters_id')
     def _onchange_requesters_id(self):
@@ -133,7 +142,6 @@ class GrabRequestForm(models.Model):
     def compute_check_status(self):
         for rec in self:
             if rec.approval_status == 'approved':
-                print('asdasd')
                 rec.get_approvers_email()
                 rec.submit_to_final_approver()
             elif rec.approval_status == 'disapprove':
@@ -286,8 +294,10 @@ class GrabRequestForm(models.Model):
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    <th>Amount</th>
-                                                    <th>Purpose</th>
+                                                    <th>From</th>
+                                                            <th>To</th>
+                                                            <th>Amount</th>
+                                                            <th>Purpose</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -296,8 +306,10 @@ class GrabRequestForm(models.Model):
         for rec in self.grf_lines:
             html_content += f"""
                                                   <tr>
-                                                        <td>{rec._amount if rec._amount else ''}</td>
-                                                        <td>{rec._purpose if rec._purpose else ''}</td>
+                                                        <td>{rec._from if rec._from else ''}</td>
+                                                              <td>{rec._to if rec._amount else ''}</td>
+                                                              <td>{rec._purpose if rec._purpose else ''}</td>
+                                                              <td>{rec._amount if rec._amount else ''}</td>
                                                   </tr>
                                             """
 
@@ -359,7 +371,6 @@ class GrabRequestForm(models.Model):
 
         # Remove duplicates from recipient_list
         recipient_list = list(set(recipient_list + all_list))  # Combine and then create set
-        print(recipient_list)
         if recipient_list:
             self.send_to_final_approver_email(recipient_list)
         else:
@@ -478,8 +489,10 @@ class GrabRequestForm(models.Model):
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    <th>Amount</th>
-                                                    <th>Purpose</th>
+                                                    <th>From</th>
+                                                            <th>To</th>
+                                                            <th>Amount</th>
+                                                            <th>Purpose</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -488,8 +501,10 @@ class GrabRequestForm(models.Model):
             html_content += f"""
                                             
                                                   <tr>
-                                                      <td>{rec._purpose if rec._purpose else ''}</td>
-                                                      <td>{rec._amount if rec._amount else ''}</td>
+                                                            <td>{rec._from if rec._from else ''}</td>
+                                                              <td>{rec._to if rec._amount else ''}</td>
+                                                              <td>{rec._purpose if rec._purpose else ''}</td>
+                                                              <td>{rec._amount if rec._amount else ''}</td>
                                                   </tr>
                                             """
 
@@ -538,7 +553,6 @@ class GrabRequestForm(models.Model):
             ])
 
             if rec.approval_status == 'to_approve':
-                print('approval status: ', rec.approval_status)
                 if rec.approver_id and rec.approval_stage < res.no_of_approvers:
                     if rec.approval_stage == 1:
 
@@ -752,7 +766,6 @@ class GrabRequestForm(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/grf_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -843,6 +856,8 @@ class GrabRequestForm(models.Model):
                                                 <table>
                                                     <thead>
                                                         <tr>
+                                                            <th>From</th>
+                                                            <th>To</th>
                                                             <th>Amount</th>
                                                             <th>Purpose</th>
                                                         </tr>
@@ -853,6 +868,8 @@ class GrabRequestForm(models.Model):
             html_content += f"""
                                                     
                                                           <tr>
+                                                              <td>{rec._from if rec._from else ''}</td>
+                                                              <td>{rec._to if rec._amount else ''}</td>
                                                               <td>{rec._purpose if rec._purpose else ''}</td>
                                                               <td>{rec._amount if rec._amount else ''}</td>
                                                           </tr>
@@ -909,7 +926,6 @@ class GrabRequestForm(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/grf_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -998,6 +1014,8 @@ class GrabRequestForm(models.Model):
                                                 <table>
                                                     <thead>
                                                         <tr>
+                                                            <th>From</th>
+                                                            <th>To</th>
                                                             <th>Amount</th>
                                                             <th>Purpose</th>
                                                         </tr>
@@ -1008,6 +1026,8 @@ class GrabRequestForm(models.Model):
         for rec in self.grf_lines:
             html_content += f"""
                                                           <tr>
+                                                              <td>{rec._from if rec._from else ''}</td>
+                                                              <td>{rec._to if rec._amount else ''}</td>
                                                               <td>{rec._purpose if rec._purpose else ''}</td>
                                                               <td>{rec._amount if rec._amount else ''}</td>
                                                           </tr>
@@ -1135,7 +1155,6 @@ class GrabRequestForm(models.Model):
                 ("approval_type", '=', record.form_request_type)
             ])
             count = sum(approver.no_of_approvers for approver in department_approvers)
-            print(count)
             record.approver_count = count
 
     @api.onchange('department_id', 'approval_stage', 'form_request_type')
@@ -1149,7 +1168,6 @@ class GrabRequestForm(models.Model):
             if rec.department_id and rec.approval_stage == 1:
                 try:
                     approver_dept = [x.first_approver.id for x in res.set_first_approvers]
-                    print(approver_dept)
                     rec.approver_id = approver_dept[0]
                     domain.append(('id', '=', approver_dept))
 
@@ -1158,7 +1176,6 @@ class GrabRequestForm(models.Model):
 
             elif rec.department_id and rec.approval_stage == 2:
                 approver_dept = [x.second_approver.id for x in res.set_second_approvers]
-                print(approver_dept)
                 rec.approver_id = approver_dept[0]
                 domain.append(('id', '=', approver_dept))
 
@@ -1180,8 +1197,6 @@ class GrabRequestForm(models.Model):
             else:
                 domain = []
 
-            print(domain)
-
             return {'domain': {'approver_id': domain}}
 
 
@@ -1190,7 +1205,7 @@ class GrabRequestFormLines(models.Model):
     _description = 'Online Purchases Lines'
 
     grf_connection = fields.Many2one('grab.request.form', string='Connection')
-    _from = fields.Datetime(string='From', default=lambda self: datetime.now())
-    _to = fields.Datetime(string='To')
-    _amount = fields.Char(string='Amount')
+    _from = fields.Char(string='From')
+    _to = fields.Char(string='To')
+    _amount = fields.Float(string='Amount')
     _purpose = fields.Char(string='Purpose')

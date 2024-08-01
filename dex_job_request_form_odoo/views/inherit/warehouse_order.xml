@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="job_request_form_dex_whtransfer_form_inherit" model="ir.ui.view">
+            <field name="name">job_request_form_dex_whtransfer_form_inherit</field>
+            <field name="model">warehouse.order</field>
+            <field name="inherit_id" ref="dex_whtransfer.warehouse_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_ref']" position="after">
+                    <field name="priority_level" required="1"/>
+                    <field name="jrf_id"
+                           attrs="{'invisible': [('jrf_id', '=', False)], 'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="multi_transfer_id" invisible="1"/>
+                    <!--                    <button name="test_get" string="Get Data" type="object"/>-->
+                </xpath>
+
+                <xpath expr="//field[@name='priority_level']" position="after">
+                    <field name="task" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                </xpath>
+
+                <field name="jo_date_needed" position="attributes">
+                    <attribute name="attrs">{'invisible': [('priority_level', '!=', 'specified_date')]}</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

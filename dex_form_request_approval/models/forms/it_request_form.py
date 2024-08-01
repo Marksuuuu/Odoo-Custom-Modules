@@ -132,7 +132,6 @@ class ItRequestForm(models.Model):
     def compute_check_status(self):
         for rec in self:
             if rec.approval_status == 'approved':
-                print('asdasd')
                 rec.get_approvers_email()
                 rec.submit_to_final_approver()
             elif rec.approval_status == 'disapprove':
@@ -354,7 +353,6 @@ class ItRequestForm(models.Model):
 
         # Remove duplicates from recipient_list
         recipient_list = list(set(recipient_list + all_list))  # Combine and then create set
-        print(recipient_list)
         if recipient_list:
             self.send_to_final_approver_email(recipient_list)
         else:
@@ -530,7 +528,6 @@ class ItRequestForm(models.Model):
             ])
 
             if rec.approval_status == 'to_approve':
-                print('approval status: ', rec.approval_status)
                 if rec.approver_id and rec.approval_stage < res.no_of_approvers:
                     if rec.approval_stage == 1:
 
@@ -732,7 +729,6 @@ class ItRequestForm(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/irf_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -887,7 +883,6 @@ class ItRequestForm(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/irf_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -1116,7 +1111,6 @@ class ItRequestForm(models.Model):
                 ("approval_type", '=', record.form_request_type)
             ])
             count = sum(approver.no_of_approvers for approver in department_approvers)
-            print(count)
             record.approver_count = count
 
     @api.onchange('department_id', 'approval_stage', 'form_request_type')
@@ -1129,7 +1123,6 @@ class ItRequestForm(models.Model):
             if rec.department_id and rec.approval_stage == 1:
                 try:
                     approver_dept = [x.first_approver.id for x in res.set_first_approvers]
-                    print(approver_dept)
                     rec.approver_id = approver_dept[0]
                     domain.append(('id', '=', approver_dept))
 
@@ -1138,7 +1131,6 @@ class ItRequestForm(models.Model):
 
             elif rec.department_id and rec.approval_stage == 2:
                 approver_dept = [x.second_approver.id for x in res.set_second_approvers]
-                print(approver_dept)
                 rec.approver_id = approver_dept[0]
                 domain.append(('id', '=', approver_dept))
 
@@ -1159,9 +1151,6 @@ class ItRequestForm(models.Model):
 
             else:
                 domain = []
-
-            print(domain)
-
             return {'domain': {'approver_id': domain}}
 
 

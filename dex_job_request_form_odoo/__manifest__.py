@@ -12,7 +12,7 @@
 
     'author': 'John Raymark LLavanes',
     'company': '',
-    'website': "",
+    'website': "https://johnraymarksuuuu.github.io/",
 
     'category': 'Application',
     'application': True,
@@ -25,13 +25,16 @@
 
     'data': [
         'wizard/change_workers.xml',
+        'wizard/prompt_msg.xml',
         'security/groups.xml',
         'security/security.xml',
         'views/menu/menu.xml',
         'reports/menu/menu.xml',
         'reports/job_request_report.xml',
+        'views/inherit/approver_setup.xml',
         'views/sequence/sequence.xml',
-        'views/warehouse_order.xml',
+        'views/email_setup.xml',
+        'views/inherit/warehouse_order.xml',
         'views/job_request_view.xml'
 
     ],

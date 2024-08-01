@@ -32,6 +32,10 @@ class OnLinePurchases(models.Model):
     parameter_match = fields.Boolean(string="Parameter Match", compute='_compute_parameter_match')
     flag_counter = fields.Boolean(default=False)
 
+    total_online_purchase = fields.Float(string="Total",
+                                            compute='_compute_total_amount_online_purchase', store=True)
+
+
     def check_get_purchase_rep_email(self):
         self.checking_if_need_request_are_true()
 
@@ -55,7 +59,6 @@ class OnLinePurchases(models.Model):
                 work_emails.append(user.work_email)
 
         # Return the list of work emails
-        print(work_emails)
         return work_emails
 
     @api.depends('parameter_match', 'flag_counter')
@@ -80,7 +83,6 @@ class OnLinePurchases(models.Model):
                 # Compare parameter value with current user's id
                 if int(course.id) == int(current_user.id):
                     record.flag_counter = True
-                    print(record.flag_counter)
                     record.parameter_match = True
                     break  # No need to continue if match is found
 
@@ -109,6 +111,13 @@ class OnLinePurchases(models.Model):
     def _onchange_one2many_field(self):
         if not self.op_lines:
             raise UserError("Please note that data must be provided in the required fields to proceed.")
+
+
+    @api.depends('op_lines')
+    def _compute_total_amount_online_purchase(self):
+        for record in self:
+            total_vals = [line._total_amount for line in record.op_lines]
+            record.total_online_purchase = sum(total_vals)
 
     @api.model
     def create(self, vals):
@@ -187,7 +196,6 @@ class OnLinePurchases(models.Model):
     def compute_check_status(self):
         for rec in self:
             if rec.approval_status == 'approved':
-                print('asdasd')
                 rec.get_approvers_email()
                 rec.submit_to_final_approver()
                 rec.checking_if_need_request_are_true()
@@ -201,7 +209,6 @@ class OnLinePurchases(models.Model):
             if rec.department_id.is_need_request_handlers:
                 rec.send_to_purchase_rep(self.get_purchase_rep_email())
             else:
-                print('else')
                 pass
 
     def submit_for_disapproval(self):
@@ -243,7 +250,6 @@ class OnLinePurchases(models.Model):
 
     def send_to_purchase_rep(self, recipient_list):
         conn = self.main_connection()
-        print(recipient_list)
         sender = conn['sender']
         host = conn['host']
         port = conn['port']
@@ -262,7 +268,7 @@ class OnLinePurchases(models.Model):
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
 
-        msg['To'] = ''.join(recipient_list)
+        msg['To'] = ', '.join(recipient_list)
         msg[
             'Subject'] = f"{re.sub(r'[-_]', ' ', self.form_request_type).title() if self.approval_status else ''} Request has been {re.sub(r'[-_]', ' ', self.approval_status).title() if self.approval_status else ''} [{self.name}], Please Process"
         html_content = """
@@ -619,7 +625,6 @@ class OnLinePurchases(models.Model):
 
         # Remove duplicates from recipient_list
         recipient_list = list(set(recipient_list + all_list))  # Combine and then create set
-        print(recipient_list)
         if recipient_list:
             self.send_to_final_approver_email(recipient_list)
         else:
@@ -815,7 +820,6 @@ class OnLinePurchases(models.Model):
             ])
 
             if rec.approval_status == 'to_approve':
-                print('approval status: ', rec.approval_status)
                 if rec.approver_id and rec.approval_stage < res.no_of_approvers:
                     if rec.approval_stage == 1:
 
@@ -1016,7 +1020,6 @@ class OnLinePurchases(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/opf_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -1201,7 +1204,6 @@ class OnLinePurchases(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/opf_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -1470,7 +1472,6 @@ class OnLinePurchases(models.Model):
                 ("approval_type", '=', record.form_request_type)
             ])
             count = sum(approver.no_of_approvers for approver in department_approvers)
-            print(count)
             record.approver_count = count
 
     @api.onchange('department_id', 'approval_stage', 'form_request_type')
@@ -1485,7 +1486,6 @@ class OnLinePurchases(models.Model):
             if rec.department_id and rec.approval_stage == 1:
                 try:
                     approver_dept = [x.first_approver.id for x in res.set_first_approvers]
-                    print(approver_dept)
                     rec.approver_id = approver_dept[0]
                     domain.append(('id', '=', approver_dept))
 
@@ -1494,7 +1494,6 @@ class OnLinePurchases(models.Model):
 
             elif rec.department_id and rec.approval_stage == 2:
                 approver_dept = [x.second_approver.id for x in res.set_second_approvers]
-                print(approver_dept)
                 rec.approver_id = approver_dept[0]
                 domain.append(('id', '=', approver_dept))
 
@@ -1516,14 +1515,15 @@ class OnLinePurchases(models.Model):
             else:
                 domain = []
 
-            print(domain)
-
             return {'domain': {'approver_id': domain}}
 
 
 class OnLinePurchasesLines(models.Model):
     _name = 'on.line.purchases.lines'
     _description = 'Online Purchases Lines'
+
+    def _get_default_currency_id(self):
+        return self.env.company.currency_id.id
 
     op_connection = fields.Many2one('on.line.purchases', string='Connection')
     _website = fields.Char(string='Website')
@@ -1535,6 +1535,9 @@ class OnLinePurchasesLines(models.Model):
     _purpose = fields.Char(string='Purpose')
 
     _attachment = fields.Many2many('ir.attachment', string='Attachment', attachment=True)
+
+    currency_id = fields.Many2one('res.currency', default=_get_default_currency_id)
+
 
     @api.depends('_quantity', '_price')
     def _compute_total_amount(self):

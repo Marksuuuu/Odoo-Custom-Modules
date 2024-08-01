@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="approver_setup_form_inherit" model="ir.ui.view">
+            <field name="name">approver_setup_form_inherit</field>
+            <field name="model">approver.setup</field>
+            <field name="inherit_id" ref="dex_form_request_approval.form_types_form_view"/>
+            <field name="arch" type="xml">
+                <field name="dept_name" position="attributes">
+                    <attribute name="attrs">{'invisible': [('approval_type', '=', 'job_request')],'required':
+                        [('approval_type', '!=', 'job_request')]}
+                    </attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

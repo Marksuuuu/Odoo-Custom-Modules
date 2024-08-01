@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="hr_employee_form_inherit" model="ir.ui.view">
+            <field name="name">hr_employee_form_inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="after">
+                    <field name="dex_emp_type" widget="radio"/>
+                    <field name="is_lateral_transfer" attrs="{'invisible': [('dex_emp_type', '=', False)]}"/>
+                </field>
+                <xpath expr="//page[@name='hr_settings']" position="after">
+                    <page name="other_emp_details" string="Other Employee Details">
+                        <group>
+                            <field name="hired_date"/>
+                            <field name="onboard_date"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

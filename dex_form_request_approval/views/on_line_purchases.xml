@@ -75,6 +75,8 @@
                                 <field name="approver_id"
                                        options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"
                                        invisible="1"/>
+                                <field name="currency_id"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"/>
                             </group>
                             <group attrs="{'invisible': [('flag_counter', '=', False)]}">
                                 <field name="date_purchased"/>
@@ -115,6 +117,13 @@
                                 </group>
                             </page>
                         </notebook>
+                        <group class="oe_subtotal_footer">
+                            <div class="oe_subtotal_footer_separator oe_inline">
+                                <label for="total_online_purchase"/>
+                            </div>
+                            <field name="total_online_purchase" nolabel="1" class="oe_subtotal_footer_separator"
+                                   widget="monetary"/>
+                        </group>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
@@ -132,6 +141,7 @@
                       decoration-muted="state in ('draft')"
                       decoration-success="state in ('approved')"
                       decoration-warning="state in ('to_approve')">
+                    <field name="create_date"/>
                     <field name="name"/>
                     <field name="requesters_id"/>
                     <field name="approval_status"/>

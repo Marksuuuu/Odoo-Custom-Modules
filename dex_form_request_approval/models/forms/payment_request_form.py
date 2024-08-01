@@ -123,7 +123,6 @@ class PaymentRequestForm(models.Model):
         try:
             self.write({'is_created_bill': True, 'person_who_billed': self.env.user.id})
             new_move_id = self._account_move(data)
-            print(new_move_id)
             # Fetch data from One2Many field here
             data_from_one2many = self.prf_lines
             search_data = self.env['account.move'].search([('id', '=', data_from_one2many.id)])
@@ -131,8 +130,6 @@ class PaymentRequestForm(models.Model):
             # Pass the fetched data to _account_move_line()
             self._account_move_line(new_move_id, data_from_one2many, search_data)
         except Exception as e:
-            print(f"Error creating record: {e}")
-            # Rollback any previous changes if an error occurs
             self.write({'is_created_bill': False})
 
     def _account_move(self, data):
@@ -166,7 +163,6 @@ class PaymentRequestForm(models.Model):
         try:
             move_line_ids = []  # Initialize an empty list to store move line IDs
             for record in data:
-                print(move_record)
                 new_record = self.env['account.move.line'].create({
                     'move_id': move_record,
                     'date': search_data.date,
@@ -190,11 +186,9 @@ class PaymentRequestForm(models.Model):
             if rec.department_id.is_need_request_handlers:
                 rec.send_to_rep(self.get_rep_email())
             else:
-                print('else')
                 pass
 
     def send_to_rep(self, recipient_list):
-        print('recipient_list', recipient_list)
         conn = self.main_connection()
         sender = conn['sender']
         host = conn['host']

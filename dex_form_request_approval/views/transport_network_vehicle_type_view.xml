@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="transport_network_vehicle_type_view_tree_view" model="ir.ui.view">
+            <field name="name">transport_network_vehicle_type_view_tree_view</field>
+            <field name="model">transport.network.vehicle.type</field>
+            <field name="arch" type="xml">
+                <tree string="Tree" editable="bottom">
+                    <field name="create_date"/>
+                    <field name="tnv_type"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

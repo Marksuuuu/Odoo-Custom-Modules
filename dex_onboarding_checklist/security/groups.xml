@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="onboarding_checklist_security_id">
+            <field name="name">Onboarding Checklist</field>
+        </record>
+
+        <record model="ir.module.category" id="onboarding_checklist_security_approval_id">
+            <field name="name">Form Security</field>
+            <field name="parent_id" ref="dex_onboarding_checklist.onboarding_checklist_security_id"/>
+        </record>
+
+
+        <record id="group_from_onboarding_hr" model="res.groups">
+            <field name="name">HR</field>
+            <field name="category_id" ref="dex_onboarding_checklist.onboarding_checklist_security_approval_id"/>
+            <field name="implied_ids" eval="[(5,0,0)]"/>
+        </record>
+
+        <record id="group_from_onboarding_it" model="res.groups">
+            <field name="name">IT</field>
+            <field name="category_id" ref="dex_onboarding_checklist.onboarding_checklist_security_approval_id"/>
+            <field name="implied_ids" eval="[(4,ref('dex_onboarding_checklist.group_from_onboarding_hr'),0)]"/>
+        </record>
+
+
+    </data>
+
+</odoo>

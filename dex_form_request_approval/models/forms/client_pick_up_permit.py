@@ -100,8 +100,6 @@ class ClientPickupPermit(models.Model):
         form_link = f"{odoo_base_url}/web#{odoo_query_params}"
 
         get_all_email_receiver = self.approver_id.work_email
-        print(get_all_email_receiver)
-        print(form_link)
 
         recipient_list = []
         if self.department_id and self.department_id.set_first_approvers:
@@ -121,7 +119,6 @@ class ClientPickupPermit(models.Model):
     def compute_check_status(self):
         for rec in self:
             if rec.approval_status == 'approved':
-                print('asdasd')
                 rec.get_approvers_email()
                 rec.submit_to_final_approver()
             elif rec.approval_status == 'disapprove':
@@ -337,7 +334,6 @@ class ClientPickupPermit(models.Model):
 
         # Remove duplicates from recipient_list
         recipient_list = list(set(recipient_list + all_list))  # Combine and then create set
-        print(recipient_list)
         if recipient_list:
             self.send_to_final_approver_email(recipient_list)
         else:
@@ -504,7 +500,6 @@ class ClientPickupPermit(models.Model):
             ])
 
             if rec.approval_status == 'to_approve':
-                print('approval status: ', rec.approval_status)
                 if rec.approver_id and rec.approval_stage < res.no_of_approvers:
                     if rec.approval_stage == 1:
 
@@ -705,7 +700,6 @@ class ClientPickupPermit(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/cpp_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -851,7 +845,6 @@ class ClientPickupPermit(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/cpp_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -1071,7 +1064,6 @@ class ClientPickupPermit(models.Model):
                 ("approval_type", '=', record.form_request_type)
             ])
             count = sum(approver.no_of_approvers for approver in department_approvers)
-            print(count)
             record.approver_count = count
 
     @api.onchange('department_id', 'approval_stage', 'form_request_type')
@@ -1086,7 +1078,6 @@ class ClientPickupPermit(models.Model):
             if rec.department_id and rec.approval_stage == 1:
                 try:
                     approver_dept = [x.first_approver.id for x in res.set_first_approvers]
-                    print(approver_dept)
                     rec.approver_id = approver_dept[0]
                     domain.append(('id', '=', approver_dept))
 
@@ -1095,7 +1086,6 @@ class ClientPickupPermit(models.Model):
 
             elif rec.department_id and rec.approval_stage == 2:
                 approver_dept = [x.second_approver.id for x in res.set_second_approvers]
-                print(approver_dept)
                 rec.approver_id = approver_dept[0]
                 domain.append(('id', '=', approver_dept))
 
@@ -1116,7 +1106,5 @@ class ClientPickupPermit(models.Model):
 
             else:
                 domain = []
-
-            print(domain)
 
             return {'domain': {'approver_id': domain}}

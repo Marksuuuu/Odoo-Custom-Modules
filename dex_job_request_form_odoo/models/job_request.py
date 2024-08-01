@@ -19,11 +19,12 @@ class JobRequest(models.Model):
     _name = 'job.request'
     _inherit = ['job.abstract']
     _rec_name = 'name'
-    _order = 'create_date asc'
+    _order = 'create_date desc'
     _description = 'model for Job Request Data'
 
-    approver_id = fields.Many2one('hr.employee', string="Approver", domain=lambda self: self.get_approver_domain(),
-                                  store=True)
+    job_request_email_line_lines = fields.One2many('job.request.email.line', 'job_request_ids')
+    approver_id = fields.Many2one('hr.employee', string="Approver", store=True)
+    # , domain = lambda self: self.get_approver_domain(),
     approver_count = fields.Integer(compute='_compute_approver_count', store=True, tracking=True)
     check_status = fields.Char(compute='compute_check_status', store=True, tracking=True)
     supplier_id = fields.Many2one('res.partner', string="Supplier", required=False, tracking=True)
@@ -50,12 +51,51 @@ class JobRequest(models.Model):
                                       tracking=True)
 
     current_user_groups1 = fields.Char(string='Current User Groups', compute='_compute_current_user_groups1',
-                                      tracking=True)
+                                       tracking=True)
 
-    reason_to_change = fields.Char(string='Reason To Change', tracking=True)
-    is_change = fields.Boolean(default=False, tracking=True)
+    reason_to_change = fields.Char(string='Reason To Change')
+    is_change = fields.Boolean(default=False)
     workers_assigned_when_changed = fields.Many2many('res.users', string='Supervisor Assigned Workers', default=False,
                                                      tracking=True)
+
+    changed_by = fields.Many2one('res.partner')
+
+    is_need_to_forward_to_others = fields.Boolean(default=False)
+
+    field_edited = fields.Boolean(string="Field Edited", default=False)
+
+    @api.onchange('date_from_user')
+    def onchange_date_from_user(self):
+        if self.date_from_user and self.date_from_user != self._origin.date_from_user:
+            self.field_edited = True
+
+    def write(self, vals):
+        change_logs = []
+
+        for record in self:
+            for field, value in vals.items():
+                old_value = getattr(record, field)
+                if old_value != value:
+                    change_logs.append({
+                        'field': record._fields[field].string,
+                        'old_value': old_value,
+                        'new_value': value,
+                    })
+
+        result = super(JobRequest, self).write(vals)
+
+        if change_logs:
+            changed_by = self.env.user.name
+            log_message = f"Changes made by {changed_by}:\n"
+            for change in change_logs:
+                log_message += f"- {change['field']}: Updated from '{change['old_value'] if change['old_value'] else ''}' to '{change['new_value']}'\n"
+
+            if self.reason_to_change:
+                log_message += f"\nReason for Change: {self.reason_to_change}"
+
+            self.message_post(body=log_message)
+
+        return result
 
     def current_user_that_logged_in(self):
         return self.env.user.name
@@ -63,7 +103,6 @@ class JobRequest(models.Model):
     def current_time_now(self):
         now = datetime.now()
         return now.strftime("%m/%d/%Y %-I:%M%p").lower()
-
 
     @api.depends('current_user_groups1', 'requesters_id')
     def _compute_current_user_groups1(self):
@@ -74,28 +113,19 @@ class JobRequest(models.Model):
             # Get the model's access control list (ACL)
             acl = self.env['ir.model.access'].search(
                 [('model_id', '=', self.env.ref('dex_job_request_form_odoo.model_job_request').id)])
-
-            _logger.info(f'TESTTTT 0000{acl}')
-
             # Filter ACL to get only those records where current user has access and belongs to one of the target groups
             user_acl_manager = acl.filtered(lambda
                                                 r: user.id in r.group_id.users.ids and r.group_id.name == 'Admin')
             user_acl_user = acl.filtered(
                 lambda r: user.id in r.group_id.users.ids and r.group_id.name == 'User')
 
-            _logger.info(f'TESTTTT 1{user_acl_manager.name}')
-
-            _logger.info(f'TESTTTT 2{user_acl_user.name}')
-
             # If the user is in the manager group, set current_user_groups to 'manager'
             if user_acl_manager.name == 'dex_job_request_form_odoo.access_job_request_manager':
                 record.current_user_groups1 = 'manager'
-                _logger.info(f'TESTTTT 1{record.current_user_groups1}')
 
             # If the user is in the user group, set current_user_groups1 to 'user'
             elif user_acl_user.name == 'dex_job_request_form_odoo.access_job_request_user':
                 record.current_user_groups1 = 'user'
-                _logger.info(f'TESTTTT 2{record.current_user_groups1}')
             # If user is not in either group, set current_user_groups1 to an empty string
             else:
                 record.current_user_groups1 = ''
@@ -109,28 +139,19 @@ class JobRequest(models.Model):
             # Get the model's access control list (ACL)
             acl = self.env['ir.model.access'].search(
                 [('model_id', '=', self.env.ref('dex_job_request_form_odoo.model_job_request').id)])
-
-            _logger.info(f'TESTTTT 0000{acl}')
-
             # Filter ACL to get only those records where current user has access and belongs to one of the target groups
             user_acl_manager = acl.filtered(lambda
                                                 r: user.id in r.group_id.users.ids and r.group_id.name == 'Admin')
             user_acl_user = acl.filtered(
                 lambda r: user.id in r.group_id.users.ids and r.group_id.name == 'User')
 
-            _logger.info(f'TESTTTT 1{user_acl_manager.name}')
-
-            _logger.info(f'TESTTTT 2{user_acl_user.name}')
-
             # If the user is in the manager group, set current_user_groups to 'manager'
             if user_acl_manager.name == 'dex_job_request_form_odoo.access_job_request_manager':
                 record.current_user_groups = 'manager'
-                _logger.info(f'TESTTTT 1{record.current_user_groups}')
 
             # If the user is in the user group, set current_user_groups to 'user'
             elif user_acl_user.name == 'dex_job_request_form_odoo.access_job_request_user':
                 record.current_user_groups = 'user'
-                _logger.info(f'TESTTTT 2{record.current_user_groups}')
             # If user is not in either group, set current_user_groups to an empty string
             else:
                 record.current_user_groups = ''
@@ -153,7 +174,7 @@ class JobRequest(models.Model):
         })
 
     def work_done(self):
-        self.compute_total_date()
+        # self.compute_total_date()
         self.write({
             'state': 'done'
         })
@@ -184,8 +205,6 @@ class JobRequest(models.Model):
             for res in self.worker:
                 if res.name:
                     recipient_list.append(res.name)
-
-        _logger.info(f'TESTTTTTTTTTTTTTT {recipient_list}')
 
     def get_workers(self):
         recipient_list = []
@@ -228,6 +247,7 @@ class JobRequest(models.Model):
                 })
 
     def submit_for_approval(self):
+        # self._get_all_data_from_receivers_line()
         # Approval Dashboard Link Section
         approval_base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         approval_action = self.env['ir.actions.act_window'].search(
@@ -281,38 +301,31 @@ class JobRequest(models.Model):
     @api.depends('state')
     def compute_check_status(self):
         recipient_list = []
-        if self.department_id and self.department_id.set_first_approvers:
-            for approver in self.department_id.set_first_approvers:
+        get_jrf_requestor = self.env['approver.setup'].search([('approval_type', '=', 'job_request')])
+        if self.form_request_type == 'job_request':
+            for approver in get_jrf_requestor.set_first_approvers:
                 if approver.approver_email:
                     recipient_list.append(approver.approver_email)
         if self.requesters_email:
             recipient_list.append(self.requesters_email)
 
-        _logger.info(f'ASDDDDDDDDDDDDD {recipient_list}')
-        _logger.info(f'ASDDDDDDDDDDDDD {self.requesters_email}')
-
         for rec in self:
             if rec.state == 'assigned':
                 rec.notify_to_all(recipient_list)
-                _logger.info(f'{rec.state} assigned')
             elif rec.state == 'ongoing':
                 rec.notify_to_all(recipient_list)
-                _logger.info(f'{rec.state} assigned')
             elif rec.state == 'on_hold':
                 rec.notify_to_all(recipient_list)
-                _logger.info(f'{rec.state} on_hold')
             elif rec.state == 'cancelled':
                 rec.notify_to_all(recipient_list)
-                _logger.info(f'{rec.state} cancelled')
             elif rec.state == 'rejected':
                 rec.notify_to_all(recipient_list)
-                _logger.info(f'{rec.state} rejected')
             elif rec.state == 'done':
                 rec.notify_to_all(recipient_list)
-                _logger.info(f'{rec.state} done')
+                rec._get_all_data_from_receivers_line()
             elif rec.state == 'queue':
                 rec.notify_to_all(recipient_list)
-                _logger.info(f'{rec.state} queue')
+                rec._get_all_data_from_receivers_line()
             else:
                 pass
 
@@ -369,50 +382,50 @@ class JobRequest(models.Model):
             print(count)
             record.approver_count = count
 
-    @api.onchange('department_id', 'approval_stage', 'form_request_type')
-    def get_approver_domain(self):
-        for rec in self:
-            domain = []
-            res = self.env["approver.setup"].search(
-                [("dept_name", "=", rec.department_id.dept_name.name), ("approval_type", '=', self.form_request_type)])
-
-            if rec.department_id and rec.approval_stage == 1:
-                try:
-                    approver_dept = [x.first_approver.id for x in res.set_first_approvers]
-                    print(approver_dept)
-                    rec.approver_id = approver_dept[0]
-                    domain.append(('id', '=', approver_dept))
-
-                except IndexError:
-                    raise UserError(_("No Approvers set for {}!").format(rec.department_id.dept_name.name))
-
-            elif rec.department_id and rec.approval_stage == 2:
-                approver_dept = [x.second_approver.id for x in res.set_second_approvers]
-                print(approver_dept)
-                rec.approver_id = approver_dept[0]
-                domain.append(('id', '=', approver_dept))
-
-            elif rec.department_id and rec.approval_stage == 3:
-                approver_dept = [x.third_approver.id for x in res.set_third_approvers]
-                rec.approver_id = approver_dept[0]
-                domain.append(('id', '=', approver_dept))
-
-            elif rec.department_id and rec.approval_stage == 4:
-                approver_dept = [x.fourth_approver.id for x in res.set_fourth_approvers]
-                rec.approver_id = approver_dept[0]
-                domain.append(('id', '=', approver_dept))
-
-            elif rec.department_id and rec.approval_stage == 5:
-                approver_dept = [x.fifth_approver.id for x in res.set_fifth_approvers]
-                rec.approver_id = approver_dept[0]
-                domain.append(('id', '=', approver_dept))
-
-            else:
-                domain = []
-
-            print(domain)
-
-            return {'domain': {'approver_id': domain}}
+    # @api.onchange('department_id', 'approval_stage', 'form_request_type')
+    # def get_approver_domain(self):
+    #     for rec in self:
+    #         domain = []
+    #         res = self.env["approver.setup"].search(
+    #             [("dept_name", "=", rec.department_id.dept_name.name), ("approval_type", '=', self.form_request_type)])
+    #
+    #         if rec.department_id and rec.approval_stage == 1:
+    #             try:
+    #                 approver_dept = [x.first_approver.id for x in res.set_first_approvers]
+    #                 print(approver_dept)
+    #                 rec.approver_id = approver_dept[0]
+    #                 domain.append(('id', '=', approver_dept))
+    #
+    #             except IndexError:
+    #                 raise UserError(_("No Approvers set for {}!").format(rec.department_id.dept_name.name))
+    #
+    #         elif rec.department_id and rec.approval_stage == 2:
+    #             approver_dept = [x.second_approver.id for x in res.set_second_approvers]
+    #             print(approver_dept)
+    #             rec.approver_id = approver_dept[0]
+    #             domain.append(('id', '=', approver_dept))
+    #
+    #         elif rec.department_id and rec.approval_stage == 3:
+    #             approver_dept = [x.third_approver.id for x in res.set_third_approvers]
+    #             rec.approver_id = approver_dept[0]
+    #             domain.append(('id', '=', approver_dept))
+    #
+    #         elif rec.department_id and rec.approval_stage == 4:
+    #             approver_dept = [x.fourth_approver.id for x in res.set_fourth_approvers]
+    #             rec.approver_id = approver_dept[0]
+    #             domain.append(('id', '=', approver_dept))
+    #
+    #         elif rec.department_id and rec.approval_stage == 5:
+    #             approver_dept = [x.fifth_approver.id for x in res.set_fifth_approvers]
+    #             rec.approver_id = approver_dept[0]
+    #             domain.append(('id', '=', approver_dept))
+    #
+    #         else:
+    #             domain = []
+    #
+    #         print(domain)
+    #
+    #         return {'domain': {'approver_id': domain}}
 
     def generate_pdf(self):
         return self.env.ref('dex_job_request_form_odoo.jrf_odoo_report_id').report_action(self)
@@ -484,6 +497,7 @@ class JobRequest(models.Model):
         sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', self.task) if self.task else 'N/A'
         capitalized_sentences = [sentence.capitalize() for sentence in sentences]
         proper_text = ' '.join(capitalized_sentences)
+
         quote, author = self.generate_motivational_quote()
 
         result = 'N/A'
@@ -493,7 +507,7 @@ class JobRequest(models.Model):
 
         msg['To'] = ', '.join(recipient_list)
         msg['Subject'] = (
-            f"{str(self.form_request_type).title() if self.state else ''} "
+            f"{re.sub(r'[-_]', ' ', self.form_request_type).title() if self.state else ''} "
             f"Request has been {str(self.state).title() if self.state else ''} "
             f"[{str(self.name)}]"
         )
@@ -567,7 +581,7 @@ class JobRequest(models.Model):
         html_content += f""" 
                                             <div class="container">
                                                 <div class="header">
-                                                Hello <b>{self.requesters_id.name}</b> </br> Your Request: <b>{proper_text.title() if self.state else ''}</b> </br> Request has been <b>{re.sub(r'[-_]', ' ', self.state).title() if self.state else ''}</b> </br> Controll Number:  <b>[{self.name}]</b> </br>Priority Level: <b>{re.sub(r'[-_]', ' ', self.priority_level).title()}</b> </br> Workers: <b>{', '.join(self.get_workers()) if self.workers_assigned_when_changed else self.workers_requested} {result} </b>
+                                                Hello <b>{self.requesters_id.name}</b> </br> Your Request: <b>{proper_text.title() if self.state else ''}</b> </br> Request has been <b>{re.sub(r'[-_]', ' ', self.state).title() if self.state else ''}</b> </br> Controll Number:  <b>[{self.name}]</b> </br>Priority Level: <b>{re.sub(r'[-_]', ' ', self.priority_level).title()}</b> </br> Workers: <b>{', '.join(self.get_workers()) if self.workers_assigned_when_changed else self.workers_requested if self.workers_assigned_when_changed else result}</b></b>
                                                 </div>
                                                 <div class="header1">
                                                     </br></br>
@@ -614,3 +628,216 @@ class JobRequest(models.Model):
         if vals.get('name', '/') == '/':
             vals['name'] = self.env['ir.sequence'].next_by_code('create.sequence.form.sequence.jrf') or '/'
         return super(JobRequest, self).create(vals)
+
+    # def open_form_view(self):
+    #     view_id = self.env.ref('dex_job_request_form_odoo.dex_form_request_job_request_view').id
+    #     return {
+    #         'name': 'Change Request',
+    #         'view_type': 'form',
+    #         'view_mode': 'form',
+    #         'res_model': 'change.workers',
+    #         'view_id': view_id,
+    #         'type': 'ir.actions.act_window',
+    #         'target': 'new',
+    #     }
+
+    @api.onchange('is_need_to_forward_to_others')
+    def _onchange_is_need_to_forward_to_others(self):
+        if self.is_need_to_forward_to_others:
+            if self.job_request_email_line_lines:
+                # If job_request_email_line_lines already has data, do not change it
+                return
+
+            # Search for email setup records where email_setup_lines is 'job_request'
+            email_set_model = self.env['email.setup']
+            checking_in_email_setup = email_set_model.search([('email_setup_lines', '=', 'job_request')])
+
+            job_request_email_line_lines = []
+            for record in checking_in_email_setup.email_setup_lines:
+                job_request_email_line_lines.append((0, 0, {
+                    'requesters_id': record.requesters_id.id,
+                    'requesters_email': record.requesters_email,
+                }))
+
+            if job_request_email_line_lines:
+                self.job_request_email_line_lines = job_request_email_line_lines
+
+        else:
+            # If is_need_to_forward_to_others is False, remove all data from job_request_email_line_lines
+            self.job_request_email_line_lines = [(5, 0, 0)]
+
+    def _get_all_data_from_receivers_line(self):
+        recipient_list = []
+        conn = self.main_connection()
+
+        for approver in self.job_request_email_line_lines:
+            if approver.requesters_email:
+                recipient_list.append(approver.requesters_email)
+
+        sender = "Do not reply. This email is autogenerated."
+        host = conn['host']
+        port = conn['port']
+        username = conn['username']
+        password = conn['password']
+
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        token = self.generate_token()
+
+        self.write({'approval_link': token})
+
+        sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', self.task) if self.task else 'N/A'
+        capitalized_sentences = [sentence.capitalize() for sentence in sentences]
+        proper_text = ' '.join(capitalized_sentences)
+
+        quote, author = self.generate_motivational_quote()
+
+        result = 'N/A'
+
+        msg = MIMEMultipart()
+        msg['From'] = formataddr(('Odoo Mailer', sender))
+
+        msg['To'] = ', '.join(recipient_list)
+        msg['Subject'] = (
+            f"{re.sub(r'[-_]', ' ', self.form_request_type).title() if self.state else ''} "
+            f"Request has been {str(self.state).title() if self.state else ''} "
+            f"[{str(self.name)}]"
+        )
+
+        html_content = """
+                                            <!DOCTYPE html>
+                                                <html lang="en">
+                                                <head>
+                                                <meta charset="UTF-8">
+                                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                                <title>Invoice Template</title>
+                                                <style>
+                                                    body {
+                                                        font-family: Arial, sans-serif;
+                                                        margin: 0;
+                                                        padding: 20px;
+                                                    }
+                                                    .container {
+                                                        max-width: 800px;
+                                                        margin: 0 auto;
+                                                        border: 1px solid #ccc;
+                                                        padding: 20px;
+                                                        position: relative;
+                                                    }
+                                                    .header {
+                                                        text-align: center;
+                                                        margin-bottom: 20px;
+                                                    }
+                                                    .header1 {
+                                                        text-align: center;
+                                                    }
+                                                    .invoice-number {
+                                                        position: absolute;
+                                                        top: 20px;
+                                                        right: 20px;
+                                                    }
+                                                    table {
+                                                        width: 100%;
+                                                        border-collapse: collapse;
+                                                        margin-top: 20px;
+                                                    }
+                                                    th, td {
+                                                        border: 1px solid white;
+                                                        padding: 8px;
+                                                        text-align: left;
+                                                    }
+                                                    th {
+                                                        background-color: #f2f2f2;
+                                                    }
+                                                    .button-container {
+                                                        text-align: center;
+                                                        margin-top: 20px;
+                                                    }
+                                                    .button {
+                                                        padding: 10px 20px;
+                                                        margin: 0 10px;
+                                                        border: none;
+                                                        border-radius: 5px;
+                                                        cursor: pointer;
+                                                        font-size: 16px;
+                                                        color: white;
+                                                        transition: background-color 0.3s;
+                                                    }
+                                                    .button:hover {
+                                                        background-color: grey;
+                                                    }
+                                                </style>
+                                                </head>
+                                                <body> """
+
+        html_content += f""" 
+                                                    <div class="container">
+                                                        <div class="header">
+                                                        <span style='text-transform:uppercase; font-style: italic;'>Hi. you know why did you receive this email? Because you've been added as a co-recipient of the requests.</span>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                        Requester <b>{self.requesters_id.name}</b> </br> Request: <b>{proper_text.title() if self.state else ''}</b> </br> and this Request has been <b>{re.sub(r'[-_]', ' ', self.state).title() if self.state else ''}</b> </br> Controll Number:  <b>[{self.name}]</b> </br>Priority Level: <b>{re.sub(r'[-_]', ' ', self.priority_level).title()}</b> </br> Workers: <b>{', '.join(self.get_workers()) if self.workers_assigned_when_changed else self.workers_requested if self.workers_assigned_when_changed else result}</b></b>
+                                                        </div>
+                                                        <div class="header1">
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            </br></br>
+                                                            <span style='font-size: 12px; margin-top: 50px; float: left;'>Quote for the Day - "<i>{quote} - {author}</i>"</span>
+                                                        </div>
+                                                    </div>
+                                                    """
+        msg.attach(MIMEText(html_content, 'html'))
+
+        try:
+            smtpObj = smtplib.SMTP(host, port)
+            smtpObj.login(username, password)
+            smtpObj.sendmail(sender, recipient_list, msg.as_string())
+
+            msg = "Successfully sent email"
+            return {
+                'success': {
+                    'title': 'Successfully email sent!',
+                    'message': f'{msg}'}
+            }
+        except Exception as e:
+            msg = f"Error: Unable to send email: {str(e)}"
+            return {
+                'warning': {
+                    'title': 'Error: Unable to send email!',
+                    'message': f'{msg}'}
+            }
+
+    def open_form_view(self):
+        view_id = self.env.ref('dex_job_request_form_odoo.dex_form_request_prompt_msg_form').id
+        action = {
+            'name': 'Reason to Change',
+            'type': 'ir.actions.act_window',
+            'res_model': 'prompt.msg',
+            'views': [(view_id, 'form')],
+            'target': 'current',
+            'res_id': self.id,
+            'context': {
+            }
+        }
+        return action
+
+
+class JobRequestEmailLine(models.Model):
+    _name = 'job.request.email.line'
+
+    job_request_ids = fields.Many2one('job.request')
+
+    requesters_id = fields.Many2one('hr.employee', string='Requesters', required=False, tracking=True)
+    requesters_email = fields.Char(related='requesters_id.work_email', string='Requesters Email', tracking=True,
+                                   store=True)

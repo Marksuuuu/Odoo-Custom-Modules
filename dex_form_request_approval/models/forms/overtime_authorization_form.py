@@ -142,7 +142,6 @@ class OvertimeAuthorizationForm(models.Model):
     def compute_check_status(self):
         for rec in self:
             if rec.approval_status == 'approved':
-                print('asdasd')
                 rec.get_approvers_email()
                 rec.submit_to_final_approver()
             elif rec.approval_status == 'disapprove':
@@ -372,7 +371,6 @@ class OvertimeAuthorizationForm(models.Model):
 
         # Remove duplicates from recipient_list
         recipient_list = list(set(recipient_list + all_list))  # Combine and then create set
-        print(recipient_list)
         if recipient_list:
             self.send_to_final_approver_email(recipient_list)
         else:
@@ -554,7 +552,6 @@ class OvertimeAuthorizationForm(models.Model):
             ])
 
             if rec.approval_status == 'to_approve':
-                print('approval status: ', rec.approval_status)
                 if rec.approver_id and rec.approval_stage < res.no_of_approvers:
                     if rec.approval_stage == 1:
 
@@ -756,7 +753,6 @@ class OvertimeAuthorizationForm(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/oaf_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -917,7 +913,6 @@ class OvertimeAuthorizationForm(models.Model):
         disapproval_url = "{}/dex_form_request_approval/request/oaf_disapprove/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -1148,7 +1143,6 @@ class OvertimeAuthorizationForm(models.Model):
                 ("approval_type", '=', record.form_request_type)
             ])
             count = sum(approver.no_of_approvers for approver in department_approvers)
-            print(count)
             record.approver_count = count
 
     @api.onchange('department_id', 'approval_stage', 'form_request_type')
@@ -1189,8 +1183,6 @@ class OvertimeAuthorizationForm(models.Model):
 
             else:
                 domain = []
-
-            print(domain)
 
             return {'domain': {'approver_id': domain}}
 

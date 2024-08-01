@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="dex_form_request_create_bill_view_form" model="ir.ui.view">
+            <field name="name">dex_form_request_create_bill_view_form</field>
+            <field name="model">create.bill.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div>
+                            <label for="tnvf_ids" string="Control Id"/>
+                            <field name="state" invisible="1"/>
+                            <h1>
+                                <field name="tnvf_ids" readonly="1"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="requesters_id" readonly="1"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"/>
+
+                                <field name="partner_id" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"/>
+                            </group>
+                            <group>
+<!--                                <field name="transport_vehicle_type" readonly="1"-->
+<!--                                       options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"/>-->
+                                <!--                            <field name="transport_vehicle_type_rate" readonly="1" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}"/>-->
+                                <field name="total_rate" readonly="1"/>
+                                <field name="cargo_type" readonly="1"/>
+                                <field name="journal_id" readonly="1"/>
+                                <field name="currency_id" readonly="1"/>
+
+                                <field name="company_id" invisible="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page name="cbwl_items" string="Request Items">
+                                <field name="cbwl_lines">
+                                    <tree string="Request Details" editable="bottom" create="0">
+                                        <field name="label" force_save="1"/>
+                                        <field name="tnvf_personnel"
+                                               attrs="{'column_invisible': ['|',('parent.cargo_type', '=', False),('parent.cargo_type', '=', 'package')]}"
+                                               force_save="1"/>
+                                        <field name="tnvf_package"
+                                               attrs="{'column_invisible': ['|',('parent.cargo_type', '=', False),('parent.cargo_type', '=', 'personnel')]}"
+                                               force_save="1"/>
+                                        <field name="account_id" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}" required="1"/>
+                                        <field name="analytic_account_id" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_open': True}" required="1"/>
+                                        <!--                                    <field name="analytic_tag_ids"/>-->
+                                        <field name="tnvf_from"/>
+                                        <field name="tnvf_to"/>
+                                        <field name="tnvf_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <group class="oe_subtotal_footer">
+                            <div class="oe_subtotal_footer_separator oe_inline">
+                                <label for="total_rate"/>
+                            </div>
+                            <field name="total_rate" nolabel="1" class="oe_subtotal_footer_separator" readonly="1"
+                                   widget="monetary"/>
+                        </group></sheet>
+
+                    <footer class="oe_right">
+                        <button name="generate_bill" string="Save" type="object" class="btn-primary"
+                                confirm="Are you sure?"/>
+                        <button string="Discard" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="dex_form_request_create_bill_view" model="ir.actions.act_window">
+            <field name="name">Change Worker</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">create.bill.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

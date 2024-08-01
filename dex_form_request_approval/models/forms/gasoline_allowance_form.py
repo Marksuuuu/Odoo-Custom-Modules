@@ -9,11 +9,13 @@ from email.mime.text import MIMEText
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 from odoo.tools import formataddr
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class GasolineAllowanceForm(models.Model):
     _name = 'gasoline.allowance.form'
-    _inherit = 'approval.fields.plugins'
+    _inherit = ['approval.fields.plugins', 'abstract.function']
 
     gaf_lines = fields.One2many('gasoline.allowance.form.lines', 'gaf_connection',
                                 string='Overtime Authorization Form Lines')
@@ -26,17 +28,260 @@ class GasolineAllowanceForm(models.Model):
     date_approved = fields.Datetime()
     is_approver = fields.Boolean(compute="compute_approver")
 
+    vehicle_type_ids = fields.Many2one('vehicle.type', string='Vehicle Type')
     total = fields.Float(string="Total")
-    rate_per_km = fields.Float(string="Rates per km")
+    vehicle_rate = fields.Float(related='vehicle_type_ids.vehicle_rate', string="Rates per km")
     total_gasoline_allowance = fields.Float(string="Total Gasoline allowance",
                                             compute='_compute_total_gasoline_allowance', store=True)
 
     total_km = fields.Float(string="Total", compute="_compute_total_km", store=True)
 
-    vehicle_type = fields.Selection([
-        ('motorcycle', 'Motorcycle'),
-        ('car', 'Car'),
-    ], string='Vehicle Type', required=True)
+    parameter_match = fields.Boolean(string="Parameter Match", compute='_compute_parameter_match', store=False,
+                                     readonly=False,
+                                     default=False)
+    flag_counter = fields.Boolean(default=False)
+
+    is_bill_created = fields.Many2one('account.move', tracking=True, string="Bill Created")
+
+    person_who_billed = fields.Many2one('res.users', string='Person Who Billed')
+
+    is_created_bill = fields.Boolean(default=False, tracking=True)
+
+    get_status_for_bill = fields.Selection(related='is_bill_created.state')
+
+    @api.depends('department_id', 'department_id.requests_handlers', 'flag_counter')
+    def _compute_parameter_match(self):
+        for record in self:
+            # Retrieve the configuration parameter value
+            user_record = record.department_id
+
+            # Accessing the courses of the department
+            courses = user_record.requests_handlers
+
+            # Initialize parameter_match to False
+            parameter_match = False
+
+            # Get current user data
+            current_user = self.env.user
+
+            # Iterating through the courses
+            for course in courses:
+                # Compare parameter value with current user's id
+                if int(course.id) == int(current_user.id):
+                    parameter_match = True
+                    record.flag_counter = True  # You may want to set flag_counter to True here as well
+                    break  # No need to continue if match is found
+
+            # Update the parameter_match field
+            record.parameter_match = parameter_match
+
+    @api.depends('department_id.is_need_request_handlers')
+    def checking_if_need_request_are_true(self):
+        for rec in self:
+            if rec.department_id.is_need_request_handlers:
+                rec.send_to_purchase_rep(self.get_purchase_rep_email())
+            else:
+                pass
+
+    def check_get_purchase_rep_email(self):
+        self.checking_if_need_request_are_true()
+
+
+    def send_to_purchase_rep(self, recipient_list):
+        conn = self.main_connection()
+        sender = conn['sender']
+        host = conn['host']
+        port = conn['port']
+        username = conn['username']
+        password = conn['password']
+
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        token = self.generate_token()
+
+        approval_url = "{}/dex_form_request_approval/request/cpp_approve/{}".format(base_url, token)
+        disapproval_url = "{}/dex_form_request_approval/request/cpp_disapprove/{}".format(base_url, token)
+
+        token = self.generate_token()
+        self.write({'approval_link': token})
+
+        msg = MIMEMultipart()
+        msg['From'] = formataddr(('Odoo Mailer', sender))
+
+        msg['To'] = ', '.join(recipient_list)
+        msg[
+            'Subject'] = f"{re.sub(r'[-_]', ' ', self.form_request_type).title() if self.approval_status else ''} Request has been {re.sub(r'[-_]', ' ', self.approval_status).title() if self.approval_status else ''} [{self.name}], Please Process"
+        html_content = """
+                                    <!DOCTYPE html>
+                                        <html lang="en">
+                                        <head>
+                                        <meta charset="UTF-8">
+                                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                        <title>Invoice Template</title>
+                                        <style>
+                                            body {
+                                                font-family: Arial, sans-serif;
+                                                margin: 0;
+                                                padding: 20px;
+                                            }
+                                            .container {
+                                                max-width: 800px;
+                                                margin: 0 auto;
+                                                border: 1px solid #ccc;
+                                                padding: 20px;
+                                                position: relative;
+                                            }
+                                            .header {
+                                                text-align: center;
+                                                margin-bottom: 20px;
+                                            }
+                                            .invoice-number {
+                                                position: absolute;
+                                                top: 20px;
+                                                right: 20px;
+                                            }
+                                            table {
+                                                width: 100%;
+                                                border-collapse: collapse;
+                                                margin-top: 20px;
+                                            }
+                                            th, td {
+                                                border: 1px solid #ddd;
+                                                padding: 8px;
+                                                text-align: left;
+                                            }
+                                            th {
+                                                background-color: #f2f2f2;
+                                            }
+                                            .button-container {
+                                                text-align: center;
+                                                margin-top: 20px;
+                                            }
+                                            .button {
+                                                padding: 10px 20px;
+                                                margin: 0 10px;
+                                                border: none;
+                                                border-radius: 5px;
+                                                cursor: pointer;
+                                                font-size: 16px;
+                                                color: white;
+                                                transition: background-color 0.3s;
+                                            }
+                                            .button:hover {
+                                                background-color: grey;
+                                            }
+                                            /* Apply ellipsis to links */
+                                            td.website-link {
+                                                max-width: 50px; /* Adjust the maximum width as needed */
+                                                overflow: hidden;
+                                                text-overflow: ellipsis;
+                                                white-space: nowrap;
+                                            }
+
+                                        </style>
+                                        </head>
+                                        <body> """
+
+        html_content += f""" 
+                                            <div class="container">
+                                                <div class="header">
+                                                    <h2>{re.sub(r'[-_]', ' ', self.form_request_type).title() if self.approval_status else ''} Request</h2>
+                                                    <p>Date: {self.create_date.strftime("%m-%d-%y")}</p>
+                                                    <p>Request by: {self.requesters_id.name}</p>
+                                                </div>
+                                                <div class="invoice-number" style='text-align: center'>
+                                                    <p>Serial Number: </br> {self.name}</p>
+                                                </div>
+                                                <div class="item-details">
+                                                    <h3>Item Details</h3>
+                                                    <p>Status: {'To Approve' if self.approval_status == 'draft' else re.sub(r'[-_]', ' ', self.approval_status).title()}</p>
+                                                    <p>Item Requested: {re.sub(r'[-_]', ' ', self.form_request_type).title() if self.approval_status else ''}</p>
+                                                    <p>{re.sub(r'[-_]', ' ', self.approval_status).title() if self.approval_status else '' if self.approval_status == 'approved' else ''} by: {self.env.user.name if self.env.user else ''}</p>
+                                                </div>"""
+
+        html_content += """
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>From</th>
+                                                            <th>To</th>
+                                                            <th>Date</th>
+                                                            <th>Purpose</th>
+                                                            <th>Estimated Km</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                    """
+        for rec in self.gaf_lines:
+            html_content += f"""
+                                                          <tr>
+                                                              <td>{rec._from if rec._from else ''}</td>
+                                                              <td>{rec._to if rec._to else ''}</td>
+                                                              <td>{rec._date.strftime("%m-%d-%y") if rec._date else ''}</td>
+                                                              <td>{rec._purpose if rec._purpose else ''}</td>
+                                                              <td>{rec._estimated_km if rec._estimated_km else ''}</td>
+                                                          </tr>"""
+        html_content += f"""
+                                                            </tbody> 
+                                                            </table>
+                                                                <div class="button-container">
+                                                                    <p>Total Rate: {self.total_km}</p>
+                                                                </div>"""
+        html_content += f"""
+                                                <div class="button-container">
+                                                            <a href="{self.generate_odoo_link()}" style="background-color: blue; margin-right: 20px; margin-top: 20px;" class="button">Edit Now</a>
+                                                </div>"""
+
+        html_content += """
+                                            </div>
+                                        </body>
+                                        </html>
+                                """
+
+        msg.attach(MIMEText(html_content, 'html'))
+
+        try:
+            smtpObj = smtplib.SMTP(host, port)
+            smtpObj.login(username, password)
+            smtpObj.sendmail(sender, recipient_list, msg.as_string())
+
+            msg = "Successfully sent email"
+            _logger.info(msg)
+            return {
+                'success': {
+                    'title': 'Successfully email sent!',
+                    'message': f'{msg}'}
+            }
+        except Exception as e:
+            msg = f"Error: Unable to send email: {str(e)}"
+            _logger.info(msg)
+            return {
+                'warning': {
+                    'title': 'Error: Unable to send email!',
+                    'message': f'{msg}'}
+            }
+
+    def get_purchase_rep_email(self):
+        work_emails = []  # Initialize an empty list to store work emails
+        for record in self:
+            # Assuming record is related to a student or contains necessary information
+            # to find the related student record
+
+            # Retrieve the student record or department record
+            student_record = record.department_id  # Replace department_id with the appropriate field
+
+            # Assuming requests_handlers is a one-to-many or many-to-many field on the student record
+            courses = student_record.requests_handlers  # Accessing the courses of the student
+
+            # Assuming user_id is a field on hr.employee model
+            search_for_users = self.env['hr.employee'].search([('user_id', 'in', courses.mapped('id'))])
+
+            # Loop through all matching HR employees and append their work emails to the list
+            for user in search_for_users:
+                work_emails.append(user.work_email)
+
+        # Return the list of work emails
+        return work_emails
 
     def _get_department_domain(self):
         approval_types = self.env['approver.setup'].search([('approval_type', '=', 'gasoline_allowance')])
@@ -60,7 +305,6 @@ class GasolineAllowanceForm(models.Model):
                 self.department_id = None
 
     def print_form(self):
-        print('test')
         return self.env.ref('dex_form_request_approval.gaf_report_id').report_action(self)
 
     def _onchange_one2many_field(self):
@@ -79,21 +323,21 @@ class GasolineAllowanceForm(models.Model):
         # self._onchange_one2many_field()
         return res
 
-    @api.depends('gaf_lines', 'rate_per_km')
+    @api.depends('gaf_lines', 'vehicle_rate')
     def _compute_total_km(self):
         for record in self:
             estimated_km_values = [line._estimated_km for line in record.gaf_lines]
             total_estimated_km = sum(estimated_km_values)
             record.total_km = total_estimated_km
 
-    @api.depends('gaf_lines', 'rate_per_km')
+    @api.depends('gaf_lines', 'vehicle_rate')
     def _compute_total_gasoline_allowance(self):
         for record in self:
             estimated_km_values = [line._estimated_km for line in record.gaf_lines]
             total_estimated_km = sum(estimated_km_values)
-            record.total_gasoline_allowance = total_estimated_km * record.rate_per_km
+            record.total_gasoline_allowance = total_estimated_km * record.vehicle_rate
 
-    @api.depends('gaf_lines', 'rate_per_km')
+    @api.depends('gaf_lines', 'vehicle_rate')
     def total_gas(self):
         total = 0
         for record in self:
@@ -105,7 +349,7 @@ class GasolineAllowanceForm(models.Model):
     def check_calculate(self):
         estimated_km_values = [rec._estimated_km for rec in self.gaf_lines]
         total_estimated_km = sum(estimated_km_values)
-        self.total_gasoline_allowance = total_estimated_km * self.rate_per_km
+        self.total_gasoline_allowance = total_estimated_km * self.vehicle_rate
 
     def compute_approver(self):
         for rec in self:
@@ -170,9 +414,9 @@ class GasolineAllowanceForm(models.Model):
     def compute_check_status(self):
         for rec in self:
             if rec.approval_status == 'approved':
-                print('asdasd')
                 rec.get_approvers_email()
                 rec.submit_to_final_approver()
+                rec.checking_if_need_request_are_true()
             elif rec.approval_status == 'disapprove':
                 rec.get_approvers_email()
                 rec.submit_for_disapproval()
@@ -347,7 +591,7 @@ class GasolineAllowanceForm(models.Model):
                                 </tbody> 
                                         </table>
                                                 <div class="button-container">
-                                                    <p>Rate per KM:  {self.rate_per_km}</p>
+                                                    <p>Rate per KM:  {self.vehicle_rate}</p>
                                                     <p>Total KM: {self.total_km}</p>
                                                     <p>Total Gas Allowance: {self.total_gasoline_allowance}</p>
                                                 </div>"""
@@ -408,7 +652,6 @@ class GasolineAllowanceForm(models.Model):
 
         # Remove duplicates from recipient_list
         recipient_list = list(set(recipient_list + all_list))  # Combine and then create set
-        print(recipient_list)
         if recipient_list:
             self.send_to_final_approver_email(recipient_list)
         else:
@@ -553,7 +796,7 @@ class GasolineAllowanceForm(models.Model):
                                 </tbody> 
                                 </table>
                                         <div class="button-container">
-                                            <p>Rate per KM:  {self.rate_per_km}</p>
+                                            <p>Rate per KM:  {self.vehicle_rate}</p>
                                             <p>Total KM: {self.total_km}</p>
                                             <p>Total Gas Allowance: {self.total_gasoline_allowance}</p>
                                         </div>"""
@@ -600,7 +843,6 @@ class GasolineAllowanceForm(models.Model):
             ])
 
             if rec.approval_status == 'to_approve':
-                print('approval status: ', rec.approval_status)
                 if rec.approver_id and rec.approval_stage < res.no_of_approvers:
                     if rec.approval_stage == 1:
 
@@ -803,7 +1045,6 @@ class GasolineAllowanceForm(models.Model):
         report_download = "{}/dex_form_request_approval/request/gaf_report_download/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -917,7 +1158,7 @@ class GasolineAllowanceForm(models.Model):
 
         html_content += f"""
                                                 <div class="button-container">
-                                                    <p>Rate per KM:  {self.rate_per_km}</p>
+                                                    <p>Rate per KM:  {self.vehicle_rate}</p>
                                                     <p>Total KM: {self.total_km}</p>
                                                     <p>Total Gas Allowance: {self.total_gasoline_allowance}</p>
                                                 </div>"""
@@ -943,7 +1184,6 @@ class GasolineAllowanceForm(models.Model):
             smtpObj.sendmail(sender, get_all_email_receiver, msg.as_string())
 
             msg = "Successfully sent email"
-            print(msg)
             return {
                 'success': {
                     'title': 'Successfully email sent!',
@@ -951,7 +1191,6 @@ class GasolineAllowanceForm(models.Model):
             }
         except Exception as e:
             msg = f"Error: Unable to send email: {str(e)}"
-            print(msg)
             return {
                 'warning': {
                     'title': 'Error: Unable to send email!',
@@ -974,7 +1213,6 @@ class GasolineAllowanceForm(models.Model):
         report_download = "{}/dex_form_request_approval/request/gaf_report_download/{}".format(base_url, token)
 
         self.write({'approval_link': token})
-        print(self.approval_link)
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(get_all_email_receiver)
@@ -1087,7 +1325,7 @@ class GasolineAllowanceForm(models.Model):
 
         html_content += f"""
                                                 <div class="button-container">
-                                                    <p>Rate per KM:  {self.rate_per_km}</p>
+                                                    <p>Rate per KM:  {self.vehicle_rate}</p>
                                                     <p>Total KM: {self.total_km}</p>
                                                     <p>Total Gas Allowance: {self.total_gasoline_allowance}</p>
                                                 </div>"""
@@ -1216,7 +1454,6 @@ class GasolineAllowanceForm(models.Model):
                 ("approval_type", '=', record.form_request_type)
             ])
             count = sum(approver.no_of_approvers for approver in department_approvers)
-            print(count)
             record.approver_count = count
 
     @api.onchange('department_id', 'approval_stage', 'form_request_type')
@@ -1226,11 +1463,9 @@ class GasolineAllowanceForm(models.Model):
             res = self.env["approver.setup"].search(
                 [("dept_name", "=", rec.department_id.dept_name.name), ("approval_type", '=', self.form_request_type)])
 
-
             if rec.department_id and rec.approval_stage == 1:
                 try:
                     approver_dept = [x.first_approver.id for x in res.set_first_approvers]
-                    print(approver_dept)
                     rec.approver_id = approver_dept[0]
                     domain.append(('id', '=', approver_dept))
 
@@ -1239,7 +1474,6 @@ class GasolineAllowanceForm(models.Model):
 
             elif rec.department_id and rec.approval_stage == 2:
                 approver_dept = [x.second_approver.id for x in res.set_second_approvers]
-                print(approver_dept)
                 rec.approver_id = approver_dept[0]
                 domain.append(('id', '=', approver_dept))
 
@@ -1261,9 +1495,46 @@ class GasolineAllowanceForm(models.Model):
             else:
                 domain = []
 
-            print(domain)
-
             return {'domain': {'approver_id': domain}}
+
+    def create_bill(self):
+        xml_id = 'dex_form_request_approval.dex_form_request_create_bill_view_form'
+        model_name = 'create.bill.wizard'
+        one2many_lines = [{
+            'label': (
+                'This request ({}) was made by: ({}), using transport vehicle ({})').format(
+                self.name,
+                self.requesters_id.name,
+                self.vehicle_type_ids.vehicle_type),
+            'tnvf_personnel': None,
+            'tnvf_package': None,
+            'tnvf_from': line._from,
+            'tnvf_to': line._to,
+            'tnvf_amount': line._estimated_km,
+            'tnvf_purpose': line._purpose,
+            'tnvf_estimated_km': line._estimated_km,
+            'tnvf_date': line._date,
+        } for line in self.gaf_lines]
+
+        datas = {
+            'name': self.name,
+            'requesters_id': self.requesters_id,
+            # 'vehicle_type': self.vehicle_type_ids,
+            # 'vehicle_type_rate': self.vehicle_rate,
+            'total_rate': self.total_gasoline_allowance,
+            'cargo_type': None,
+            'currency_id': self.currency_id,
+            'journal_id': self.journal_id,
+            'state': self.state,
+            'tnvf_lines': one2many_lines,
+            'xml_id': xml_id,
+            'model_name': model_name,
+        }
+
+        action = self.create_bill_function(datas)
+
+        # action['context'].update({'link_field_name': 'transport_network_vehicle_ids'})
+        return action
 
 
 class GasolineAllowanceFormLines(models.Model):
