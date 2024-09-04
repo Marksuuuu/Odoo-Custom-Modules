@@ -1,0 +1,7 @@
+<odoo>
+    <template id="CustomButtonTemplate">
+        <button type="button" class="btn btn-primary o_custom_button">
+            <span>123</span> <!-- Default value, will be updated by JavaScript -->
+        </button>
+    </template>
+</odoo>

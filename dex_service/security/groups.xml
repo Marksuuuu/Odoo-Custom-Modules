@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="dex_service_root_group_id" model="ir.module.category">
+            <field name="name">Service</field>
+        </record>
+
+        <record id="dex_service_group_id" model="ir.module.category">
+            <field name="name">Permissions</field>
+            <field name="parent_id" ref="dex_service.dex_service_root_group_id"/>
+        </record>
+
+
+        <record id="group_dex_service_admin" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="dex_service.dex_service_group_id"/>
+        </record>
+
+        <record id="group_dex_service_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="dex_service.dex_service_group_id"/>
+            <field name="implied_ids" eval="[(4,ref('dex_service.group_dex_service_admin'),0)]"/>
+        </record>
+
+
+    </data>
+
+</odoo>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="service_action_id" model="ir.actions.act_window">
+            <field name="name">Service</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+        
+        <record id="service_line_action_id" model="ir.actions.act_window">
+            <field name="name">Service Line</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.line</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+
+        <record id="service_type_action_id" model="ir.actions.act_window">
+            <field name="name">Service Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+
+        <record id="service_line_thread_action_id" model="ir.actions.act_window">
+            <field name="name">Service Line Thread</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.line.thread</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+        
+        <record id="warranty_action_id" model="ir.actions.act_window">
+            <field name="name">Service Warranty</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">warranty</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+        
+        <record id="not_existing_product_action_id" model="ir.actions.act_window">
+            <field name="name">Not Existing Product</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">not.existing.product</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="dex_service_menu_root_id" name="Dex Service" sequence="10"/>
+
+        <menuitem id="dex_service_configuration_root_id" parent="dex_service.dex_service_menu_root_id"
+                  name="Configuration" sequence="2"/>
+        
+        <menuitem id="service_line_root_action_id" name="Dashboard" parent="dex_service.dex_service_menu_root_id"
+                  sequence="0" action="service_line_action_id"/>
+
+        <menuitem id="service_root_action_id" name="Service" parent="dex_service.dex_service_menu_root_id"
+                  sequence="1" action="service_action_id"/>
+
+        <menuitem id="service_type_menu_action_id" name="Service Type"
+                  parent="dex_service.dex_service_configuration_root_id"
+                  sequence="0" action="service_type_action_id"/>
+        
+        <menuitem id="warranty_menu_action_id" name="Warranty"
+                  parent="dex_service.dex_service_configuration_root_id"
+                  sequence="1" action="warranty_action_id"/>
+
+        <menuitem id="not_existing_product_menu_action_id" name="Not Existing Product"
+                  parent="dex_service.dex_service_configuration_root_id"
+                  sequence="2" action="not_existing_product_action_id"/>
+
+    </data>
+</odoo>

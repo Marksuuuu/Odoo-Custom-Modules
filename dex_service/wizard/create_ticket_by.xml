@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="create_ticket_by" model="ir.ui.view">
+            <field name="name">create_ticket_by</field>
+            <field name="model">create.ticket.by</field>
+            <field name="arch" type="xml">
+                <form string="Service Form" delete="0" edit="0" import="0">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="partner_id" string="Partner" class="oe_edit_only"/>
+                            <h1>
+                                <field name="partner_id" readonly="1"/>
+                            </h1>
+                        </div>
+                        <div class="oe_title">
+                            <label for="service_id" string="Service Id" class="oe_edit_only"/>
+                            <h1>
+                                <field name="service_id" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>                 
+                            <group>
+                                <field name='warranty_number' attrs="{'invisible': [('request_type', '!=', 2)],'required': [('request_type', '=', 2)]}"/>                                
+                                <field name='invoice_no' attrs="{'invisible': [('request_type', 'not in', (1,2))], 'required': [('request_type', 'in', (1,2))]}"/>
+                                <field name='edp_code' options="{'no_create':1}" context="{'create':False}" attrs="{'invisible': [('request_type', '!=', 3)]}">
+                                    <tree editable='bottom'>
+                                        <field name='default_code'/>
+                                        <field name='name'/>
+                                    </tree>
+                                </field>
+                                <field name='edp_code_not_existing' options="{'no_create':1}" context="{'create':False}" attrs="{'invisible': [('request_type', '!=', 4)]}">
+                                    <tree editable='bottom'>
+                                        <field name='internal_reference'/>
+                                        <field name='name'/>
+                                    </tree>
+                                </field>
+                                <!--<label for="height_mm"/>-->
+                                <!--<div class="o_row" name="height_mm">-->
+                                <!--    <field name="height_mm"/><span>mm</span>-->
+                                <!--</div>-->
+                                
+                            </group>
+                            <group string='Invoice' name='invoice' attrs="{'invisible': [('request_type', 'not in', (1,2))]}">
+                                <!--<field name="invoice_to_name"/>-->
+                                <field name="partner_id_invoice"/>
+                                <field name="invoice_date"/>
+                                <!--<field name="sale_order_id"/>-->
+                            </group>
+                            <group>
+                                <field name='what_type' readonly="1"/>
+                                <field name='service_type' required="1"/>
+                                <field name='request_type' invisible="1"/>
+                                <field name='status'/>
+                            </group>
+                                                     
+                        </group>
+                        
+                        <notebook attrs="{'invisible': [('request_type', 'not in', (1,2))]}">
+                            <page string='Invoice Lines'>
+                                <field name='create_ticket_by_line_ids'>
+                                    <tree editable='bottom' create='0'>
+                                        <field name='product_id'/>
+                                        <field name='name'/>
+                                        <field name='quantity'/>
+                                        <!--<button name="insert_as_ticket" type="object" class="fa fa-list-ol bg-warning"/>-->
+                                    </tree>
+                                </field>
+
+                            </page>
+                        </notebook>
+                        
+                    </sheet>
+                    <footer class="oe_right">
+                        <button name="btn_save_changes" string=" Save" type="object" class="fa fa-floppy-o btn-outline-primary"
+                                confirm="Are you sure?"/>
+                        <button string=" Discard" class="fa fa-trash btn-outline-danger" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="create_ticket_by_action" model="ir.actions.act_window">
+            <field name="name">Create Ticket</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">create.ticket.by</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>   

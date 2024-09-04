@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="service_report_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        body {
+            max-width: 800px; /* Adjust the max-width for portrait mode */
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .box {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 1px solid black;
+            margin-right: 10px;
+        }
+        .service-entry {
+            border-bottom: 1px solid black;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .service-entry:last-child {
+            border-bottom: none;
+        }
+        .container {
+            max-width: 100%; /* Ensure the container takes up the full width */
+            }
+
+                    </style>
+                </xpath>
+                <div class="container border p-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div><strong>DEXTERTON CORPORATION</strong></div>
+                        <div><strong class="border px-2">Service Form: 0263-02-20F</strong></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6"><strong>TRANSACTION DATE:</strong> 2/24/2020</div>
+                        <div class="col-6 text-end"><strong>TECHNICIAN:</strong> FERNANDO</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-end"><strong>PAGE:</strong> 1 of 1</div>
+                    </div>
+
+                    <!--<hr>-->
+
+                    <!-- First Service Entry -->
+                    <div class="service-entry">
+                        <div class="mb-2"><strong>NAME:</strong> CT CONCEPT / CARL TAN <span class="float-end"># 1</span></div>
+                        <div class="mb-2"><strong>ADDRESS:</strong> LOT 8 BLOCK 2 MT. OLYMPUS ST., RICHDALE SUBD., STA. CRUZ</div>
+                        <div class="mb-2"><strong>TEL. NO.:</strong> +639175411947 <span class="float-end">TIME: 02/18/20 IN: 11:04 AM OUT: 11:43 AM</span></div>
+                        <div class="mb-2"><strong>ITEM:</strong> 1 <em>REPAIR</em> KOHLER - K-5428T-C4-CP - JULY SHOWER COLUMN WITH B/S FAUCET</div>
+                        <div class="mb-2"><strong>REQUESTED BY:</strong> DC-EMILY <span class="float-end">Serial #: ___________________________</span></div>
+                        <div class="row">
+                            <div class="col"><strong>Case Status:</strong></div>
+                            <!--<div class="col"><div class="box"></div> Pending</div>-->
+                            <!--<div class="col"><div class="box"></div> Close</div>-->
+                            <!--<div class="col"><div class="box"></div> Canceled</div>-->
+                            <!--<div class="col">With: ___________________________</div>-->
+                        </div>
+                    </div>
+
+                    <!-- Second Service Entry -->
+                    <div class="service-entry">
+                        <div class="mb-2"><strong>NAME:</strong> HELENA CHUA <span class="float-end"># 2</span></div>
+                        <div class="mb-2"><strong>ADDRESS:</strong> 28 LINCOLN ST., GREENHILLS WEST SAN JUAN</div>
+                        <div class="mb-2"><strong>TEL. NO.:</strong> 8584-1417 +639179440752 <span class="float-end">TIME: 02/21/20 IN: 02:26 PM OUT: 04:05 PM</span></div>
+                        <div class="mb-2"><strong>ITEM:</strong> 1 <em>REPAIR</em> JACOB DELAFON - ODN/B-00 - ODEON 2 PC. WATER CLOSET - WHITE ** [022: </div>
+                        <div class="mb-2"><strong>REQUESTED BY:</strong> ___________________________ <span class="float-end">Serial #: ___________________________</span></div>
+                        <div class="row align-items-center">
+                            <!--<div class="col"><strong>Case Status:</strong></div>-->
+                            <!--<div class="col"><div class="box"></div> Pending</div>-->
+                            <!--<div class="col"><div class="box"></div> Close</div>-->
+                            <!--<div class="col"><div class="box"></div> Canceled</div>-->
+                            <!--<div class="col">With: ___________________________</div>-->
+                        </div>
+                    </div>
+
+                    <!--</hr>-->
+
+                    <!-- Footer Section -->
+                    <div class="row">
+                        <div class="col-4"><strong>PREPARED BY:</strong> MALOU</div>
+                        <div class="col-4"><strong>DATE:</strong> 2/22/2020 9:03:00 AM</div>
+                        <div class="col-4"><strong>APPROVED BY:</strong> ___________________________</div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <div class="border p-2">
+                            <div><strong>GUARDHOUSE</strong></div>
+                            <div>TIME OUT: 09:19 AM</div>
+                            <div>TIME IN: 04:36 PM</div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </t>
+
+        </template>
+        <template id="service_action_menu_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.create_uid.lang"/>
+                    <t t-call="dex_service.service_report_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+

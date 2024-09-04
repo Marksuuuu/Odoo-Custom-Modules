@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="service_line_thread_form_view" model="ir.ui.view">
+            <field name="name">service_line_thread_form_view</field>
+            <field name="model">service.line.thread</field>
+            <field name="arch" type="xml">
+                <form string="Service Type From">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="service_line_main_ids" string="Control No." class="oe_edit_only"/>
+                            <h1>
+                                <field name="service_line_main_ids"/>
+                            </h1>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="service_line_thread_tree_view" model="ir.ui.view">
+            <field name="name">service_line_thread_tree_view</field>
+            <field name="model">service.line.thread</field>
+            <field name="arch" type="xml">
+                <tree string="Tree" editable="bottom" create='0'>
+                    <field name="service_line_main_ids" invisible="1"/>
+                    <field name="thread_name"/>
+                    <field name="status"/>
+                    <field name="invoice_id"/>
+                    <field name="purchase_date"/>
+                    <field name="with_warranty"/>
+                    <field name="warranty_number"/>
+                    <field name="serial_number"/>
+                    <field name="item_description"/>
+                    <field name="client_name"/>
+                    <field name="service_type"/>
+                    <field name="complaints" optional="hidden"/>
+                    <field name="feedback_count" optional="hidden"/>
+                    <field name="street" optional="hidden"/>
+                    <field name="street2" optional="hidden"/>
+                    <field name="city" optional="hidden"/>
+                    <field name="state_id" optional="hidden"/>
+                    <field name="zip" optional="hidden"/>
+                    <field name="country_id" optional="hidden"/>
+                    <field name="user_id" optional="hidden"/>
+                    <field name="call_date" optional="hidden"/>
+                    <field name="requested_by" optional="hidden"/>
+                    <field name="phone_number" optional="hidden"/>
+                    <field name="look_for" optional="hidden"/>
+                    <field name="charge" optional="hidden"/>
+                    <field name="free_of_charge" optional="hidden"/>
+                    <field name="tentative_schedule_date" optional="hidden"/>
+                    <field name="other_instructions" optional="hidden"/>
+                    <field name="pending_reason" optional="hidden"/>
+                    <field name="count_field" invisible="1"/> <!-- The field you want to use -->
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

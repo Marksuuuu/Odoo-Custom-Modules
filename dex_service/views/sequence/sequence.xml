@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="dex_service_sequence_srf" model="ir.sequence">
+            <field name="name">Dex Service Sequence</field>
+            <field name="code">create.sequence.form.sequence.srf</field>
+            <field name="padding">6</field>
+            <field name="prefix">SRF%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="dex_service_request_sequence_srs" model="ir.sequence">
+            <field name="name">Dex Service Request Sequence</field>
+            <field name="code">create.service.request.sequence.srs</field>
+            <field name="padding">6</field>
+            <field name="prefix">SRS%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+        
+        <record id="dex_warranty_wrnty" model="ir.sequence">
+            <field name="name">Dex Service Warranty Sequence</field>
+            <field name="code">create.service.request.sequence.wrnty</field>
+            <field name="padding">6</field>
+            <field name="prefix">WRNTY%(month)s%(year)s-</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="dex_service_sequence_slt" model="ir.sequence">
+            <field name="name">Service Line Thread Sequence</field>
+            <field name="code">service.line.thread.seq</field>
+            <field name="prefix">THREAD/</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="create_thread_wizard" model="ir.ui.view">
+            <field name="name">create_thread_wizard</field>
+            <field name="model">create.thread.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Service Form" create="0" delete="0" edit="0" import="0">
+                    <sheet>
+                        <group>
+                            <div class="oe_title">
+                                <label for="client_name" string="Partner ID" class="oe_edit_only"/>
+                                <h1>
+                                    <field name="client_name" readonly="1"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group>
+                            <div class="oe_title">
+                                <label for="service_line_main_ids" string="Control No." class="oe_edit_only"/>
+                                <h1>
+                                    <field name="service_line_main_ids" readonly='1'/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group>
+                            <group string='Customer Info'>
+                                <field name='type'/>
+                                <label for="" name="address_name">
+                                    <b attrs="{'invisible': [('type', '!=', 'contact')]}">Company Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'invoice')]}">Invoice Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'delivery')]}">Delivery Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'other')]}">Other Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'private')]}">Private Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', False)]}">Address</b>
+                                </label>
+                                <div class="o_address_format">
+                                    <field name="street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State"
+                                           options="{&quot;no_open&quot;: True}"
+                                           context="{'country_id': country_id, 'zip': zip}"/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <field name="country_id" placeholder="Country" class="o_address_country"
+                                           options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                </div>
+                            </group>
+                        </group>
+                        <group>
+                            <!-- Identification Fields -->
+                            <group string="Identification">
+                                <field name="status"/>
+                                <field name="invoice_id"/>
+                                <field name="warranty_number"/>
+                                <field name="serial_number"/>
+                                <field name="user_id"/>
+                            </group>
+
+                            <!-- Date and Time Fields -->
+                            <group string="Date and Time">
+                                <field name="purchase_date"/>
+                                <field name="call_date"/>
+                                <field name="tentative_schedule_date"/>
+                            </group>
+
+                            <!-- Service and Warranty Fields -->
+                            <group string="Service and Warranty">
+                                <field name="with_warranty"/>
+                                <field name="item_description"/>
+                                <field name="service_type"/>
+                                <field name="complaints"/>
+                                <field name="feedback_count"/>
+                                <field name="charge"/>
+                                <field name="free_of_charge"/>
+                                <field name="other_instructions"/>
+                                <field name="pending_reason"/>
+                            </group>
+
+                            <!-- Contact Fields -->
+                            <group string="Contact">
+                                <field name="phone_number"/>
+                                <field name="requested_by"/>
+                            </group>
+
+                            <!-- Miscellaneous Fields -->
+                            <group string="Miscellaneous">
+                                <field name="look_for"/>
+                                <field name="count_field" invisible="1"/> <!-- The field you want to use -->
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer class="oe_right">
+                        <button name="create_thread" string=" Save" type="object" class="fa fa-floppy-o btn-outline-primary"
+                                confirm="Are you sure?"/>
+                        <button string=" Discard" class="fa fa-trash btn-outline-danger" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="create_thread_tree_wizard" model="ir.ui.view">
+            <field name="name">create_thread_tree_wizard</field>
+            <field name="model">create.thread.wizard</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="service_line_main_ids"/>
+                    <field name="status"/>
+                    <field name="invoice_id"/>
+                    <field name="purchase_date"/>
+                    <field name="with_warranty"/>
+                    <field name="warranty_number"/>
+                    <field name="serial_number"/>
+                    <field name="item_description"/>
+                    <field name="client_name"/>
+                    <field name="service_type"/>
+                    <field name="complaints"/>
+                    <field name="feedback_count"/>
+                    <field name="street"/>
+                    <field name="street2"/>
+                    <field name="city"/>
+                    <field name="state_id"/>
+                    <field name="zip"/>
+                    <field name="country_id"/>
+                    <field name="user_id"/>
+                    <field name="call_date"/>
+                    <field name="requested_by"/>
+                    <field name="phone_number"/>
+                    <field name="look_for"/>
+                    <field name="charge"/>
+                    <field name="free_of_charge"/>
+                    <field name="tentative_schedule_date"/>
+                    <field name="other_instructions"/>
+                    <field name="pending_reason"/>
+                    <field name="count_field" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="create_thread_wizard_action" model="ir.actions.act_window">
+            <field name="name">Create Thread</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">create.thread.wizard</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>
