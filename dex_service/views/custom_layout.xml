@@ -1,0 +1,9 @@
+<odoo>
+    <template id="custom_layout" name="Custom Layout">
+        <t t-call="web.layout">
+            <div class="container">
+                <t t-content="0"/> <!-- Placeholder for your custom content -->
+            </div>
+        </t>
+    </template>
+</odoo>

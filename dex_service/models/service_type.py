@@ -19,6 +19,7 @@ _logger = logging.getLogger(__name__)
 
 class ServiceType(models.Model):
     _name = 'service.type'
+    _order = 'id desc'
     _description = 'Dex Service Type'
 
     name = fields.Char()

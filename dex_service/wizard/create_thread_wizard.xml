@@ -11,7 +11,7 @@
                             <div class="oe_title">
                                 <label for="client_name" string="Partner ID" class="oe_edit_only"/>
                                 <h1>
-                                    <field name="client_name" readonly="1"/>
+                                    <field name="client_name" readonly="1" string='Contact Person'/>
                                 </h1>
                             </div>
                         </group>

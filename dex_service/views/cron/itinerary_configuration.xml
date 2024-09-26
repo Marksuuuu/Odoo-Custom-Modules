@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="dex_service_itinerary_configuration_tree" model="ir.ui.view">
+            <field name="name">dex_service_itinerary_configuration_tree</field>
+            <field name="model">itinerary.configuration</field>
+            <field name="arch" type="xml">
+                <tree string="Tree" editable='bottom'>
+                    <field name='create_date'/>
+                    <field name='email_groups'/>
+                    <field name='specific_email' attrs="{'readonly': [('email_groups', 'not in', 'specific_email')]}"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

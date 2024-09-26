@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="dex_service_request_form_form" model="ir.ui.view">
+            <field name="name">dex_service_request_form_form</field>
+            <field name="model">dex.service.request.form</field>
+            <field name="arch" type="xml">
+                <form string="Service Form">
+                    <header>
+                        <button name='action_find_or_create' string=" Create Service" class="fa fa-print btn-outline-info" type="object" groups="dex_service.group_dex_service_admin" attrs="{'invisible': [('is_created', '==', True)]}"/>        
+                    </header>
+                    <sheet>
+                        <group>
+                            <div class="oe_title">
+                                <label for="name" string="Service ID" class="oe_edit_only"/>
+                                <h1>
+                                    <field name="name" readonly="1"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group>
+                            <group invisible='1'>
+                                <field name='is_created'/>
+                            </group>
+                            <group>
+                                <field name='partner_id' attrs="{'readonly': [('is_created', '==', True)]}" string='Contact Person'/>
+                                <field name='is_created' readonly="1"/>
+                            </group>
+                            <group>
+                                <label for="" name="address_name">
+                                    <b attrs="{'invisible': [('type', '!=', 'contact')]}">Company Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'invoice')]}">Invoice Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'delivery')]}">Delivery Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'other')]}">Other Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'private')]}">Private Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', False)]}">Address</b>
+                                </label>
+                                <div class="o_address_format">
+                                    <field name="street" placeholder="Street..." class="o_address_street" attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street" attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                    <field name="city" placeholder="City" class="o_address_city" attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State"
+                                           options="{&quot;no_open&quot;: True}"
+                                           context="{'country_id': country_id, 'zip': zip}" attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip" attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                    <field name="country_id" placeholder="Country" class="o_address_country"
+                                           options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                </div>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name='type' required='1' attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                <field name='brand_units' required='1' attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                <field name='number_of_units' required='1' attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                <field name='sale_order_no' required='1' attrs="{'readonly': [('is_created', '==', True)]}"/>
+                                <field name='date_of_purchase' required='1' attrs="{'readonly': [('is_created', '==', True)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                             <page name='dex_service_request_form_line_page_name' string='Other Details'>
+                                 <field name='dex_service_request_form_line_ids' attrs="{'readonly': [('is_created', '==', True)]}">
+                                    <tree editable='bottom'>
+                                        <field name='edp_code' required="1"/>
+                                        <field name="description" required="1"/>
+                                    </tree>
+                                </field>
+                             </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="dex_service_request_form_tree" model="ir.ui.view">
+            <field name="name">dex_service_request_form_tree</field>
+            <field name="model">dex.service.request.form</field>
+            <field name="arch" type="xml">
+                <tree string="Tree">
+                    <field name='name'/>
+                    <field name='partner_id'/>
+                    <field name='brand_units'/>
+                    <field name='number_of_units'/>
+                    <field name='sale_order_no'/>
+                    <field name='date_of_purchase'/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -6,101 +6,208 @@
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <xpath expr="//style" position="after">
                     <style type="text/css">
+                        /* Basic reset */
                         body {
-            max-width: 800px; /* Adjust the max-width for portrait mode */
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .box {
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            border: 1px solid black;
-            margin-right: 10px;
-        }
-        .service-entry {
-            border-bottom: 1px solid black;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-        }
-        .service-entry:last-child {
-            border-bottom: none;
-        }
-        .container {
-            max-width: 100%; /* Ensure the container takes up the full width */
-            }
+                            margin: 0;
+                            font-family: Arial, sans-serif;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                        }
+                        
+                        .address-cell {
+                            width: 100px;
+                                overflow: visible; /* Allow overflowed content to be visible */
+                                word-wrap: break-word; /* Break long words to wrap to the next line */
+                        }
+                        .text{
+                            margin-left: 10px;
+                        }
 
+                        table {
+                        border-collapse: collapse; /* Ensures borders are collapsed and no extra space */
+                        width: 100%; /* Ensure tables use full width available */
+                        table-layout: fixed; /* Ensure columns use the specified widths */
+                        }
+
+                        td {
+                        padding: 2px !important; /* Adds padding to table cells for better readability */
+                        margin: 0; /* Removes margin from table cells (not necessary but for completeness) */
+                        border: 1px solid black; /* Default border for cells */
+                        }
+
+                        /* Set fixed widths for specific columns */
+                        .table-borderless td {
+                        border: none; /* No border for borderless tables */
+                        }
+
+                        .table-borderless td:first-child {
+                        width: 25%; /* Adjust as needed */
+                        }
+
+                        .table-borderless td:nth-child(2) {
+                        width: 25%; /* Adjust as needed */
+                        }
+
+                        .table-borderless td:nth-child(3) {
+                        width: 25%; /* Adjust as needed */
+                        }
+
+                        .table-borderless td:last-child {
+                        width: 25%; /* Adjust as needed */
+                        }
+
+                        .table-bordered td {
+                        border: 1px solid black; /* Ensures table cells have borders */
+                        }
+
+                        .box {
+                        width: 30px; /* Adjusted width */
+                        height: 30px; /* Adjusted height */
+                        border: 1px solid black;
+                        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                        margin-left: 10px;
+                        }
+
+                        .box-container {
+                        display: -webkit-box; /* wkhtmltopdf uses this one */
+                        display: -webkit-flex;
+                        display: flex;
+                        -webkit-box-pack: center; /* wkhtmltopdf uses this one */
+                        -webkit-justify-content: center;
+                        justify-content: center;
+                        }
+
+                        .box-container .text {
+                        line-height: 30px; /* Center text vertically with respect to the box height */
+                        color: black; /* Text color */
+                        margin: 0; /* Removes any extra margin around the text */
+                        }
                     </style>
                 </xpath>
-                <div class="container border p-4">
-                    <div class="d-flex justify-content-between mb-2">
-                        <div><strong>DEXTERTON CORPORATION</strong></div>
-                        <div><strong class="border px-2">Service Form: 0263-02-20F</strong></div>
-                    </div>
+                <div class="container" style='font-size: 12px'>
+                    <table class='table table-borderless'>
+                        <thead>
+                            <tr>
+                                <td>DEXTERTON CORPORATION</td>
+                                <td></td>
+                                <td style="background-color: black; color: white; text-align: center;">SERVICE FORM</td>
+                                <td> <t t-esc="o.name"/> </td>
+                            </tr>
+                            <tr>
+                                <tr>
+                                    <td>TRANSACTION DATE</td>
+                                    <td> <t t-esc="o.transaction_date"/> </td>
+                                    <td>TECHNICIAN</td>
+                                    <td><span t-esc="o.technician.name"/></td>
+                                 </tr>
+                            </tr>
+                        </thead>
+                    </table>
+                    <t t-set="data1" t-value="o.assign_request_line_ids"/>
+                    <t t-set="data2" t-value="o.assign_request_service_time_ids"/>
+                    <t t-set="data3" t-value="o.assign_request_other_details_ids"/>
 
-                    <div class="row">
-                        <div class="col-6"><strong>TRANSACTION DATE:</strong> 2/24/2020</div>
-                        <div class="col-6 text-end"><strong>TECHNICIAN:</strong> FERNANDO</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 text-end"><strong>PAGE:</strong> 1 of 1</div>
-                    </div>
-
-                    <!--<hr>-->
-
-                    <!-- First Service Entry -->
-                    <div class="service-entry">
-                        <div class="mb-2"><strong>NAME:</strong> CT CONCEPT / CARL TAN <span class="float-end"># 1</span></div>
-                        <div class="mb-2"><strong>ADDRESS:</strong> LOT 8 BLOCK 2 MT. OLYMPUS ST., RICHDALE SUBD., STA. CRUZ</div>
-                        <div class="mb-2"><strong>TEL. NO.:</strong> +639175411947 <span class="float-end">TIME: 02/18/20 IN: 11:04 AM OUT: 11:43 AM</span></div>
-                        <div class="mb-2"><strong>ITEM:</strong> 1 <em>REPAIR</em> KOHLER - K-5428T-C4-CP - JULY SHOWER COLUMN WITH B/S FAUCET</div>
-                        <div class="mb-2"><strong>REQUESTED BY:</strong> DC-EMILY <span class="float-end">Serial #: ___________________________</span></div>
-                        <div class="row">
-                            <div class="col"><strong>Case Status:</strong></div>
-                            <!--<div class="col"><div class="box"></div> Pending</div>-->
-                            <!--<div class="col"><div class="box"></div> Close</div>-->
-                            <!--<div class="col"><div class="box"></div> Canceled</div>-->
-                            <!--<div class="col">With: ___________________________</div>-->
-                        </div>
-                    </div>
-
-                    <!-- Second Service Entry -->
-                    <div class="service-entry">
-                        <div class="mb-2"><strong>NAME:</strong> HELENA CHUA <span class="float-end"># 2</span></div>
-                        <div class="mb-2"><strong>ADDRESS:</strong> 28 LINCOLN ST., GREENHILLS WEST SAN JUAN</div>
-                        <div class="mb-2"><strong>TEL. NO.:</strong> 8584-1417 +639179440752 <span class="float-end">TIME: 02/21/20 IN: 02:26 PM OUT: 04:05 PM</span></div>
-                        <div class="mb-2"><strong>ITEM:</strong> 1 <em>REPAIR</em> JACOB DELAFON - ODN/B-00 - ODEON 2 PC. WATER CLOSET - WHITE ** [022: </div>
-                        <div class="mb-2"><strong>REQUESTED BY:</strong> ___________________________ <span class="float-end">Serial #: ___________________________</span></div>
-                        <div class="row align-items-center">
-                            <!--<div class="col"><strong>Case Status:</strong></div>-->
-                            <!--<div class="col"><div class="box"></div> Pending</div>-->
-                            <!--<div class="col"><div class="box"></div> Close</div>-->
-                            <!--<div class="col"><div class="box"></div> Canceled</div>-->
-                            <!--<div class="col">With: ___________________________</div>-->
-                        </div>
-                    </div>
-
-                    <!--</hr>-->
-
-                    <!-- Footer Section -->
-                    <div class="row">
-                        <div class="col-4"><strong>PREPARED BY:</strong> MALOU</div>
-                        <div class="col-4"><strong>DATE:</strong> 2/22/2020 9:03:00 AM</div>
-                        <div class="col-4"><strong>APPROVED BY:</strong> ___________________________</div>
-                    </div>
-
-                    <div class="d-flex justify-content-end mt-4">
-                        <div class="border p-2">
-                            <div><strong>GUARDHOUSE</strong></div>
-                            <div>TIME OUT: 09:19 AM</div>
-                            <div>TIME IN: 04:36 PM</div>
-                        </div>
-                    </div>
-
+                    <t t-foreach="zip(data1, data2, data3)" t-as="a">
+                        <table class='table table-bordered'>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4">
+                                        <t t-if='not a[0].service_id.thread_name'>
+                                            ###############
+                                        </t>
+                                        <t t-if='a[0].service_id.thread_name'>
+                                            SERVICE NUMBER: <b><span t-esc="a[0].service_id.thread_name"/></b>                                            
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>NAME</td>
+                                    <td> <span t-esc="a[0].partner_id.name"/> </td>
+                                    <td>TIME</td>
+                                    <t t-if='a[0].fee != 0'>
+                                        <td>FEE: <span t-esc="a[0].fee"/></td>
+                                    </t>
+                                    <t t-elif="a[1].free_of_charge">
+                                        <td>FREE OF CHARGE</td>
+                                    </t>
+                                    <t t-else=''>
+                                        <td> </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <td>ADDRESS</td>
+                                    <td class="address-cell"> <span t-esc="a[0].partner_id.street"/> </td>
+                                    <td>IN</td>
+                                    <td><span t-esc="a[1].time_in"/></td>                                    
+                                </tr>
+                                <tr>
+                                    <td>TELL NO.</td>
+                                    <td> <span t-esc="a[0].partner_id.phone"/> </td>
+                                    <td>OUT</td>
+                                    <td><span t-esc="a[1].time_out"/></td>
+                                </tr>
+                                <tr>
+                                    <td>ITEMS</td>
+                                    <td colspan="3">
+                                        <span t-esc="a[2].item_description"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>REQUESTED BY</td>
+                                    <td colspan="2"><span t-esc="a[2].requesters_id.name"/>
+                                    </td>
+                                    <td>SERIAL# __________</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="box-container">
+                                            <div class="box"></div>
+                                            <span class="text">Pending</span>
+                                            <div class="box"></div>
+                                            <span class="text">Close</span>
+                                            <div class="box"></div>
+                                            <span class="text">Cancelled</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Case Status</td>
+                                    <td colspan="2">With</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td>PREPARED BY:</td>
+                                <td> <t t-esc="request.env.user.name"/> </td>
+                                <td>APPROVED BY:</td>
+                                <td>GUARD HOUSE</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DATE:</td>
+                                <td> <span t-esc="o.transaction_date"/> </td>
+                                <td></td>
+                                <td>TIME OUT:</td>
+                                <td> <span t-esc="o.time_out"/> </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>TIME IN:</td>
+                                <td> <span t-esc="o.time_in"/> </td>                                
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
             </t>
-
         </template>
         <template id="service_action_menu_id">
             <t t-call="web.html_container">
@@ -112,4 +219,3 @@
         </template>
     </data>
 </odoo>
-

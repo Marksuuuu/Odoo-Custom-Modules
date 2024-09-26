@@ -6,3 +6,5 @@ from . import service_type
 from . import warranty
 from . import assign_request
 from . import not_existing_product
+from . import dex_service_request_form
+from . import cron

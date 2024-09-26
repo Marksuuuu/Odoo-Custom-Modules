@@ -1,0 +1,37 @@
+<odoo>
+    <template id="template_dashboard">
+        <t t-call="website.layout">
+            <t t-raw="0">
+                <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"/>
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+            </t>
+            <div class="container">
+                <h1>Custom Dashboard</h1>
+                <table id="customTable" class="display">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="records" t-as="record">
+                            <tr>
+                                <td><t t-esc="record.name"/></td>
+                                <td><t t-esc="record.value"/></td>
+                                <td><t t-esc="record.description"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <script>
+                $(document).ready(function() {
+                $('#customTable').DataTable();
+                });
+            </script>
+        </t>
+    </template>
+</odoo>

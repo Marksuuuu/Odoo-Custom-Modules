@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="service_line_tree_view" model="ir.ui.view">
+            <field name="name">service_line_tree_view</field>
+            <field name="model">service.line</field>
+            <field name="arch" type="xml">
+                <tree string="Tree" default_order="name desc" create='0' decoration-success="status in ['done','open']"
+                      decoration-primary="status == 'confirm'" decoration-danger="status in ['cancelled','close']" decoration-warning="status in ['pending','waiting']" >
+                    <!--<field name="checking_status"/>-->
+                    <field name="create_date"/>                    
+                    <field name="name" invisible='1'/>
+                    <field name="status" string="Status" widget='selection'/>
+                    <field name="create_uid"/>                    
+                    <field name="service_type" widget="badge" decoration-success="client_name != False"/>
+                    <field name="client_name" widget="badge" decoration-success="client_name != False" string='Contact Person'/>
+                    <field name="checking_status" invisible="1"/>                                                            
+                    <field name="tentative_schedule_date"/>                    
+                    <field name="item_description" widget="badge" decoration-success="item_description != False"/>
+                    <field name="invoice_id" optional="hidden"/>
+                    <field name="purchase_date"/>
+                    <field name="with_warranty"/>
+                    <field name="warranty_number"/>
+                    <field name="serial_number"/>
+                    <field name="pending_date" invisible="1"/>
+                    <field name="done_date" invisible="1"/>
+                    <field name="total_duration" optional="hidden" readonly="1" widget="float_time"/>
+                    <field name="actual_duration" optional="hidden" readonly="1" widget="float_time"/>
+                    <field name="pending_reason" attrs="{'invisible': [('status', '!=', 'pending')], 'required': [('status', '=', 'pending')]}"/>
+                    <field name="complaints" optional="hidden"/>
+                    <field name="feedback_count" optional="hidden"/>
+                    <field name="street" optional="hidden"/>
+                    <field name="street2" optional="hidden"/>
+                    <field name="city" optional="hidden"/>
+                    <field name="state_id" optional="hidden"/>
+                    <field name="zip" optional="hidden"/>
+                    <field name="country_id" optional="hidden"/>
+                    <field name="user_id" optional="hidden"/>
+                    <field name="call_date" optional="hidden"/>
+                    <field name="requested_by" optional="hidden"/>
+                    <field name="phone_number" optional="hidden"/>
+                    <field name="look_for" optional="hidden"/>
+                    <field name="charge" optional="hidden"/>
+                    <field name="free_of_charge" optional="hidden"/>
+                    <field name="other_instructions" optional="hidden"/>
+                    <button name="create_thread" type="object"
+                            class="fa fa-pencil-square-o btn-outline-dark" attrs="{'invisible': [('status', '!=', 'pending')]}" help='Creating Thread'/>
+                    <button name="show_thread" type="object" class="fa fa-list-ol btn-outline-dark" attrs="{'invisible': [('status', '!=', 'pending')]}" help='Show All Thread / List'/>     
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

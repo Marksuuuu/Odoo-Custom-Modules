@@ -3,19 +3,19 @@
     <data noupdate="1">
 
         <record id="dex_service_sequence_srf" model="ir.sequence">
-            <field name="name">Dex Service Sequence</field>
+            <field name="name">Dex Service Account</field>
             <field name="code">create.sequence.form.sequence.srf</field>
             <field name="padding">6</field>
-            <field name="prefix">SRF%(month)s%(year)s-</field>
+            <field name="prefix">SA%(month)s%(year)s-</field>
             <field name="implementation">no_gap</field>
             <field name="active">True</field>
         </record>
 
         <record id="dex_service_request_sequence_srs" model="ir.sequence">
-            <field name="name">Dex Service Request Sequence</field>
+            <field name="name">Dex Service Record</field>
             <field name="code">create.service.request.sequence.srs</field>
             <field name="padding">6</field>
-            <field name="prefix">SRS%(month)s%(year)s-</field>
+            <field name="prefix">SR%(month)s%(year)s-</field>
             <field name="implementation">no_gap</field>
             <field name="active">True</field>
         </record>
@@ -33,6 +33,24 @@
             <field name="name">Service Line Thread Sequence</field>
             <field name="code">service.line.thread.seq</field>
             <field name="prefix">THREAD/</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+        
+        <record id="dex_service_request_sr" model="ir.sequence">
+            <field name="name">Service Request Sequence</field>
+            <field name="code">service.request.sr</field>
+            <field name="prefix">SS</field>
+            <field name="padding">5</field>
+            <field name="implementation">no_gap</field>
+            <field name="active">True</field>
+        </record>
+        
+        <record id="dex_service_form_sequence_sfs" model="ir.sequence">
+            <field name="name">Service Form Sequence</field>
+            <field name="code">dex.service.form.sequence.sfs</field>
+            <field name="prefix">SF</field>
             <field name="padding">5</field>
             <field name="implementation">no_gap</field>
             <field name="active">True</field>

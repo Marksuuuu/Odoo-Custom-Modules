@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="service_main_form" model="ir.ui.view">
+            <field name="name">service_main_form</field>
+            <field name="model">service.main</field>
+            <field name="arch" type="xml">
+                <form string="Service Form">
+                    <sheet>
+                        <group name="invisible_fields" invisible="1">
+                            <field name="type"/>
+                            <field name="is_client_blocked"/>
+                            <field name="is_tranfered"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="partner_id" force_save="1" string='Contact Person'/>
+                                <field name="transfer_to_partner_id" force_save="1" attrs="{'invisible': [('is_tranfered', '=', False)]}"/>
+                            </group>
+                            <group>
+                                <label for="" name="address_name">
+                                    <b attrs="{'invisible': [('type', '!=', 'contact')]}">Company Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'invoice')]}">Invoice Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'delivery')]}">Delivery Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'other')]}">Other Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'private')]}">Private Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', False)]}">Address</b>
+                                </label>
+                                <div class="o_address_format">
+                                    <field name="street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="city" placeholder="City" class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state" placeholder="State"
+                                           options="{&quot;no_open&quot;: True}"
+                                           context="{'country_id': country_id, 'zip': zip}"/>
+                                    <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <field name="country_id" placeholder="Country" class="o_address_country"
+                                           options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                </div>
+                            </group>
+
+                            <group attrs="{'invisible': [('is_tranfered', '=', False)]}" string='Transfer Address'>
+                                <label for="" name="transfer_to_address_name">
+                                    <b attrs="{'invisible': [('type', '!=', 'contact')]}">Company Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'invoice')]}">Invoice Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'delivery')]}">Delivery Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'other')]}">Other Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', 'private')]}">Private Address</b>
+                                    <b attrs="{'invisible': [('type', '!=', False)]}">Address</b>
+                                </label>
+                                <div class="o_address_format">
+                                    <field name="transfer_to_street" placeholder="Street..." class="o_address_street"/>
+                                    <field name="transfer_to_street2" placeholder="Street 2..." class="o_address_street"/>
+                                    <field name="transfer_to_city" placeholder="City" class="o_address_city"/>
+                                    <field name="transfer_to_state_id" class="o_address_state" placeholder="State"
+                                           options="{&quot;no_open&quot;: True}"
+                                           context="{'country_id': country_id, 'zip': zip}"/>
+                                    <field name="transfer_to_zip" placeholder="ZIP" class="o_address_zip"/>
+                                    <field name="transfer_to_country_id" placeholder="Country" class="o_address_country"
+                                           options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                </div>
+                            </group>
+
+                            <group>
+                                <!--<field name='daily_sales_report_date'/>-->
+                                <field name='sales_coordinator'/>
+                                <field name='transfer_reason' readonly="1" attrs="{'invisible': [('is_tranfered', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <notebook attrs="{'invisible': [('partner_id', '=', False)]}">
+                            <page name="service_page" string="Service Record">
+                                <field name="service_main_line_ids">
+                                    <tree editable="bottom" create="0">
+                                        <field name="status" widget='selection'/>
+                                        <field name="invoice_number"/>
+                                        <field name="invoice_id" invisible="1"/>
+                                        <field name="purchase_date"/>
+                                        <field name="with_warranty"/>
+                                        <field name="warranty_number"/>
+                                        <field name="serial_number"/>
+                                        <field name="item_description"/>
+                                        <field name="client_name"/>
+                                        <field name="service_type"/>
+                                        <field name="complaints" optional="hidden"/>
+                                        <field name="feedback_count" optional="hidden"/>
+                                        <field name="street" optional="hidden"/>
+                                        <field name="street2" optional="hidden"/>
+                                        <field name="city" optional="hidden"/>
+                                        <field name="state_id" optional="hidden"/>
+                                        <field name="zip" optional="hidden"/>
+                                        <field name="country_id" optional="hidden"/>
+                                        <field name="user_id" optional="hidden"/>
+                                        <field name="call_date" optional="hidden"/>
+                                        <field name="requested_by" optional="hidden"/>
+                                        <field name="phone_number" optional="hidden"/>
+                                        <field name="look_for" optional="hidden"/>
+                                        <field name="charge" optional="hidden"/>
+                                        <field name="free_of_charge" optional="hidden"/>
+                                        <field name="tentative_schedule_date" optional="hidden"/>
+                                        <field name="other_instructions" optional="hidden"/>
+                                        <field name="pending_reason" optional="hidden"/>
+                                        <field name="count_field" invisible="1"/> <!-- The field you want to use -->
+                                        <!-- Add the custom widget directly here -->
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="service_page_so" string="Sale Record">
+                                <field name="service_main_sale_order">
+                                    <tree editable="bottom" create="0">
+                                        <field name='item_description'/>
+                                        <field name='available'/>
+                                        <field name='product_uom_qty'/>
+                                        <field name='product_uom'/>
+                                        <field name='price_unit'/>
+                                        <field name='tax_id'/>
+                                        <field name='discount'/>
+                                        <field name='dex_selling_price'/>
+                                        <field name='price_total'/>
+                                    </tree>
+                                </field>
+                                <group name="note_group" col="6">
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                        <field name="amount_untaxed"/>
+                                        <field name="amount_tax"/>
+                                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                            <label for="amount_total"/>
+                                        </div>
+                                        <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary"/>
+                                    </group>
+                                    <div class="oe_clear"/>
+                                </group>
+                            </page>
+                        </notebook>                    
+
+                    </sheet>
+                    <footer class="oe_right">
+                        <button name="action_find_or_create" string=" Go To" type="object" class="fa fa-arrow-up btn-outline-primary"
+                                confirm="Are you sure?"/>
+                        <button string=" Discard" class="fa fa-trash btn-outline-danger" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="service_main_action" model="ir.actions.act_window">
+            <field name="name">Service Account Assign</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">service.main</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!--        <menuitem id="dex_import_root_id" name="Import Tool" sequence="15" action="dex_form_request_job_request_view"/>-->
+
+        <!--        <menuitem id="dex_import_menu" name="Import" sequence="0" parent="dex_import_root_id" />-->
+
+
+    </data>
+</odoo>

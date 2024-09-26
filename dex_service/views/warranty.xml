@@ -49,20 +49,20 @@
                             <group>
                                 <field name='edp_code' required='1'/>
                                 <field name='serial_number' required='1'/>
-                                <field name='invoice_no' required='1'/>
+                                <!--<field name='invoice_no' required='1'/>-->
                             </group>
                         </group>
-                        <notebook>
-                            <page name='warranty_page' string='Invoice Lines'>
-                                <field name='warranty_line_ids'>
-                                    <tree>
-                                        <field name='product_id'/>
-                                        <field name='name'/>
-                                        <field name='quantity'/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
+                        <!--<notebook>-->
+                        <!--    <page name='warranty_page' string='Invoice Lines'>-->
+                        <!--        <field name='warranty_line_ids'>-->
+                        <!--            <tree>-->
+                        <!--                <field name='product_id'/>-->
+                        <!--                <field name='name'/>-->
+                        <!--                <field name='quantity'/>-->
+                        <!--            </tree>-->
+                        <!--        </field>-->
+                        <!--    </page>-->
+                        <!--</notebook>-->
                     </sheet>
                 </form>
             </field>

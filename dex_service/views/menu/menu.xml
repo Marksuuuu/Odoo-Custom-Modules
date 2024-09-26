@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <record id="service_action_id" model="ir.actions.act_window">
-            <field name="name">Service</field>
+            <field name="name">Service Account</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">service</field>
             <field name="view_mode">tree,form</field>
@@ -14,7 +14,7 @@
         </record>
         
         <record id="service_line_action_id" model="ir.actions.act_window">
-            <field name="name">Service Line</field>
+            <field name="name">Service Record</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">service.line</field>
             <field name="view_mode">tree</field>
@@ -72,17 +72,102 @@
                 </p>
             </field>
         </record>
+        
+        <record id="service_request_action_id" model="ir.actions.act_window">
+            <field name="name">Service Request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">not.existing.product</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+        
+        <record id="dex_service_request_form_action_id" model="ir.actions.act_window">
+            <field name="name">Service Request Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dex.service.request.form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+        
+        <record id="assign_request_dex_service_action" model="ir.actions.act_window">
+            <field name="name">Service Schedule</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">assign.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+        
+        <record id="itinerary_configuration_dex_service_action" model="ir.actions.act_window">
+            <field name="name">Itinerary Configuration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">itinerary.configuration</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Please create an Item's first
+                </p>
+            </field>
+        </record>
+        
+        <record id="action_your_controller" model="ir.actions.act_url">
+            <field name="name">Your Controller</field>
+            <field name="url">/main_dashboard</field>
+            <field name="target">self</field>
+        </record>
+        
+        <!-- MENUS -->
 
         <menuitem id="dex_service_menu_root_id" name="Dex Service" sequence="10"/>
 
         <menuitem id="dex_service_configuration_root_id" parent="dex_service.dex_service_menu_root_id"
-                  name="Configuration" sequence="2"/>
+                  name="Configuration" sequence="4"/>
+        
+        
+        <!-- MENU ITEMS -->
+        
+        <menuitem id="service_root_action_id" name="Service" parent="dex_service.dex_service_menu_root_id"
+                  sequence="1"/>
+        
+        <!-- END -->
+        
+        
+        <!-- DEX SERVICE FORM & MENU ACTION-->
         
         <menuitem id="service_line_root_action_id" name="Dashboard" parent="dex_service.dex_service_menu_root_id"
                   sequence="0" action="service_line_action_id"/>
+        
+        <!--<menuitem id="service_main_menu_root_action_id" name="Service Account Assign" parent="dex_service.dex_service_menu_root_id"-->
+        <!--          sequence="2" action="service_main_action"/>-->
 
-        <menuitem id="service_root_action_id" name="Service" parent="dex_service.dex_service_menu_root_id"
-                  sequence="1" action="service_action_id"/>
+        <menuitem id="assign_request_root_action_id" name="Service Schedule" parent="dex_service.dex_service_menu_root_id"
+                  sequence="3" action="assign_request_dex_service_action"/>
+
+        <menuitem id="service_menu_root_action_id" name="Service Account" parent="dex_service.service_root_action_id"
+                  sequence="0" action="service_action_id"/>
+        
+        <menuitem id="service_request_form_action_id" name="Service Request Form"
+                  parent="dex_form_request_approval.create_request_main_categ_id"
+                  sequence="10" action="dex_service_request_form_action_id"/>
+        
+        <!-- END -->
+        
+        
 
         <menuitem id="service_type_menu_action_id" name="Service Type"
                   parent="dex_service.dex_service_configuration_root_id"
@@ -91,6 +176,10 @@
         <menuitem id="warranty_menu_action_id" name="Warranty"
                   parent="dex_service.dex_service_configuration_root_id"
                   sequence="1" action="warranty_action_id"/>
+        
+        <menuitem id="itinerary_configuration_menu_action_id" name="Itinerary Configuration"
+                  parent="dex_service.dex_service_configuration_root_id"
+                  sequence="3" action="itinerary_configuration_dex_service_action" groups='dex_service.group_dex_service_admin'/>
 
         <menuitem id="not_existing_product_menu_action_id" name="Not Existing Product"
                   parent="dex_service.dex_service_configuration_root_id"

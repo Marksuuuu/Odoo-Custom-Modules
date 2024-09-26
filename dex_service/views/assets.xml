@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="dex_assets_backend" name="Dex Service Assets assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/dex_service/static/src/js/tree_button.js"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

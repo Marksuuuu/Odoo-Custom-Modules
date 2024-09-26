@@ -19,6 +19,8 @@ _logger = logging.getLogger(__name__)
 
 class ServiceLineThread(models.Model):
     _name = 'service.line.thread'
+    _rec_name = 'thread_name'
+    _order = 'id desc'
     _description = 'Dex Service Line'
 
 
@@ -27,7 +29,7 @@ class ServiceLineThread(models.Model):
 
     status = fields.Selection(
         [('open', 'Open'), ('cancelled', 'Cancelled'),('close', 'Close'), ('pending', 'Pending'), ('waiting', 'Waiting')], default='open',
-        string='Type')
+        string='Status')
 
     invoice_id = fields.Many2one('account.move', string='Invoice ID')
     purchase_date = fields.Date(string='Purchase Date')
@@ -65,6 +67,14 @@ class ServiceLineThread(models.Model):
     thread_count = fields.Integer(string='Thread Count')
 
     count_field = fields.Integer(default=30)
+    
+    requesters_id = fields.Many2one('res.users', string='Requester', default=lambda self: self.env.user.id)
+    
+    is_scheduled = fields.Boolean(default=False)
+    
+    def set_close(self):
+        self.status = 'close'
+    
 
     @api.model
     def generate_thread_name(self):
@@ -80,16 +90,13 @@ class ServiceLineThread(models.Model):
 
 
     def assign_thread_name(self):
-        """Assign a custom ID to the record."""
         for record in self:
-            if not record.thread_name:  # Only assign if not already set
+            if not record.thread_name:
                 record.thread_name = self.generate_thread_name()
 
     @api.model
     def create(self, vals):
-        # Create the record first
         record = super(ServiceLineThread, self).create(vals)
-        # Assign custom ID after creation
         record.assign_thread_name()
         return record
 

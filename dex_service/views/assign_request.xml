@@ -7,30 +7,42 @@
             <field name="arch" type="xml">
                 <form string="Service Form">
                     <header>
-                        <button name='print_service_report' string=" Print Service" class="fa fa-print btn-outline-info" type="object"/>                        
-                        <button string=" Delete Service" class="fa fa-trash-o btn-outline-danger" special="cancel" confirm='Are you sure?'/>
+                        <button name='print_service_report' string=" Print Service" class="fa fa-print btn-outline-info" type="object"/>
+                        <!--<button name="get_all_email" type="object" string="testtt"/>-->
+                        <!--<button name='create_function' string=" Print Service" class="fa fa-print btn-outline-info" type="object"/>                        -->
+                        <!--<button string=" Delete Service" class="fa fa-trash-o btn-outline-danger" special="cancel" confirm='Are you sure?'/>-->
                     </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" icon="fa-users" name="add_service" string='Add Service'/>
+                        </div>
                         <group>
                             <div class="oe_title">
-                                <label for="service_id" string="Service ID" class="oe_edit_only"/>
+                                <label for="name" string="Service ID" class="oe_edit_only"/>
                                 <h1>
-                                    <field name="service_id" readonly="1"/>
+                                    <field name="name"/>
                                 </h1>
                             </div>
                         </group>
                         <group>
                             <group>
-                                <field name='call_date'/>
-                                <field name='technician' options="{'no_create': 1}"/>
-                                <field name='report_print_count'/>
+                                <field name='transaction_date' required='1'/>
+                                <field name='technician' required='1'/>
+                            </group>
+                            <group>
+                                <field name='time_in' required='1'/>
+                                <field name='time_out' required='1'/>
+                            </group>
+                            <group>
+                                <field name='report_print_count' invisible='1'/>
                             </group>
                         </group>
                         <notebook>
                             <page name='assign_request_line_page_name' string='Service Details'>
                                 <field name='assign_request_line_ids'>
                                     <tree editable='bottom'>
-                                        <field name='partner_id'/>
+                                        <field name='partner_id' string='Contact Person'/>
+                                        <field name='fee'/>                                        
                                         <field name="street" optional="hidden"/>
                                         <field name="street2" optional="hidden"/>
                                         <field name="city" optional="hidden"/>
@@ -44,13 +56,16 @@
                             </page>
                             <page name='assign_request_service_time_page_name' string='Service Time'>
                                 <field name='assign_request_service_time_ids'>
-                                    <tree editable='bottom'>
-                                        <field name="partner_id"/>
+                                    <tree editable='bottom' create='0'>
+                                        <field name="partner_id" string='Contact Person'/>
+                                        <field name='assign_request_line'/>                                        
                                         <field name="job_request"/>
+                                        <field name="free_of_charge"/>
                                         <field name="service_action"/>
                                         <field name="service_cost"/>
                                         <field name="parts_cost"/>
                                         <field name="parts_cost_actual"/>
+                                        <field name="pending_reason"/>
                                         <field name="payment_remarks"/>
                                         <field name="time_in"/>
                                         <field name="time_out"/>
@@ -62,14 +77,21 @@
                             </page>
                             <page name='assign_request_other_details_page_name' string='Other Details'>
                                 <field name='assign_request_other_details_ids'>
-                                    <tree editable='bottom'>
-                                        <field name='partner_id'/>
-                                        <field name="item"/>
+                                    <tree editable='bottom' create='0'>
+                                        <field name='partner_id' string='Contact Person'/>
+                                        <field name='assign_request_line'/>                                        
+                                        <field name="item_description" readonly='1'/>
                                         <field name="parts_request"/>
                                         <field name="parts_feedback"/>
-                                        <field name="requested_by"/>
+                                        <field name="purchase_date"/>
+                                        <field name="requesters_id"/>
                                         <field name="requested_date"/>
                                         <field name="customer_feedback"/>
+                                        <field name="call_date"/>
+                                        <field name="complaints"/>
+                                        <field name="with_warranty"/>
+                                        <field name="remarks"/>
+                                        <field name="service_type"/>
                                     </tree>
                                 </field>
                             </page>
@@ -89,20 +111,10 @@
             <field name="model">assign.request</field>
             <field name="arch" type="xml">
                 <tree string="Tree">
-                     <field name='service_id'/>
-                     <field name='call_date'/>
-                     <field name='technician' options="{'no_create': 1}"/>
-                     <field name='report_print_count'/>
+                     <field name='create_date'/>
+                     <field name='name'/>
                 </tree>
             </field>
-        </record>
-
-        <record id="assign_request_dex_service_action" model="ir.actions.act_window">
-            <field name="name">Assign Request</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">assign.request</field>
-            <field name="view_mode">tree,form</field>
-            <field name="target">current</field>
         </record>
 
         <!--        <menuitem id="dex_import_root_id" name="Import Tool" sequence="15" action="dex_form_request_job_request_view"/>-->

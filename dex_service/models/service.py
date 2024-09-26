@@ -20,6 +20,8 @@ _logger = logging.getLogger(__name__)
 class Service(models.Model):
     _name = 'service'
     _description = 'Dex Service'
+    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+
     _order = 'id desc'
     
 
@@ -67,8 +69,19 @@ class Service(models.Model):
     is_tranfered = fields.Boolean(default=False)
     transfer_reason = fields.Char(string='Transfer Reason')
     
+    requesters_id = fields.Many2one('res.users', string='Requester', default=lambda self: self.env.user.id)
+    
+    count_service_line_ids = fields.Integer(string='Line Count', compute='_compute_service_line_ids', store=True)
+
+
+    
     def open_form_view(self):
-        pass  
+        pass
+    
+    @api.depends('count_service_line_ids')
+    def _compute_service_line_ids(self):
+        for record in self:
+            record.count_service_line_ids = len(record.service_line_ids)
 
     @api.model
     def create(self, vals):
@@ -185,14 +198,12 @@ class Service(models.Model):
             }
         }
         return action
-        
-            
-
-
     
 
 class ServiceLine(models.Model):
     _name = 'service.line'
+    _order = 'id desc'
+    _rec_name = 'name'
     _description = 'Dex Service Line'
 
     service_id = fields.Many2one('service', string='Service Id', ondelete='cascade')
@@ -228,21 +239,76 @@ class ServiceLine(models.Model):
     look_for = fields.Char(string='Look For')
     charge = fields.Float(string='Charge')
     free_of_charge = fields.Boolean(string='Free of Charge?')
-
-    tentative_schedule_date = fields.Date(string='Tentative Schedule Date')
-
-    other_instructions = fields.Char(string='Other Instructions')
-
-    pending_reason = fields.Char(string='Pending Reason')
-
-    thread_count = fields.Integer(string='Thread Count')
-
-    count_field = fields.Integer(default=30)
     
     what_type = fields.Selection(
         [('by_invoice', 'By Invoice'), ('by_warranty', 'By Warranty'), ('by_edp_code', 'By EDP-Code'),('by_edp_code_not_existing', 'By EDP-Code (Not Existing)')], default=False,
         string='Type')
 
+    tentative_schedule_date = fields.Date(string='Tentative Schedule Date')
+
+    other_instructions = fields.Char(string='Other Instructions')
+
+    pending_reason = fields.Char(string='Pending Reason', default=False)
+
+    thread_count = fields.Integer(string='Thread Count')
+
+    count_field = fields.Integer(default=30)
+    
+    is_tentative_date_added = fields.Boolean(
+        default=False, 
+        compute='_check_tentative_date', 
+        store=True
+    )
+    requesters_id = fields.Many2one('res.users', string='Requester', default=lambda self: self.env.user.id)
+    
+    checking_status = fields.Boolean(default=False, compute='_compute_checking_status')
+    
+    pending_date = fields.Datetime(string="Pending Date")
+    done_date = fields.Datetime(string="Done Date")
+    total_duration = fields.Float(string="Total Duration (hours)", readonly=True)
+    actual_duration = fields.Float(string="Actual Duration (hours)", compute='_compute_actual_duration', store=False)
+
+    @api.model
+    def write(self, vals):
+        if 'status' in vals:
+            if vals['status'] == 'pending':
+                vals['pending_date'] = datetime.now()
+                vals['done_date'] = False  # Reset done date if going back to pending
+
+            elif vals['status'] == 'done' and self.pending_date:
+                vals['done_date'] = datetime.now()
+                # Calculate total duration
+                duration = vals['done_date'] - self.pending_date
+                vals['total_duration'] = duration.total_seconds() / 3600  # Convert to hours
+
+        return super(ServiceLine, self).write(vals)
+
+    @api.depends('pending_date')
+    def _compute_actual_duration(self):
+        for record in self:
+            if record.pending_date:
+                current_time = datetime.now()
+                duration = current_time - record.pending_date
+                record.actual_duration = duration.total_seconds() / 3600  # Convert to hours
+            else:
+                record.actual_duration = 0.0  # Reset if pending_date is not set
+    
+    def main_connection(self):
+        sender = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.sender')
+        host = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.host')
+        port = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.port')
+        username = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.username')
+        password = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.password')
+
+        credentials = {
+            'sender': sender,
+            'host': host,
+            'port': port,
+            'username': username,
+            'password': password
+        }
+        return credentials
+    
     @api.model
     def create(self, vals):
         if vals.get('name', '/') == '/':
@@ -334,5 +400,322 @@ class ServiceLine(models.Model):
                 }
             }
             return action
+        
+    @api.depends('status')
+    def _compute_checking_status(self):
+        for record in self:
+            if not record.pending_reason:
+                record.checking_status = False
+            else:
+                from_what = 2
+                email_recipients = [record.requesters_id.login]
+                _logger.info('email_recipients {}'.format(email_recipients))
+                font_awesome = 'fa-solid fa-clock'
+                # Uncomment if check_and_send_email is implemented
+                # record.check_and_send_email(email_recipients, from_what, font_awesome)
+                record.checking_status = True
+
+
+            
+        
+    @api.model
+    def get_all_partner_ids(self):
+        partner_ids = set()
+        if self.client_name:
+            partner_ids.add(self.client_name.email)
+        if not self.id:
+            return list(partner_ids)
+        assign_requests = self.service_id.search([('service_line_ids', '=', self.id)])
+        for request in assign_requests:
+            for line in request.service_line_ids:
+                if line.partner_id:
+                    partner_ids.add(line.partner_id.email)
+        return list(partner_ids)
+
+    @api.onchange('status', 'pending_reason')
+    def onchange_status(self):
+        partner_ids = self.get_all_partner_ids()
+        email_recipients = [self.requesters_id.login]
+        
+        if self.user_id:
+            user_login = self.user_id.login
+            if user_login:
+                partner_ids.append(user_login)
+            _logger.info('User related to the service line: %s', user_login)
+            
+        from_what = 2
+        if self.status == 'open':
+            font_awesome = 'fa-solid fa-door-open'
+            self.notify_to_all(email_recipients, from_what, font_awesome)
+        elif self.status == 'cancelled':
+            font_awesome = 'fa-solid fa-xmark'
+            self.notify_to_all(email_recipients, from_what, font_awesome)
+        elif self.status == 'close':
+            font_awesome = 'fa-solid fa-door-closed'
+            self.notify_to_all(email_recipients, from_what, font_awesome)
+        elif self.status == 'pending':
+            _logger.info('pending_here')
+            _logger.info('pending_reason {}'.format(self.pending_reason))
+            if self.pending_reason:
+                
+                font_awesome = 'fa-solid fa-clock'
+                self.notify_to_all(email_recipients, from_what, font_awesome)
+            # self.check_and_send_email(email_recipients, from_what, font_awesome)
+        elif self.status == 'waiting':
+            font_awesome = 'fa-solid fa-hourglass-start'
+            self.notify_to_all(email_recipients, from_what, font_awesome)
+        else:
+            'fa-solid fa-bug'
+    
+    # def check_and_send_email(self, email_recipients, from_what, font_awesome):
+    #     _logger.info('pending_here1')
+    #     
+    #     if self.status == 'pending' and self.pending_reason is not False:
+    #         _logger.info('pending_here2')
+    #         self.notify_to_all(email_recipients, from_what, font_awesome)
+    #         _logger.info('Notification sent to all partners due to pending status.')
+
+  
+    @api.depends('tentative_schedule_date')
+    def _check_tentative_date(self):
+        for record in self:
+            if record.tentative_schedule_date:
+                record.is_tentative_date_added = True
+                sales_person = self.get_email_sales_person()
+                create_by = self.get_email_create_by()
+                email_recipients = [sales_person, create_by]
+                from_what = 1
+                font_awesome = 'fa-solid fa-calendar-days'
+                record.notify_to_all(email_recipients, from_what, font_awesome)
+            else:
+                # record.send_email_to()
+                record.is_tentative_date_added = False
+      
+    def get_email_sales_person(self):
+        email = self.user_id.login
+        return email
+    
+    def get_email_create_by(self):
+        email = self.requesters_id.login
+        return email
+    
+    # def send_email_to(self):
+    #     sales_person = self.get_email_sales_person()
+    #     create_by = self.get_email_create_by()
+    #     email_recipients = [sales_person, create_by]
+    #     from_what = 1
+    #     font_awesome = 'fa-solid fa-calendar-days'
+    #     self.notify_to_all(email_recipients, from_what, font_awesome)
+        
+    def notify_to_all(self, recipient_list, from_what, font_awesome):
+        conn = self.main_connection()
+        sender = "Do not reply. This email is autogenerated."
+        host = conn['host']
+        port = conn['port']
+        username = conn['username']
+        password = conn['password']
+    
+        if from_what == 1:
+            title_format = f'This Request with serial number of "[{self.name}]" have an Tentative Date'
+        elif from_what == 2:
+            title_format = f'This Request with serial number of "[{self.name}]" have Change the STATUS [{self.status.title() if self.status else ""}]'
+        else:
+            title_format = ''
+    
+        # Prepare the email message
+        msg = MIMEMultipart()
+        msg['From'] = formataddr(('Odoo Mailer', sender))
+        msg['To'] = ', '.join(recipient_list)
+        msg['Subject'] = title_format
+    
+        # HTML content
+        html_content = """
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>Responsive Services Section</title>
+                <!-- Font Awesome CDN -->
+                <link
+                  rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+                />
+                <!-- Google Font -->
+                <link
+                  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+                  rel="stylesheet"
+                />
+                <!-- Stylesheet -->
+                <style>
+                  * {
+                    padding: 0;
+                    margin: 0;
+                    box-sizing: border-box;
+                    font-family: "Poppins", sans-serif;
+                  }
+                  section {
+                    height: 100vh;
+                    width: 100%;
+                    display: grid;
+                    place-items: center;
+                  }
+                  .container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 1em;
+                    padding: 1em;
+                    max-width: 1200px;
+                    width: 100%;
+                  }
+                  .card {
+                    flex: 1 1 100%;
+                    max-width: 100%;
+                    padding: 2em 1.5em;
+                    background: linear-gradient(#ffffff 50%, #2c7bfe 50%);
+                    background-size: 100% 200%;
+                    background-position: 0 2.5%;
+                    border-radius: 5px;
+                    box-shadow: 0 0 35px rgba(0, 0, 0, 0.12);
+                    cursor: pointer;
+                    transition: 0.5s;
+                  }
+                  h3 {
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: #1f194c;
+                    margin: 1em 0;
+                  }
+                  p {
+                    color: #575a7b;
+                    font-size: 15px;
+                    line-height: 1.6;
+                    letter-spacing: 0.03em;
+                  }
+                  .icon-wrapper {
+                    background-color: #2c7bfe;
+                    position: relative;
+                    margin: auto;
+                    font-size: 30px;
+                    height: 2.5em;
+                    width: 2.5em;
+                    color: #ffffff;
+                    border-radius: 50%;
+                    display: grid;
+                    place-items: center;
+                    transition: 0.5s;
+                  }
+                  .card:hover {
+                    background-position: 0 100%;
+                  }
+                  .card:hover .icon-wrapper {
+                    background-color: #ffffff;
+                    color: #2c7bfe;
+                  }
+                  .card:hover h3 {
+                    color: #ffffff;
+                  }
+                  .card:hover p {
+                    color: #f0f0f0;
+                  }
+                  table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 1em;
+                  }
+                  th, td {
+                    padding: 0.75em;
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                  }
+                  th {
+                    background-color: #f4f4f4;
+                  }
+                  tr:nth-child(even) {
+                    background-color: #f9f9f9;
+                  }
+                  /* @media screen and (min-width: 768px) {
+                    .card {
+                      flex: 0 0 50%;
+                    }
+                  }
+                  @media screen and (min-width: 992px) {
+                    .card {
+                      flex: 0 0 33.33%;
+                    }
+                  } */
+                </style>
+              </head>"""
+        html_content += f"""
+              <body>
+                <section>
+                  <div class="container">
+                    <div class="card">
+                      <div class="icon-wrapper">
+                        <i class="{font_awesome}"></i>
+                      </div>
+                      <h3>Service Control Number {'[' + self.name + ']' if self.name else ''}</h3>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Client Name</th>
+                            <th>Service Type</th>
+                            <th>Tentative Schedule Date</th>
+                            <th>Item Description</th>
+                            <th>Sales Person</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>{self.client_name.name if self.client_name else 'N/A'}</td>
+                            <td>{self.service_type.name if self.service_type else 'N/A'}</td>
+                            <td>{self.tentative_schedule_date.strftime("%m-%d-%y") if self.tentative_schedule_date else 'N/A'}</td>
+                            <td>{self.item_description if self.item_description else 'N/A'}</td>
+                            <td>{self.user_id.name if self.user_id else 'N/A'}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </section>
+              </body>
+            </html>
+        """
+        msg.attach(MIMEText(html_content, 'html'))
+    
+        try:
+            smtpObj = smtplib.SMTP(host, port)
+            smtpObj.login(username, password)
+            smtpObj.sendmail(sender, recipient_list, msg.as_string())
+            smtpObj.quit()
+    
+            msg = "Successfully sent email"
+            notification = {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Success'),
+                    'type': 'success',
+                    'message': msg,
+                    'sticky': False,
+                }
+            }
+            return notification
+        except Exception as e:
+            msg = f"Error: Unable to send email: {str(e)}"
+            notification = {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Error'),
+                    'type': 'error',
+                    'message': msg,
+                    'sticky': False,
+                }
+            }
+    
+            return notification
+
         
         

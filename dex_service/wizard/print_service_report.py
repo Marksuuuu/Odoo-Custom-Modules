@@ -18,7 +18,6 @@ class PrintServiceReport(models.TransientModel):
             requests_res = self.env[active_model].browse(active_id)
 
             if requests_res:
-                # Increment the counter
                 self.report_print_count = (self.report_print_count or 0) + 1
 
                 vals = {

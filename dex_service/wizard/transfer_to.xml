@@ -20,7 +20,7 @@
                         </group>
                         <group string='From'>
                             <group>
-                                <field name="partner_id"/>
+                                <field name="partner_id" string='Contact Person'/>
                                 <field name="street"/>
                                 <field name="street2"/>
                                 <field name="city"/>

@@ -42,7 +42,7 @@
             <field name='perm_unlink'>0</field>
         </record>
 
-         <record id='dex_service_line_thread_admin' model='ir.model.access'>
+        <record id='dex_service_line_thread_admin' model='ir.model.access'>
             <field name='name'>dex_service.service_line_thread</field>
             <field name='model_id' ref='dex_service.model_service_line_thread'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
@@ -81,7 +81,7 @@
             <field name='perm_create'>1</field>
             <field name='perm_unlink'>0</field>
         </record>
-        
+
         <record id='dex_warranty_admin' model='ir.model.access'>
             <field name='name'>dex_service.warranty</field>
             <field name='model_id' ref='dex_service.model_warranty'/>
@@ -101,27 +101,27 @@
             <field name='perm_create'>1</field>
             <field name='perm_unlink'>0</field>
         </record>
-        
-        <record id='dex_warranty_line_admin' model='ir.model.access'>
-            <field name='name'>dex_service.warranty_line</field>
-            <field name='model_id' ref='dex_service.model_warranty_line'/>
-            <field name='group_id' ref='dex_service.group_dex_service_admin'/>
-            <field name='perm_read'>1</field>
-            <field name='perm_write'>1</field>
-            <field name='perm_create'>1</field>
-            <field name='perm_unlink'>1</field>
-        </record>
 
-        <record id='dex_warranty_line_user' model='ir.model.access'>
-            <field name='name'>dex_service.warranty_line</field>
-            <field name='model_id' ref='dex_service.model_warranty_line'/>
-            <field name='group_id' ref='dex_service.group_dex_service_user'/>
-            <field name='perm_read'>1</field>
-            <field name='perm_write'>1</field>
-            <field name='perm_create'>1</field>
-            <field name='perm_unlink'>0</field>
-        </record>
-        
+        <!--<record id='dex_warranty_line_admin' model='ir.model.access'>-->
+        <!--    <field name='name'>dex_service.warranty_line</field>-->
+        <!--    <field name='model_id' ref='dex_service.model_warranty_line'/>-->
+        <!--    <field name='group_id' ref='dex_service.group_dex_service_admin'/>-->
+        <!--    <field name='perm_read'>1</field>-->
+        <!--    <field name='perm_write'>1</field>-->
+        <!--    <field name='perm_create'>1</field>-->
+        <!--    <field name='perm_unlink'>1</field>-->
+        <!--</record>-->
+
+        <!--<record id='dex_warranty_line_user' model='ir.model.access'>-->
+        <!--    <field name='name'>dex_service.warranty_line</field>-->
+        <!--    <field name='model_id' ref='dex_service.model_warranty_line'/>-->
+        <!--    <field name='group_id' ref='dex_service.group_dex_service_user'/>-->
+        <!--    <field name='perm_read'>1</field>-->
+        <!--    <field name='perm_write'>1</field>-->
+        <!--    <field name='perm_create'>1</field>-->
+        <!--    <field name='perm_unlink'>0</field>-->
+        <!--</record>-->
+
         <record id='assign_request_admin' model='ir.model.access'>
             <field name='name'>dex_service.assign_request</field>
             <field name='model_id' ref='dex_service.model_assign_request'/>
@@ -141,7 +141,7 @@
             <field name='perm_create'>1</field>
             <field name='perm_unlink'>0</field>
         </record>
-        
+
         <record id='assign_request_line_admin' model='ir.model.access'>
             <field name='name'>dex_service.assign_request_line</field>
             <field name='model_id' ref='dex_service.model_assign_request_line'/>
@@ -161,7 +161,7 @@
             <field name='perm_create'>1</field>
             <field name='perm_unlink'>0</field>
         </record>
-        
+
         <record id='assign_request_service_time_admin' model='ir.model.access'>
             <field name='name'>dex_service.assign_request_service_time</field>
             <field name='model_id' ref='dex_service.model_assign_request_service_time'/>
@@ -181,7 +181,7 @@
             <field name='perm_create'>1</field>
             <field name='perm_unlink'>0</field>
         </record>
-        
+
         <record id='assign_request_other_details_admin' model='ir.model.access'>
             <field name='name'>dex_service.assign_request_other_details</field>
             <field name='model_id' ref='dex_service.model_assign_request_other_details'/>
@@ -201,7 +201,7 @@
             <field name='perm_create'>1</field>
             <field name='perm_unlink'>0</field>
         </record>
-        
+
         <record id='not_existing_product_admin' model='ir.model.access'>
             <field name='name'>dex_service.not_existing_product</field>
             <field name='model_id' ref='dex_service.model_not_existing_product'/>
@@ -221,6 +221,76 @@
             <field name='perm_create'>1</field>
             <field name='perm_unlink'>0</field>
         </record>
+        
+        <record id='dex_service_request_form_admin' model='ir.model.access'>
+            <field name='name'>dex_service.dex_service_request_form</field>
+            <field name='model_id' ref='dex_service.model_dex_service_request_form'/>
+            <field name='group_id' ref='dex_service.group_dex_service_admin'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>1</field>
+        </record>
+
+        <record id='dex_service_request_form_user' model='ir.model.access'>
+            <field name='name'>dex_service.dex_service_request_form</field>
+            <field name='model_id' ref='dex_service.model_dex_service_request_form'/>
+            <field name='group_id' ref='dex_service.group_dex_service_user'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>0</field>
+        </record>
+        
+        <record id='dex_service_request_form_line_admin' model='ir.model.access'>
+            <field name='name'>dex_service.dex_service_request_form_line</field>
+            <field name='model_id' ref='dex_service.model_dex_service_request_form_line'/>
+            <field name='group_id' ref='dex_service.group_dex_service_admin'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>1</field>
+        </record>
+
+        <record id='dex_service_request_form_line_user' model='ir.model.access'>
+            <field name='name'>dex_service.dex_service_request_form_line</field>
+            <field name='model_id' ref='dex_service.model_dex_service_request_form_line'/>
+            <field name='group_id' ref='dex_service.group_dex_service_user'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>0</field>
+        </record>
+        
+        <record id='dex_service_itinerary_configuration_admin' model='ir.model.access'>
+            <field name='name'>dex_service.dex_service_Itinerary_configuration</field>
+            <field name='model_id' ref='dex_service.model_itinerary_configuration'/>
+            <field name='group_id' ref='dex_service.group_dex_service_admin'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>1</field>
+            <field name='perm_unlink'>1</field>
+        </record>
+        
+        <record id='dex_service_itinerary_configuration_user' model='ir.model.access'>
+            <field name='name'>dex_service.dex_service_Itinerary_configuration</field>
+            <field name='model_id' ref='dex_service.model_itinerary_configuration'/>
+            <field name='group_id' ref='dex_service.group_dex_service_user'/>
+            <field name='perm_read'>1</field>
+            <field name='perm_write'>1</field>
+            <field name='perm_create'>0</field>
+            <field name='perm_unlink'>0</field>
+        </record>
+        
+        <!--<record id='dex_service_itinerary_configuration_admin' model='ir.model.access'>-->
+        <!--    <field name='name'>dex_service.dex_service_Itinerary_configuration</field>-->
+        <!--    <field name='model_id' ref='dex_service.model_dex_service_Itinerary_configuration'/>-->
+        <!--    <field name='group_id' ref='dex_service.group_dex_service_admin'/>-->
+        <!--    <field name='perm_read'>1</field>-->
+        <!--    <field name='perm_write'>1</field>-->
+        <!--    <field name='perm_create'>1</field>-->
+        <!--    <field name='perm_unlink'>1</field>-->
+        <!--</record>-->
 
 
     </data>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="add_service_form" model="ir.ui.view">
+            <field name="name">add_service_form</field>
+            <field name="model">add.service</field>
+            <field name="arch" type="xml">
+                <form string="Print">
+                    <sheet>
+                        <!--<group>-->
+                        <!--    <div class="oe_title">-->
+                        <!--        <label for="service" string="Service" class="oe_edit_only"/>-->
+                        <!--        <h1>-->
+                        <!--            <field name="service" readonly='1'/>-->
+                        <!--        </h1>-->
+                        <!--    </div>-->
+                        <!--</group>-->
+                        <group>
+                            <field name='service_id'/>
+                        </group>
+                        <group>
+                            <field name='partner_name' string='Contact Person'/>
+                        </group>
+                    </sheet>
+                    <footer class="oe_right">
+                        <button name="btn_save_changes" string=" Save" type="object" class="fa fa-floppy-o btn-outline-primary"
+                                confirm="Are you sure?"/>
+                        <button string=" Discard" class="fa fa-trash btn-outline-danger" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

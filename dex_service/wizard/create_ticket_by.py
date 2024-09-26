@@ -10,12 +10,15 @@ _logger = logging.getLogger(__name__)
 
 class CreateTicketBy(models.TransientModel):
     _name = 'create.ticket.by'
+    # _inherit = 'account.move'
     
     service_id = fields.Many2one('service', string='Service Id', ondelete='cascade')
     service_type = fields.Many2one('service.type', string='Service Type')
+    
     what_type = fields.Selection(
         [('by_invoice', 'By Invoice'), ('by_warranty', 'By Warranty'), ('by_edp_code', 'By EDP-Code'),('by_edp_code_not_existing', 'By EDP-Code (Not Existing)')], default=False,
         string='Type')
+    
     partner_id = fields.Many2one('res.partner', domain=[('type', '=', 'invoice'), ('customer_rank', '>', 1)])
     warranty_number = fields.Many2one('warranty',string='Warranty #')
     
@@ -39,26 +42,29 @@ class CreateTicketBy(models.TransientModel):
     
     create_ticket_by_line_ids = fields.One2many('create.ticket.by.line', 'create_ticket_by_line_line_ids')
     
-    @api.onchange('warranty_number')
-    def onchange_warranty_number(self):
-        self.invoice_no = self.warranty_number.invoice_no.id
-        _logger.info('invoice_no {}'.format(self.warranty_number.invoice_no.id))
-        if self.invoice_no:
-            if not self.invoice_no.invoice_line_ids:
-                _logger.info('No lines found in invoice_no')
-                self.create_ticket_by_line_ids = [(5, 0, 0)]
-            else:
-                self.create_ticket_by_line_ids = [(5, 0, 0)]
-                create_ticket_by_line_ids = []
-                for line in self.warranty_number.warranty_line_ids:
-                    create_ticket_by_line_ids.append((0, 0, {
-                        'product_id': line.product_id.id,
-                        'name': line.name,
-                        'quantity': line.quantity,
-                    }))
-                self.create_ticket_by_line_ids = create_ticket_by_line_ids
-        else:
-            self.create_ticket_by_line_ids = [(5, 0, 0)]
+    # @api.onchange('warranty_number')
+    # def onchange_warranty_number(self):
+    #     self.invoice_no = self.warranty_number.invoice_no.id
+    #     _logger.info('invoice_no {}'.format(self.warranty_number.invoice_no.id))
+    #     if self.invoice_no:
+    #         if not self.invoice_no.invoice_line_ids:
+    #             _logger.info('No lines found in invoice_no')
+    #             self.create_ticket_by_line_ids = [(5, 0, 0)]
+    #         else:
+    #             self.create_ticket_by_line_ids = [(5, 0, 0)]
+    #             create_ticket_by_line_ids = []
+    #             for line in self.warranty_number.warranty_line_ids:
+    #                 create_ticket_by_line_ids.append((0, 0, {
+    #                     'product_id': line.product_id.id,
+    #                     'name': line.name,
+    #                     'quantity': line.quantity,
+    #                 }))
+    #             self.create_ticket_by_line_ids = create_ticket_by_line_ids
+    #     else:
+    #         self.create_ticket_by_line_ids = [(5, 0, 0)]
+    
+    
+
     
     
     @api.onchange('invoice_no')
@@ -116,26 +122,23 @@ class CreateTicketBy(models.TransientModel):
         vals_list = []
         
         for line_id in self.warranty_number:
-            for rec in line_id.warranty_line_ids:
-                _logger.info('rec.name {}'.format(rec.name))
-                vals = {
-                    'item_description': rec.name,
-                    'service_id': service_id,
-                    'client_name': partner_id,
-                    'service_type': service_type_id,
-                    'what_type': what_type,
-                    'warranty_number': line_id.id,
+            _logger.info('Processing line: {}'.format(line_id.name))
+            vals = {
+                'item_description': line_id.name,
+                'service_id': service_id,
+                'client_name': partner_id,
+                'service_type': service_type_id,
+                'what_type': what_type,
+                'warranty_number': line_id.id,
+            }
+            vals_list.append(vals)
+        service_lines = self.env['service.line'].create(vals_list)
+        requests_res.write({
+            'service_type': False,
+        })
+        
+        return service_lines
 
-                }
-                vals_list.append(vals)
-            
-            service_lines = self.env['service.line'].create(vals_list)
-            
-            requests_res.write({
-                'service_type': False,
-            })
-            
-            return service_lines
 
     
     def create_service_lines_edp(self, requests_res):

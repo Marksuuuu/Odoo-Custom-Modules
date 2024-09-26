@@ -19,6 +19,7 @@ _logger = logging.getLogger(__name__)
 
 class NotExistingProduct(models.Model):
     _name = 'not.existing.product'
+    _order = 'id desc'
     _description = 'Dex Service Not Existing'
     
     internal_reference = fields.Char(string='Internal Reference')
