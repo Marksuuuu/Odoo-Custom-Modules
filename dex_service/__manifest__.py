@@ -32,6 +32,7 @@
         ## Report ##
         'views/reports/menu/menu.xml',
         'views/reports/service_report.xml',
+        'views/reports/service_request_form.xml',
         # 'views/inherit/assets.xml',
         
         ## Wizard ##
@@ -50,7 +51,7 @@
         'views/inherit/sale_order.xml',
         'views/assign_request.xml',
         'views/templates.xml',
-        'views/custom_layout.xml',
+        # 'views/custom_layout.xml',
         'views/warranty.xml',
         'views/sequence/sequence.xml',
         'views/service_line_thread_view.xml',

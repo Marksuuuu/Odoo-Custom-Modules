@@ -26,7 +26,17 @@
             report_type="qweb-pdf"
             menu="False"
             paperformat=""
-
+        />
+        
+        <report
+            id="service_request_form_report_id"
+            model="service.line"
+            string="Service Request Form"
+            name="dex_service.service_request_form_action_menu_id"
+            file="dex_service.service_request_form_action_menu_id"
+            report_type="qweb-pdf"
+            menu="False"
+            paperformat=""
         />
     </data>
 

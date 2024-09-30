@@ -31,7 +31,7 @@
                         <div class="oe_title">
                             <label for="name" string="Control No." class="oe_edit_only"/>
                             <h1>
-                                <field name="name"/>
+                                <field name="name" invisible="1"/>
                             </h1>
                         </div>
                         <group name="invisible_fields" invisible="1">
@@ -41,10 +41,10 @@
                         </group>
                         <group>
                             <group>
-                                <field name="requesters_id" readonly="1"/>
+                                <field name="partner_id" force_save="1" readonly="1"/>
                             </group>
                             <group>
-                                <field name="partner_id" force_save="1" readonly="1"/>
+                                <field name="requesters_id" readonly="1"/>                                
                                 <field name="transfer_to_partner_id" force_save="1" attrs="{'invisible': [('is_tranfered', '=', False)]}"/>
                             </group>
                             <group>
@@ -109,8 +109,10 @@
                                    <field name="service_line_ids"  attrs="{'readonly': [('block_reason', '!=', False)]}">
                                     <tree editable="bottom" create="0" decoration-success="status in ['done','open']"
                                           decoration-primary="status == 'confirm'" decoration-danger="status in ['cancelled','close']" decoration-warning="status in ['pending','waiting']" >
-                                        <!--<field name="name"/>-->
+                                        <button icon='fa-exclamation-triangle' class="bg-danger oe_link" attrs="{'invisible': [('is_inputs_complete', '!=', False)]}" help='this sign is for checking if you have (complaints,tentative date, pending_reason)'/>
+                                        <!--<button icon='fa-check-square' class="bg-success oe_link" attrs="{'invisible': [('is_inputs_complete', '!=', True)]}"/>-->
                                         <field name="status" widget='selection' string='Status'/>
+                                        <field name="is_inputs_complete" invisible="1"/>                                        
                                         <field name="checking_status" invisible="1"/>                                        
                                         <field name="requested_by"/>
                                         <field name="client_name" string='Contact Person'/>
@@ -146,12 +148,11 @@
                                         <field name="count_field" invisible="1"/> <!-- The field you want to use -->
                                         <field name="requesters_id" invisible="1"/> <!-- The field you want to use -->
                                         <!-- Add the custom widget directly here -->
+                                        <button name='print_service_request_form' class="fa fa-print btn-outline-info" type="object"  attrs="{'invisible': [('is_inputs_complete', '!=', True)]}"/>                                                                
                                         <button name="create_thread" type="object"
                                                 class="fa fa-pencil-square-o btn-outline-dark" attrs="{'invisible': [('status', '!=', 'pending')]}" help='Creating Thread'/>
                                         <!--<button name="assign_workers" type="object" class="fa fa-user-plus btn-outline-success" attrs="{'invisible': [('status', '!=', 'pending')]}" help='Assign Workers / Technician'/>                                        -->
                                         <button name="show_thread" type="object" class="fa fa-list-ol btn-outline-dark" attrs="{'invisible': [('status', '!=', 'pending')]}" help='Show All Thread / List'/>
-                                        <!--<button name='check_count_of_report_print_count' string="TEEST" class="fa fa-print btn-outline-info" type="object"/>                        -->
-
                                     </tree>
                                 </field>
                             </page>
@@ -171,10 +172,10 @@
             <field name="arch" type="xml">
                 <tree string="Tree" decoration-danger="is_client_blocked == True" decoration-info="is_client_blocked == False">
                     <field name="create_date"/>
-                    <field name="name"/>
+                    <!--<field name="name"/>-->
                     <field name="partner_id" widget="badge" decoration-warning="count_service_line_ids != False"/>
                     <field name="is_client_blocked" invisible='1'/>
-                    <field name="count_service_line_ids" string='Service Count' widget="badge" decoration-warning="count_service_line_ids != False"/>
+                    <field name="count_service_line_ids" string='Service Record (Count)' widget="badge" decoration-warning="count_service_line_ids != False"/>
                 </tree>
             </field>
         </record>

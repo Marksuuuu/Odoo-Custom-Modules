@@ -71,7 +71,8 @@ class Service(models.Model):
     
     requesters_id = fields.Many2one('res.users', string='Requester', default=lambda self: self.env.user.id)
     
-    count_service_line_ids = fields.Integer(string='Line Count', compute='_compute_service_line_ids', store=True)
+    count_service_line_ids = fields.Integer(string='Line Count', compute='_compute_service_line_ids')
+    
 
 
     
@@ -200,6 +201,8 @@ class Service(models.Model):
         return action
     
 
+    
+
 class ServiceLine(models.Model):
     _name = 'service.line'
     _order = 'id desc'
@@ -267,6 +270,17 @@ class ServiceLine(models.Model):
     done_date = fields.Datetime(string="Done Date")
     total_duration = fields.Float(string="Total Duration (hours)", readonly=True)
     actual_duration = fields.Float(string="Actual Duration (hours)", compute='_compute_actual_duration', store=False)
+    
+    is_inputs_complete = fields.Boolean(default=False, compute='_compute_check_if_complete')
+
+    
+    @api.depends('tentative_schedule_date', 'complaints', 'phone_number')
+    def _compute_check_if_complete(self):
+        for record in self:
+            record.is_inputs_complete = bool(record.tentative_schedule_date or record.complaints or record.phone_number)
+            
+    def print_service_request_form(self):
+        return self.env.ref('dex_service.service_request_form_report_id').report_action(self)
 
     @api.model
     def write(self, vals):
@@ -317,8 +331,6 @@ class ServiceLine(models.Model):
     
     def check_count_of_report_print_count(self):
         search_for_assign_request = self.env['assign.request'].search([('service_id', '=', self.id)])
-        _logger.info('search_for_assign_request {}'.format(search_for_assign_request.report_print_count))
-        _logger.info('search {}'.format(self.id))
         # total_count = 0  
         # for rec in self:
         #     total_count += rec.report_print_count  
@@ -409,13 +421,10 @@ class ServiceLine(models.Model):
             else:
                 from_what = 2
                 email_recipients = [record.requesters_id.login]
-                _logger.info('email_recipients {}'.format(email_recipients))
                 font_awesome = 'fa-solid fa-clock'
                 # Uncomment if check_and_send_email is implemented
                 # record.check_and_send_email(email_recipients, from_what, font_awesome)
                 record.checking_status = True
-
-
             
         
     @api.model
@@ -441,7 +450,6 @@ class ServiceLine(models.Model):
             user_login = self.user_id.login
             if user_login:
                 partner_ids.append(user_login)
-            _logger.info('User related to the service line: %s', user_login)
             
         from_what = 2
         if self.status == 'open':
@@ -454,8 +462,6 @@ class ServiceLine(models.Model):
             font_awesome = 'fa-solid fa-door-closed'
             self.notify_to_all(email_recipients, from_what, font_awesome)
         elif self.status == 'pending':
-            _logger.info('pending_here')
-            _logger.info('pending_reason {}'.format(self.pending_reason))
             if self.pending_reason:
                 
                 font_awesome = 'fa-solid fa-clock'
@@ -483,7 +489,8 @@ class ServiceLine(models.Model):
                 record.is_tentative_date_added = True
                 sales_person = self.get_email_sales_person()
                 create_by = self.get_email_create_by()
-                email_recipients = [sales_person, create_by]
+                email_recipients = [sales_person if sales_person else '', create_by if create_by else '']
+                _logger.info('email_recipients {}'.format(email_recipients))
                 from_what = 1
                 font_awesome = 'fa-solid fa-calendar-days'
                 record.notify_to_all(email_recipients, from_what, font_awesome)

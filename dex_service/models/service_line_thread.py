@@ -72,6 +72,7 @@ class ServiceLineThread(models.Model):
     
     is_scheduled = fields.Boolean(default=False)
     
+    
     def set_close(self):
         self.status = 'close'
     

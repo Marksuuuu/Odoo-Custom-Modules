@@ -69,10 +69,8 @@ class CreateTicketBy(models.TransientModel):
     
     @api.onchange('invoice_no')
     def onchange_invoice_no(self):
-        _logger.info('invoice_no {}'.format(self.invoice_no.id))
         if self.invoice_no:
             if not self.invoice_no.invoice_line_ids:
-                _logger.info('No lines found in invoice_no')
                 self.create_ticket_by_line_ids = [(5, 0, 0)]
             else:
                 self.create_ticket_by_line_ids = [(5, 0, 0)]
@@ -122,7 +120,6 @@ class CreateTicketBy(models.TransientModel):
         vals_list = []
         
         for line_id in self.warranty_number:
-            _logger.info('Processing line: {}'.format(line_id.name))
             vals = {
                 'item_description': line_id.name,
                 'service_id': service_id,
@@ -151,7 +148,6 @@ class CreateTicketBy(models.TransientModel):
         vals_list = []
         
         for line_id in self.edp_code:
-            _logger.info('line_id.name {}'.format(line_id.name))
             vals = {
                 'item_description': line_id.name,
                 'service_id': self.service_id.id,

@@ -76,7 +76,6 @@ class ServiceMain(models.TransientModel):
     @api.model
     def find_or_create_record(self, search_criteria, default_values):
         record = self.env['service'].search(search_criteria)
-        _logger.info('record_test {}'.format(record))
         if not record:
             record = self.env['service'].create(default_values)
         return {
@@ -99,9 +98,6 @@ class ServiceMain(models.TransientModel):
         if self.partner_id:
             partner_id_data = self.env['service'].search([('partner_id', '=', self.partner_id.id)])
             sale_order_data = self.env['sale.order'].search([('partner_id', '=', self.partner_id.id)])
-    
-            _logger.info('partner_id_data %s', partner_id_data)
-            _logger.info('sale_order_data %s', sale_order_data)
     
             self.service_main_line_ids = [(5, 0, 0)]
             self.service_main_sale_order = [(5, 0, 0)]
@@ -129,9 +125,7 @@ class ServiceMain(models.TransientModel):
                         self.amount_untaxed = order.amount_untaxed
                         self.amount_tax = order.amount_tax
                         self.amount_total = order.amount_total
-                        _logger.info('Processing sale order: %s', order)
                         for line in order.order_line:
-                            _logger.info('Processing order line: %s', line)
                             service_main_order_ids.append((0, 0, {
                                 'item_description': line.product_id.name,
                                 'available': line.available,
@@ -144,7 +138,6 @@ class ServiceMain(models.TransientModel):
                                 'price_total': line.price_total,
                             }))
                 else:
-                    _logger.info('No sale orders found for the selected partner')
                     self.amount_untaxed = 0
                     self.amount_tax = 0
                     self.amount_total = 0

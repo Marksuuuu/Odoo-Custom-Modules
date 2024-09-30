@@ -1,6 +1,5 @@
 odoo.define('dex_service.tree_button', function (require) {
 "use strict";
-   console.log('test');
    var ListController = require('web.ListController');
    var ListView = require('web.ListView');
    var viewRegistry = require('web.view_registry');
@@ -10,7 +9,6 @@ odoo.define('dex_service.tree_button', function (require) {
           'click .open_wizard_action': '_OpenWizard',
       }),
       _OpenWizard: function () {
-         console.log('test');
           var self = this;
            this.do_action({
               type: 'ir.actions.act_window',

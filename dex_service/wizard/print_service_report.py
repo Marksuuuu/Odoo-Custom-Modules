@@ -12,8 +12,6 @@ class PrintServiceReport(models.TransientModel):
         active_id = self._context.get('active_id')
         active_model = self._context.get('active_model')
 
-        _logger.debug(f"Active ID: {active_id}, Active Model: {active_model}")
-
         if active_id and active_model:
             requests_res = self.env[active_model].browse(active_id)
 
@@ -29,5 +27,4 @@ class PrintServiceReport(models.TransientModel):
 
     def print_service_report(self):
         report_action = self.env.ref('dex_service.service_odoo_report_id').report_action(self)
-        _logger.debug(f"Report Action: {report_action}")
         return report_action

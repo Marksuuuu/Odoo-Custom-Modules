@@ -2,6 +2,7 @@ from odoo import models, fields, api
 import base64
 import pandas as pd
 import logging
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -34,7 +35,6 @@ class AddService(models.TransientModel):
         requests_res = self.env[active_model].browse(active_id)
     
         if not requests_res:
-            _logger.info('No services found for the selected partner')
             requests_res.assign_request_line_ids = [(5, 0, 0)]
             requests_res.assign_request_service_time_ids = [(5, 0, 0)]
             requests_res.assign_request_other_details_ids = [(5, 0, 0)]
@@ -50,45 +50,45 @@ class AddService(models.TransientModel):
         purchase_date = self.purchase_date if self.purchase_date else None
         with_warranty = self.with_warranty if self.with_warranty else None
         service_type = self.service_type.id if self.service_type else None
-    
-        if partner_id:
-            new_line = {
-                'service_id': service_id,
-                'partner_id': partner_id
+        
+        if self.service_id.service_line_main_ids.is_inputs_complete:
+            if partner_id:
+                new_line = {
+                    'service_id': service_id,
+                    'partner_id': partner_id
+                    }
+                new_line_service_time_ids = {
+                    'partner_id': partner_id,
+                    'service_id': service_id,
+                    'pending_reason': pending_reason,
+                    'free_of_charge': free_of_charge
+                    }
+                new_line_other_details_ids = {
+                    'partner_id': partner_id,
+                    'service_id': service_id,
+                    'requesters_id': requesters_id,
+                    'complaints': complaints,
+                    'item_description': item_description,
+                    'purchase_date': purchase_date,
+                    'with_warranty': with_warranty,
+                    'service_type': service_type,
                 }
-            new_line_service_time_ids = {
-                'partner_id': partner_id,
-                'service_id': service_id,
-                'pending_reason': pending_reason,
-                'free_of_charge': free_of_charge
-                }
-            new_line_other_details_ids = {
-                'partner_id': partner_id,
-                'service_id': service_id,
-                'requesters_id': requesters_id,
-                'complaints': complaints,
-                'item_description': item_description,
-                'purchase_date': purchase_date,
-                'with_warranty': with_warranty,
-                'service_type': service_type,
-            }
-            assign_request_line_ids = [(0, 0, new_line) for _ in requests_res]
-            assign_request_service_time_ids = [(0, 0, new_line_service_time_ids) for _ in requests_res]
-            assign_request_other_details_ids = [(0, 0, new_line_other_details_ids) for _ in requests_res]
-            
-            requests_res.assign_request_line_ids = assign_request_line_ids
-            requests_res.assign_request_service_time_ids = assign_request_service_time_ids
-            requests_res.assign_request_other_details_ids = assign_request_other_details_ids
-            
-                # Now check the service_id for is_schedule
-            service_record = self.env['service.line.thread'].browse(service_id)  # Replace with your actual model
-            _logger.info('service_record {}'.format(service_record))
-            # Write the service_id if the condition is met
-            service_record.write({'is_scheduled': True})
+                assign_request_line_ids = [(0, 0, new_line) for _ in requests_res]
+                assign_request_service_time_ids = [(0, 0, new_line_service_time_ids) for _ in requests_res]
+                assign_request_other_details_ids = [(0, 0, new_line_other_details_ids) for _ in requests_res]
+                
+                requests_res.assign_request_line_ids = assign_request_line_ids
+                requests_res.assign_request_service_time_ids = assign_request_service_time_ids
+                requests_res.assign_request_other_details_ids = assign_request_other_details_ids
+                
+                service_record = self.env['service.line.thread'].browse(service_id)  
+                service_record.write({'is_scheduled': True})
+            else:
+                requests_res.assign_request_line_ids = [(5, 0, 0)]
+                requests_res.assign_request_service_time_ids = [(5, 0, 0)]
+                requests_res.assign_request_other_details_ids = [(5, 0, 0)]
         else:
-            requests_res.assign_request_line_ids = [(5, 0, 0)]
-            requests_res.assign_request_service_time_ids = [(5, 0, 0)]
-            requests_res.assign_request_other_details_ids = [(5, 0, 0)]
+            raise UserError(f'Please Contact {self.service_id.service_line_main_ids.create_uid.name} to Finish/To Fully Filled this Fields (Pending Reason, Tentative Date, Contact/Phone Number), Thank you')
     
     def _assign_request(self, assign_request_line):
         self._update_add_service_time_records(assign_request_line)
@@ -103,7 +103,6 @@ class AddService(models.TransientModel):
         new_records = []
         
         for record in assign_request_line:
-            _logger.info('assign_request_line {}'.format(record))
             partner_id = record.id
             if partner_id and partner_id not in existing_ids:
                 new_records.append((0, 0, {
@@ -119,7 +118,6 @@ class AddService(models.TransientModel):
         existing_ids = {line.partner_id.id for line in self.assign_request_other_details_ids}
         new_records = []
         for record in assign_request_line:
-            _logger.info('assign_request_line {}'.format(record))
             partner_id = record.id
             if partner_id and partner_id not in existing_ids:
                 new_records.append((0, 0, {
@@ -133,7 +131,6 @@ class AddService(models.TransientModel):
         existing_ids = {line.partner_id.id for line in self.assign_request_line_ids}
         new_records = []
         for record in assign_request_line:
-            _logger.info('assign_request_line {}'.format(record))
             partner_id = record.id
             if partner_id and partner_id not in existing_ids:
                 new_records.append((0, 0, {

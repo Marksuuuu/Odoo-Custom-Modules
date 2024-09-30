@@ -7,16 +7,13 @@
             <field name="arch" type="xml">
                 <form string="Service Form">
                     <sheet>
+                        <group><field name="partner_id" force_save="1" string='Contact Person'/></group>
                         <group name="invisible_fields" invisible="1">
                             <field name="type"/>
                             <field name="is_client_blocked"/>
                             <field name="is_tranfered"/>
                         </group>
-                        <group>
-                            <group>
-                                <field name="partner_id" force_save="1" string='Contact Person'/>
-                                <field name="transfer_to_partner_id" force_save="1" attrs="{'invisible': [('is_tranfered', '=', False)]}"/>
-                            </group>
+                        <group string="Details">
                             <group>
                                 <label for="" name="address_name">
                                     <b attrs="{'invisible': [('type', '!=', 'contact')]}">Company Address</b>
@@ -40,6 +37,7 @@
                             </group>
 
                             <group attrs="{'invisible': [('is_tranfered', '=', False)]}" string='Transfer Address'>
+                                <field name="transfer_to_partner_id" force_save="1" attrs="{'invisible': [('is_tranfered', '=', False)]}"/>                                
                                 <label for="" name="transfer_to_address_name">
                                     <b attrs="{'invisible': [('type', '!=', 'contact')]}">Company Address</b>
                                     <b attrs="{'invisible': [('type', '!=', 'invoice')]}">Invoice Address</b>
@@ -63,7 +61,7 @@
 
                             <group>
                                 <!--<field name='daily_sales_report_date'/>-->
-                                <field name='sales_coordinator'/>
+                                <!--<field name='sales_coordinator'/>-->
                                 <field name='transfer_reason' readonly="1" attrs="{'invisible': [('is_tranfered', '=', False)]}"/>
                             </group>
                         </group>
@@ -108,13 +106,13 @@
                                 <field name="service_main_sale_order">
                                     <tree editable="bottom" create="0">
                                         <field name='item_description'/>
-                                        <field name='available'/>
+                                        <!--<field name='available'/>-->
                                         <field name='product_uom_qty'/>
                                         <field name='product_uom'/>
-                                        <field name='price_unit'/>
-                                        <field name='tax_id'/>
-                                        <field name='discount'/>
-                                        <field name='dex_selling_price'/>
+                                        <!--<field name='price_unit'/>-->
+                                        <!--<field name='tax_id'/>-->
+                                        <!--<field name='discount'/>-->
+                                        <!--<field name='dex_selling_price'/>-->
                                         <field name='price_total'/>
                                     </tree>
                                 </field>

@@ -26,11 +26,11 @@
                         </group>
                         <group>
                             <group>
-                                <field name='transaction_date' required='1'/>
-                                <field name='technician' required='1'/>
+                                <field name='transaction_date' required='1' string="Sevice Date"/>
+                                <field name='technician' required='1' string="Service By"/>
                             </group>
                             <group>
-                                <field name='time_in' required='1'/>
+                                <field name='time_in' required='1'/> 
                                 <field name='time_out' required='1'/>
                             </group>
                             <group>
@@ -116,6 +116,21 @@
                 </tree>
             </field>
         </record>
+        
+        <record id="assign_request_dex_service_calendar" model="ir.ui.view">
+            <field name="name">assign_request_dex_service_calendar</field>
+            <field name="model">assign.request</field>
+            <field name="arch" type="xml">
+                <calendar string="Service Schedule"
+                          date_start="transaction_date"
+                          event_open_popup="true"
+                          mode="month"
+                          quick_add="False">
+                    <field name="technician"/>
+                </calendar>
+            </field>
+        </record>
+        
 
         <!--        <menuitem id="dex_import_root_id" name="Import Tool" sequence="15" action="dex_form_request_job_request_view"/>-->
 

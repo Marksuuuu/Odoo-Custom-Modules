@@ -39,13 +39,10 @@ class ServiceItineraryCron(models.Model):
             elif selected_data == 'Specific Email':
                 email_list.append(rec.specific_email)
     
-        _logger.info('email_list {}'.format(email_list))
-    
         # Collect emails from assign_requests
         for request in assign_requests:
             request_list.append(request)
         self.notify_to_all(email_list, assign_requests)
-        _logger.info('request_list {}'.format(request_list))
     
         return email_list
 
@@ -137,7 +134,6 @@ class ServiceItineraryCron(models.Model):
                                                            assign_request.assign_request_service_time_ids,
                                                            assign_request.assign_request_other_details_ids):
                 for technician in assign_request.technician:
-                    _logger.info('other_detail.service_type.name {}'.format(other_detail.service_type.name))
                     html_content += f"""
                     <tr>
                         <td>{technician.name}</td>

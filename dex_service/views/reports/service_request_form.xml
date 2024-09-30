@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="service_request_form_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                         .table {
+                              width: 100%;
+                              table-layout: fixed; /* Ensure table has fixed layout */
+                              margin: auto;
+                              padding: 0;
+                              font-size: 14px;
+                            }
+                        th, td {
+                              padding: 2px !important; /* Reduce padding from table cells */
+                              word-wrap: break-word;    /* Allow text to wrap */
+                              white-space: normal;      /* Allow long text to wrap */
+                            }
+                    </style>
+                </xpath>
+                <div>           
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Email</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Email</th>
+                        <th>Email</th>
+                        <th>Email</th>
+                      </tr>
+                      <tr>
+                        <th>Firstname</th>
+                        <th colspan="3">Lastname</th>
+                        <th>Email</th>
+                        <th colspan="2">Firstname</th>
+                        <th>Email</th>
+                      </tr>
+                      <tr>
+                        <th>Firstname</th>
+                        <th colspan="3">Lastname</th>
+                        <th>Email</th>
+                        <th colspan="3">Firstname</th>
+                      </tr>
+                      <tr>
+                        <th>Firstname</th>
+                        <th colspan="3">Lastname</th>
+                        <th>Email</th>
+                        <th colspan="3">Firstname</th>
+                      </tr>
+                      <tr>
+                        <th>Firstname</th>
+                        <th colspan="3">Lastname</th>
+                        <th>Email</th>
+                        <th colspan="3">Firstname</th>
+                      </tr>
+                      <tr>
+                        <th>Firstname</th>
+                        <th colspan="3">Lastname</th>
+                        <th rowspan="2">Email</th>
+                        <th rowspan='2' colspan="3">Firstname</th>
+                      </tr>
+                      <tr>
+                        <th>Firstname</th>
+                        <th>Firstname</th>
+                        <th>Firstname</th>
+                        <th>Firstname</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Email</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Email</th>
+                            <th>Email</th>
+                            <th>Email</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Firstname</th>
+                            <th colspan="5">Lastname</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Firstname</th>
+                            <th>Lastname</th>
+                            <th colspan="2">Email</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Firstname</th>
+                            <th>Lastname</th>
+                            <th colspan="2">Email</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Firstname</th>
+                            <th>Lastname</th>
+                            <th colspan="2">Email</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Firstname</th>
+                            <th>Lastname</th>
+                            <th colspan="2">Email</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Firstname</th>
+                            <th>Lastname</th>
+                            <th colspan="2">Email</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Firstname</th>
+                            <th>Lastname</th>
+                            <th colspan="2">Email</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                        </tr>
+                        <tr>
+                            <th colspan="3">Firstname</th>
+                            <th>Lastname</th>
+                            <th colspan="2">Email</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                        </tr>
+                        <tr>
+                            <th colspan="4" rowspan="5">Firstname</th>
+                            <th>Lastname</th>
+                            <th colspan="3">Email</th>
+                        </tr>
+                        <tr>
+                            <th>Lastname</th>
+                            <th colspan="3">Email</th>
+                        </tr>
+                        <tr>
+                            <th>Lastname</th>
+                            <th colspan="3">Email</th>
+                        </tr>
+                        <tr>
+                            <th>Lastname</th>
+                            <th colspan="3">Email</th>
+                        </tr>
+                        <tr>
+                            <th>Lastname</th>
+                            <th colspan="3">Email</th>
+                        </tr>
+                        <tr>
+                            <th>asd</th>
+                            <th>asd</th>
+                            <th colspan="3">asd</th>
+                            <th colspan="3" rowspan="2"></th>
+                        </tr>
+                        <tr>
+                            <th>asd</th>
+                            <th>asd</th>
+                            <th colspan="3">asd</th>
+                        </tr>
+                        <tr>
+                            <th>asd</th>
+                            <th>asd</th>
+                            <th colspan="3">asd</th>
+                            <th colspan="3">asd</th>
+                        </tr>
+                        <tr>
+                            <th colspan="8">asd</th>
+                        </tr>
+                        <tr>
+                            <th colspan="8">asd</th>
+                        </tr>
+                        <tr>
+                            <th colspan="8">asd</th>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style="margin-top: 50px;">
+                      <table class="table table-borderless" style="text-align: left;">
+                      <thead>
+                          <tr>
+                              <th>Tentative Schedule Date:</th>
+                              <th>_________________________</th>
+                              <th>Approved By</th>
+                          </tr>
+                          <tr>
+                              <th colspan="2">Tentative Schedule Date: Tentative Schedule Date: Tentative Schedule Date: Tentative Schedule Date:</th>
+                              <th>___________________________</th>
+                          </tr>
+                          <tr>
+                              <th colspan="3">Tentative Schedule Date: Tentative Schedule Date: Tentative Schedule Date: Tentative Schedule Date:</th>
+                          </tr>
+                      </thead>
+                  </table>
+                </div>
+            </t>
+        </template>
+        <template id="service_request_form_action_menu_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.create_uid.lang"/>
+                    <t t-call="dex_service.service_request_form_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

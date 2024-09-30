@@ -51,7 +51,6 @@ class AssignRequest(models.Model):
         }
 
         for record in self:
-            # Collect data from each field and append to the corresponding list
             result['assign_request_line_ids'].extend([line for line in record.assign_request_line_ids])
             result['assign_request_service_time_ids'].extend([service_time for service_time in record.assign_request_service_time_ids])
             result['assign_request_other_details_ids'].extend([details for details in record.assign_request_other_details_ids])
@@ -59,15 +58,12 @@ class AssignRequest(models.Model):
         return result
 
     def create_function(self):
-        # Example of using the get_all_data_as_list method
         data = self.get_all_data_as_list()
 
-        # Now you can work with the 'data' dictionary and access each list by indexing
         lines = data['assign_request_line_ids']
         service_times = data['assign_request_service_time_ids']
         other_details = data['assign_request_other_details_ids']
 
-        # For demonstration, you might want to print or log the data
         for rec in lines.pop():
             _logger.info("rec IDs: %s", rec)
 
@@ -118,8 +114,6 @@ class AssignRequest(models.Model):
             if rec.service_id:
                 assign_request_line = rec.service_id.client_name
                 assign_request_line_id = fields.Datetime.now().strftime('%Y%m%d%H%M%S')
-                _logger.info('assign_request_line {}'.format(assign_request_line))
-                _logger.info('assign_request_line_id {}'.format(assign_request_line_id))
                 rec._assign_request(assign_request_line, assign_request_line_id)
             else:
                 rec.assign_request_service_time_ids = [(5, 0, 0)]
@@ -137,7 +131,6 @@ class AssignRequest(models.Model):
         new_records = []
         
         for record in assign_request_line:
-            _logger.info('assign_request_line {}'.format(record))
             partner_id = record.id
             if partner_id and partner_id not in existing_ids:
                 new_records.append((0, 0, {
@@ -154,7 +147,6 @@ class AssignRequest(models.Model):
         existing_ids = {line.partner_id.id for line in self.assign_request_other_details_ids}
         new_records = []
         for record in assign_request_line:
-            _logger.info('assign_request_line {}'.format(record))
             partner_id = record.id
             if partner_id and partner_id not in existing_ids:
                 new_records.append((0, 0, {
@@ -168,7 +160,6 @@ class AssignRequest(models.Model):
         existing_ids = {line.partner_id.id for line in self.assign_request_line_ids}
         new_records = []
         for record in assign_request_line:
-            _logger.info('assign_request_line {}'.format(record))
             partner_id = record.id
             if partner_id and partner_id not in existing_ids:
                 new_records.append((0, 0, {

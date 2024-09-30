@@ -52,16 +52,13 @@ class DexServiceRequestForm(models.Model):
     @api.model
     def find_or_create_record(self, search_criteria, default_values):
         existing_records = self.env['service'].search(search_criteria)
-        _logger.info('Found records: {}'.format(existing_records))
     
         if existing_records:
             for record in existing_records:
                 record.write(default_values)
-                _logger.info('Updated record: {}'.format(record))
             records = existing_records
         else:
             record = self.env['service'].create(default_values)
-            _logger.info('Created record: {}'.format(record))
             records = self.env['service'].browse(record.id)
         service_line_ids = default_values.pop('service_line_ids', [])
         if service_line_ids:
@@ -95,8 +92,6 @@ class DexServiceRequestForm(models.Model):
     def action_find_or_create(self):
         search_criteria = [('partner_id', '=', self.partner_id.id)]
         service_line_ids = self.dex_service_request_form_line_ids
-
-        _logger.info('service_line_ids {}'.format(service_line_ids))
 
         default_values = {
             'partner_id': self.partner_id.id,
