@@ -9,8 +9,8 @@ _logger = logging.getLogger(__name__)
 
 
     
-class ServiceLineThread(models.Model):
-    _inherit = 'service.line.thread'
+class DexServiceServiceLineThread(models.Model):
+    _inherit = 'dex_service.service.line.thread'
     
     def name_get(self):
         if self.env.context.get('select_service_thread'):
@@ -24,7 +24,7 @@ class ServiceLineThread(models.Model):
         if self.env.context.get('select_service_thread'):
             if not args:
                 args = []
-            account_move = self.env['service.line.thread'].search(args + ['|', '|', ('client_name', operator, name), ('street', operator, name), ('city', operator, name)], limit=limit)
+            account_move = self.env['dex_service.service.line.thread'].search(args + ['|', '|', ('client_name', operator, name), ('street', operator, name), ('city', operator, name)], limit=limit)
             if account_move:
                 return models.lazy_name_get(self.browse(account_move.ids))
             else:

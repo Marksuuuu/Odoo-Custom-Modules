@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="acknowledgement_form_container">
+            <t t-call="web.internal_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <xpath expr="//style" position="after">
+                    <style type="text/css">
+                        *{
+                        font-weight: normal;
+                        }
+                        .table {
+                        width: 100%;
+                        table-layout: fixed; /* Ensure table has fixed layout */
+                        margin: auto;
+                        padding: 0;
+                        font-size: 15px;
+                        }
+                        th, td {
+                        padding: 2px !important; /* Reduce padding from table cells */
+                        word-wrap: break-word; /* Allow text to wrap */
+                        white-space: normal; /* Allow long text to wrap */
+                        }
+                    </style>
+                </xpath>
+                <div>           
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr style="text-align: center;">
+                                <th colspan="4" style="font-size: 30px;">ACKNOWLEDGEMENT FORM</th>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <th colspan="4">Controll Number :
+                                    <span t-esc="o.thread_name"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Date:</th>
+                                <th>07/11/12</th>
+                                <th>Item:</th>
+                                <th>
+                                    <span t-esc='o.item_description'/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Client name:</th>
+                                <th>
+                                    <span t-esc="o.client_name.name"/>
+                                </th>
+                                <th>Complaint</th>
+                                <th>
+                                    <span t-esc="o.complaints"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Contact#</th>
+                                <th>
+                                    <span t-esc="o.phone_number"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="4">In view of the above request of service, we would like to inform you that we are charging an amount of ____________ for the REPAIR of the item indicated above.</th>
+                            </tr>
+                            <tr>
+                                <th colspan="4">Please take note that all the services that we render should be paid upon service delivery. In this regard, this amount will be entered into your account as an UNPAID TRANSACTION and will be due within 5 working days.</th>
+                            </tr>
+                            <tr>
+                                <th colspan="4">I affirm that I shall pay the amount indicated herein.</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: center;">______________________________________</th>
+                                <th style="text-align: center;">___________________________</th>
+                                <th style="text-align: center;">___________________________</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: center;">Client/Representative's Name &amp; Signature :</th>
+                                <th style="text-align: center;">Serviced by</th>
+                                <th style="text-align: center;">Accounting Dept.</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th colspan="4" style="border: 1px solid white;"></th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <th colspan="4" style="border-left: 1px solid white; border-right: 1px solid white; border-bottom: none; border-style: dashed;"></th>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <th colspan="4" style="border: 1px solid white;"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr style="text-align: center;">
+                                <th colspan="4" style="font-size: 30px;">ACKNOWLEDGEMENT FORM</th>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <th colspan="4">Controll Number :
+                                    <span t-esc="o.thread_name"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Date:</th>
+                                <th>07/11/12</th>
+                                <th>Item:</th>
+                                <th>
+                                    <span t-esc='o.item_description'/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Client name:</th>
+                                <th>
+                                    <span t-esc="o.client_name.name"/>
+                                </th>
+                                <th>Complaint</th>
+                                <th>
+                                    <span t-esc="o.complaints"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Contact#</th>
+                                <th>
+                                    <span t-esc="o.phone_number"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="4">In view of the above request of service, we would like to inform you that we are charging an amount of ____________ for the REPAIR of the item indicated above.</th>
+                            </tr>
+                            <tr>
+                                <th colspan="4">Please take note that all the services that we render should be paid upon service delivery. In this regard, this amount will be entered into your account as an UNPAID TRANSACTION and will be due within 5 working days.</th>
+                            </tr>
+                            <tr>
+                                <th colspan="4">I affirm that I shall pay the amount indicated herein.</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: center;">______________________________________</th>
+                                <th style="text-align: center;">___________________________</th>
+                                <th style="text-align: center;">___________________________</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align: center;">Client/Representative's Name &amp; Signature :</th>
+                                <th style="text-align: center;">Serviced by</th>
+                                <th style="text-align: center;">Accounting Dept.</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </t>
+        </template>
+        <template id="acknowledgement_form_action_menu_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.create_uid.lang"/>
+                    <t t-call="dex_service.acknowledgement_form_container" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

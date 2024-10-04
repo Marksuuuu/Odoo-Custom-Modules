@@ -43,8 +43,8 @@
         </record>
 
         <record id='dex_service_line_thread_admin' model='ir.model.access'>
-            <field name='name'>dex_service.service_line_thread</field>
-            <field name='model_id' ref='dex_service.model_service_line_thread'/>
+            <field name='name'>dex_service.dex_service_service_line_thread</field>
+            <field name='model_id' ref='dex_service.model_dex_service_service_line_thread'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -53,8 +53,8 @@
         </record>
 
         <record id='dex_service_line_thread_user' model='ir.model.access'>
-            <field name='name'>dex_service.service_line_thread</field>
-            <field name='model_id' ref='dex_service.model_service_line_thread'/>
+            <field name='name'>dex_service.dex_service_service_line_thread</field>
+            <field name='model_id' ref='dex_service.model_dex_service_service_line_thread'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -63,8 +63,8 @@
         </record>
 
         <record id='dex_service_type_admin' model='ir.model.access'>
-            <field name='name'>dex_service.service_type</field>
-            <field name='model_id' ref='dex_service.model_service_type'/>
+            <field name='name'>dex_service.dex_service_service_type</field>
+            <field name='model_id' ref='dex_service.model_dex_service_service_type'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -73,8 +73,8 @@
         </record>
 
         <record id='dex_service_type_user' model='ir.model.access'>
-            <field name='name'>dex_service.service_type</field>
-            <field name='model_id' ref='dex_service.model_service_type'/>
+            <field name='name'>dex_service.dex_service_service_type</field>
+            <field name='model_id' ref='dex_service.model_dex_service_service_type'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -122,9 +122,9 @@
         <!--    <field name='perm_unlink'>0</field>-->
         <!--</record>-->
 
-        <record id='assign_request_admin' model='ir.model.access'>
-            <field name='name'>dex_service.assign_request</field>
-            <field name='model_id' ref='dex_service.model_assign_request'/>
+        <record id='dex_service_assign_request_admin' model='ir.model.access'>
+            <field name='name'>dex_service.dex_service_assign_request</field>
+            <field name='model_id' ref='dex_service.model_dex_service_assign_request'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -132,9 +132,9 @@
             <field name='perm_unlink'>1</field>
         </record>
 
-        <record id='assign_request_user' model='ir.model.access'>
-            <field name='name'>dex_service.assign_request</field>
-            <field name='model_id' ref='dex_service.model_assign_request'/>
+        <record id='dex_service_assign_request_user' model='ir.model.access'>
+            <field name='name'>dex_service.dex_service_assign_request</field>
+            <field name='model_id' ref='dex_service.model_dex_service_assign_request'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -143,8 +143,8 @@
         </record>
 
         <record id='assign_request_line_admin' model='ir.model.access'>
-            <field name='name'>dex_service.assign_request_line</field>
-            <field name='model_id' ref='dex_service.model_assign_request_line'/>
+            <field name='name'>dex_service.dex_service_assign_request_line</field>
+            <field name='model_id' ref='dex_service.model_dex_service_assign_request_line'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -153,8 +153,8 @@
         </record>
 
         <record id='assign_request_line_user' model='ir.model.access'>
-            <field name='name'>dex_service.assign_request_line</field>
-            <field name='model_id' ref='dex_service.model_assign_request_line'/>
+            <field name='name'>dex_service.dex_service_assign_request_line</field>
+            <field name='model_id' ref='dex_service.model_dex_service_assign_request_line'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -163,8 +163,8 @@
         </record>
 
         <record id='assign_request_service_time_admin' model='ir.model.access'>
-            <field name='name'>dex_service.assign_request_service_time</field>
-            <field name='model_id' ref='dex_service.model_assign_request_service_time'/>
+            <field name='name'>dex_service.dex_service_assign_request_service_time</field>
+            <field name='model_id' ref='dex_service.model_dex_service_assign_request_service_time'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -173,8 +173,8 @@
         </record>
 
         <record id='assign_request_service_time_user' model='ir.model.access'>
-            <field name='name'>dex_service.assign_request_service_time</field>
-            <field name='model_id' ref='dex_service.model_assign_request_service_time'/>
+            <field name='name'>dex_service.dex_service_assign_request_service_time</field>
+            <field name='model_id' ref='dex_service.model_dex_service_assign_request_service_time'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -183,8 +183,8 @@
         </record>
 
         <record id='assign_request_other_details_admin' model='ir.model.access'>
-            <field name='name'>dex_service.assign_request_other_details</field>
-            <field name='model_id' ref='dex_service.model_assign_request_other_details'/>
+            <field name='name'>dex_service.dex_service_assign_request_other_details</field>
+            <field name='model_id' ref='dex_service.model_dex_service_assign_request_other_details'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -193,8 +193,8 @@
         </record>
 
         <record id='assign_request_other_details_user' model='ir.model.access'>
-            <field name='name'>dex_service.assign_request_other_details</field>
-            <field name='model_id' ref='dex_service.model_assign_request_other_details'/>
+            <field name='name'>dex_service.dex_service_assign_request_other_details</field>
+            <field name='model_id' ref='dex_service.model_dex_service_assign_request_other_details'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -203,8 +203,8 @@
         </record>
 
         <record id='not_existing_product_admin' model='ir.model.access'>
-            <field name='name'>dex_service.not_existing_product</field>
-            <field name='model_id' ref='dex_service.model_not_existing_product'/>
+            <field name='name'>dex_service.dex_service_no_prod_exist</field>
+            <field name='model_id' ref='dex_service.model_dex_service_no_prod_exist'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -213,8 +213,8 @@
         </record>
 
         <record id='not_existing_product_user' model='ir.model.access'>
-            <field name='name'>dex_service.not_existing_product</field>
-            <field name='model_id' ref='dex_service.model_not_existing_product'/>
+            <field name='name'>dex_service.dex_service_no_prod_exist</field>
+            <field name='model_id' ref='dex_service.model_dex_service_no_prod_exist'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>
             <field name='perm_write'>1</field>
@@ -223,7 +223,7 @@
         </record>
         
         <record id='dex_service_request_form_admin' model='ir.model.access'>
-            <field name='name'>dex_service.dex_service_request_form</field>
+            <field name='name'>dex_service.dex_service_dex_service_request_form</field>
             <field name='model_id' ref='dex_service.model_dex_service_request_form'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
@@ -233,7 +233,7 @@
         </record>
 
         <record id='dex_service_request_form_user' model='ir.model.access'>
-            <field name='name'>dex_service.dex_service_request_form</field>
+            <field name='name'>dex_service.dex_service_dex_service_request_form</field>
             <field name='model_id' ref='dex_service.model_dex_service_request_form'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>
@@ -243,7 +243,7 @@
         </record>
         
         <record id='dex_service_request_form_line_admin' model='ir.model.access'>
-            <field name='name'>dex_service.dex_service_request_form_line</field>
+            <field name='name'>dex_service.dex_service_dex_service_request_form_line</field>
             <field name='model_id' ref='dex_service.model_dex_service_request_form_line'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
@@ -253,7 +253,7 @@
         </record>
 
         <record id='dex_service_request_form_line_user' model='ir.model.access'>
-            <field name='name'>dex_service.dex_service_request_form_line</field>
+            <field name='name'>dex_service.dex_service_dex_service_request_form_line</field>
             <field name='model_id' ref='dex_service.model_dex_service_request_form_line'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>
@@ -263,7 +263,7 @@
         </record>
         
         <record id='dex_service_itinerary_configuration_admin' model='ir.model.access'>
-            <field name='name'>dex_service.dex_service_Itinerary_configuration</field>
+            <field name='name'>dex_service.dex_service_itinerary_configuration</field>
             <field name='model_id' ref='dex_service.model_itinerary_configuration'/>
             <field name='group_id' ref='dex_service.group_dex_service_admin'/>
             <field name='perm_read'>1</field>
@@ -273,7 +273,7 @@
         </record>
         
         <record id='dex_service_itinerary_configuration_user' model='ir.model.access'>
-            <field name='name'>dex_service.dex_service_Itinerary_configuration</field>
+            <field name='name'>dex_service.dex_service_itinerary_configuration</field>
             <field name='model_id' ref='dex_service.model_itinerary_configuration'/>
             <field name='group_id' ref='dex_service.group_dex_service_user'/>
             <field name='perm_read'>1</field>

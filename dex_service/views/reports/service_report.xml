@@ -8,21 +8,21 @@
                     <style type="text/css">
                         /* Basic reset */
                         body {
-                            margin: 0;
-                            font-family: Arial, sans-serif;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            height: 100vh;
+                        margin: 0;
+                        font-family: Arial, sans-serif;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
                         }
-                        
+
                         .address-cell {
-                            width: 100px;
-                                overflow: visible; /* Allow overflowed content to be visible */
-                                word-wrap: break-word; /* Break long words to wrap to the next line */
+                        width: 100px;
+                        overflow: visible; /* Allow overflowed content to be visible */
+                        word-wrap: break-word; /* Break long words to wrap to the next line */
                         }
                         .text{
-                            margin-left: 10px;
+                        margin-left: 10px;
                         }
 
                         table {
@@ -84,6 +84,9 @@
                         color: black; /* Text color */
                         margin: 0; /* Removes any extra margin around the text */
                         }
+                        .nowrap {
+                        white-space: nowrap;
+                        }
                     </style>
                 </xpath>
                 <div class="container" style='font-size: 12px'>
@@ -92,16 +95,22 @@
                             <tr>
                                 <td>DEXTERTON CORPORATION</td>
                                 <td></td>
-                                <td style="background-color: black; color: white; text-align: center;">SERVICE FORM</td>
-                                <td> <t t-esc="o.name"/> </td>
+                                <td style="background-color: black; color: white; text-align: center;">SERVICE ITINERARY</td>
+                                <td>
+                                    <t t-esc="o.name"/>
+                                </td>
                             </tr>
                             <tr>
-                                <tr>
-                                    <td>TRANSACTION DATE</td>
-                                    <td> <t t-esc="o.transaction_date"/> </td>
-                                    <td>TECHNICIAN</td>
-                                    <td><span t-esc="o.technician.name"/></td>
-                                 </tr>
+                                <td>TRANSACTION DATE</td>
+                                <td>
+                                    <t t-esc="o.transaction_date"/>
+                                </td>
+                                <td>TECHNICIAN</td>
+                                <td class="nowrap" style="word-wrap: break-word !important; ">
+                                    <t t-foreach="o.technician" t-as="tech">
+                                        <span style="word-wrap: break-word !important;" t-esc="tech.name"/>
+                                    </t>
+                                </td>
                             </tr>
                         </thead>
                     </table>
@@ -118,35 +127,50 @@
                                             ###############
                                         </t>
                                         <t t-if='a[0].service_id.thread_name'>
-                                            SERVICE NUMBER: <b><span t-esc="a[0].service_id.thread_name"/></b>                                            
+                                            SERVICE NUMBER:
+                                            <b>
+                                                <span t-esc="a[0].service_id.thread_name"/>
+                                            </b>                                            
                                         </t>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>NAME</td>
-                                    <td> <span t-esc="a[0].partner_id.name"/> </td>
+                                    <td>
+                                        <span t-esc="a[0].partner_id.name"/>
+                                    </td>
                                     <td>TIME</td>
                                     <t t-if='a[0].fee != 0'>
-                                        <td>FEE: <span t-esc="a[0].fee"/></td>
+                                        <td>FEE:
+                                            <span t-esc="a[0].fee"/>
+                                        </td>
                                     </t>
                                     <t t-elif="a[1].free_of_charge">
                                         <td>FREE OF CHARGE</td>
                                     </t>
                                     <t t-else=''>
-                                        <td> </td>
+                                        <td></td>
                                     </t>
                                 </tr>
                                 <tr>
                                     <td>ADDRESS</td>
-                                    <td class="address-cell"> <span t-esc="a[0].partner_id.street"/> </td>
+                                    <td class="address-cell">
+                                        <span t-esc="a[0].partner_id.street"/>
+                                    </td>
                                     <td>IN</td>
-                                    <td><span t-esc="a[1].time_in"/></td>                                    
+                                    <td>
+                                        <span t-esc="a[1].time_in"/>
+                                    </td>                                    
                                 </tr>
                                 <tr>
                                     <td>TELL NO.</td>
-                                    <td> <span t-esc="a[0].partner_id.phone"/> </td>
+                                    <td>
+                                        <span t-esc="a[0].partner_id.phone"/>
+                                    </td>
                                     <td>OUT</td>
-                                    <td><span t-esc="a[1].time_out"/></td>
+                                    <td>
+                                        <span t-esc="a[1].time_out"/>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>ITEMS</td>
@@ -156,7 +180,8 @@
                                 </tr>
                                 <tr>
                                     <td>REQUESTED BY</td>
-                                    <td colspan="2"><span t-esc="a[2].requesters_id.name"/>
+                                    <td colspan="2">
+                                        <span t-esc="a[2].requesters_id.name"/>
                                     </td>
                                     <td>SERIAL# __________</td>
                                 </tr>
@@ -183,7 +208,9 @@
                         <thead>
                             <tr>
                                 <td>PREPARED BY:</td>
-                                <td> <t t-esc="request.env.user.name"/> </td>
+                                <td>
+                                    <t t-esc="request.env.user.name"/>
+                                </td>
                                 <td>APPROVED BY:</td>
                                 <td>GUARD HOUSE</td>
                                 <td></td>
@@ -192,17 +219,23 @@
                         <tbody>
                             <tr>
                                 <td>DATE:</td>
-                                <td> <span t-esc="o.transaction_date"/> </td>
+                                <td>
+                                    <span t-esc="o.transaction_date"/>
+                                </td>
                                 <td></td>
                                 <td>TIME OUT:</td>
-                                <td> <span t-esc="o.time_out"/> </td>
+                                <td>
+                                    <span t-esc="o.time_out"/>
+                                </td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td>TIME IN:</td>
-                                <td> <span t-esc="o.time_in"/> </td>                                
+                                <td>
+                                    <span t-esc="o.time_in"/>
+                                </td>                                
                             </tr>
                         </tbody>
                     </table>

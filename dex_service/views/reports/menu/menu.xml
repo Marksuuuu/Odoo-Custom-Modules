@@ -16,10 +16,10 @@
             <field name="header_spacing">35</field>
             <field name="dpi">90</field>
         </record>
-        
+
         <report
             id="service_odoo_report_id"
-            model="assign.request"
+            model="dex_service.assign.request"
             string="Service Report"
             name="dex_service.service_action_menu_id"
             file="dex_service.service_action_menu_id"
@@ -27,13 +27,24 @@
             menu="False"
             paperformat=""
         />
-        
+
         <report
             id="service_request_form_report_id"
-            model="service.line"
+            model="dex_service.service.line.thread"
             string="Service Request Form"
             name="dex_service.service_request_form_action_menu_id"
             file="dex_service.service_request_form_action_menu_id"
+            report_type="qweb-pdf"
+            menu="False"
+            paperformat=""
+        />
+
+        <report
+            id="acknowledgment_form_report_id"
+            model="dex_service.service.line.thread"
+            string="Awknoledgement Form"
+            name="dex_service.acknowledgement_form_action_menu_id"
+            file="dex_service.acknowledgement_form_action_menu_id"
             report_type="qweb-pdf"
             menu="False"
             paperformat=""

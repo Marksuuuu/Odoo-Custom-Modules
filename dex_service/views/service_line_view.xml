@@ -28,7 +28,7 @@
                     <field name="actual_duration" optional="hidden" readonly="1" widget="float_time"/>
                     <field name="pending_reason" attrs="{'invisible': [('status', '!=', 'pending')], 'required': [('status', '=', 'pending')]}"/>
                     <field name="complaints" optional="hidden"/>
-                    <field name="feedback_count" optional="hidden"/>
+                    <!--<field name="feedback_count" optional="hidden"/>-->
                     <field name="street" optional="hidden"/>
                     <field name="street2" optional="hidden"/>
                     <field name="city" optional="hidden"/>

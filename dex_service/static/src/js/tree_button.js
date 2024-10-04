@@ -12,7 +12,7 @@ odoo.define('dex_service.tree_button', function (require) {
           var self = this;
            this.do_action({
               type: 'ir.actions.act_window',
-              res_model: 'service.main',
+              res_model: 'dex_service.service.main',
               name :'Assign',
               view_mode: 'form',
               view_type: 'form',

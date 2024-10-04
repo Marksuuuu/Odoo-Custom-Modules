@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="block_reason_form" model="ir.ui.view">
+            <field name="name">block_reason_form</field>
+            <field name="model">dex_service.block.reason</field>
+            <field name="arch" type="xml">
+                <form string="Block Reason Form" create="0" delete="0" edit="0" import="0">
+                    <sheet>
+                        <group>
+                            <!--<field name="service"/>-->
+                        </group>
+                        <group>
+                            <group>
+                                <field name="block_reason"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer class="oe_right">
+                        <button name="btn_save_changes" icon="fa-floppy-o " string=" Save" type="object" class="btn-outline-primary"
+                                confirm="Are you sure?"/>
+                        <button string=" Discard" icon="fa-trash " class="btn-outline-danger" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="block_reason_action" model="ir.actions.act_window">
+            <field name="name">Client Search</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">dex_service.client.search</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!--        <menuitem id="dex_import_root_id" name="Import Tool" sequence="15" action="dex_form_request_job_request_view"/>-->
+
+        <!--        <menuitem id="dex_import_menu" name="Import" sequence="0" parent="dex_import_root_id" />-->
+
+
+    </data>
+</odoo>

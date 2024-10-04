@@ -34,7 +34,7 @@ class ServiceRequest(models.TransientModel):
     country_id = fields.Many2one(related='partner_id.country_id')
     user_id = fields.Many2one(related='partner_id.user_id')
     type = fields.Selection(related='partner_id.type')
-    service_type = fields.Many2one('service.type', string='Service Type')
+    service_type = fields.Many2one('dex_service.service.type', string='Service Type')
     
     transfer_to_partner_id = fields.Many2one('res.partner', domain=[('type', '=', 'invoice'), ('customer_rank', '>', 1)])
     transfer_to_street = fields.Char(related='transfer_to_partner_id.street')
@@ -79,6 +79,6 @@ class ServiceLine(models.Model):
     item_description = fields.Char(string='Item Description')
     client_name = fields.Many2one('res.partner', domain=[('type', '=', 'invoice'), ('customer_rank', '>', 1)], store=True)
 
-    service_type = fields.Many2one('service.type', string='Service Type', store=True)
+    service_type = fields.Many2one('dex_service.service.type', string='Service Type', store=True)
     complaints = fields.Char(string='Complaints')
     feedback_count = fields.Integer(string='Feedback Count')

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="not_existing_product_form_view" model="ir.ui.view">
+            <field name="name">not_existing_product_form_view</field>
+            <field name="model">dex_service.no.prod.exist</field>
+            <field name="arch" type="xml">
+                <form string="Not Existing Product Form">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Product Name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="internal_reference"/>
+                            </group>
+                            <group>
+                                <field name="sales_price"/>
+                                <field name="qty_available"/>
+                                <field name="virtual_available"/>
+                                <field name="uom_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="not_existing_product_tree_view" model="ir.ui.view">
+            <field name="name">not_existing_product_tree_view</field>
+            <field name="model">dex_service.no.prod.exist</field>
+            <field name="arch" type="xml">
+                <tree string="Tree">
+                    <field name="name"/>
+                    <field name="internal_reference"/>
+                    <field name="sales_price"/>
+                    <field name="qty_available"/>
+                    <field name="virtual_available"/>
+                    <field name="uom_id"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

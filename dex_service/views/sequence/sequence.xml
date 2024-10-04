@@ -31,7 +31,7 @@
 
         <record id="dex_service_sequence_slt" model="ir.sequence">
             <field name="name">Service Line Thread Sequence</field>
-            <field name="code">service.line.thread.seq</field>
+            <field name="code">dex_service.service.line.thread.seq</field>
             <field name="prefix">THREAD/</field>
             <field name="padding">5</field>
             <field name="implementation">no_gap</field>

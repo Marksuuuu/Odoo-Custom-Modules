@@ -6,202 +6,231 @@
                 <t t-set="o" t-value="o.with_context(lang=lang)"/>
                 <xpath expr="//style" position="after">
                     <style type="text/css">
-                         .table {
-                              width: 100%;
-                              table-layout: fixed; /* Ensure table has fixed layout */
-                              margin: auto;
-                              padding: 0;
-                              font-size: 14px;
-                            }
+                        *{
+                        font-weight: normal;
+                        }
+                        .table {
+                        width: 100%;
+                        table-layout: fixed; /* Ensure table has fixed layout */
+                        margin: auto;
+                        padding: 0;
+                        font-size: 15px;
+                        }
                         th, td {
-                              padding: 2px !important; /* Reduce padding from table cells */
-                              word-wrap: break-word;    /* Allow text to wrap */
-                              white-space: normal;      /* Allow long text to wrap */
-                            }
+                        padding: 0px !important; /* Reduce padding from table cells */
+                        word-wrap: break-word; /* Allow text to wrap */
+                        white-space: normal; /* Allow long text to wrap */
+                        }
                     </style>
                 </xpath>
-                <div>           
-                  <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
-                        <th>Email</th>
-                        <th>Email</th>
-                        <th>Email</th>
-                      </tr>
-                      <tr>
-                        <th>Firstname</th>
-                        <th colspan="3">Lastname</th>
-                        <th>Email</th>
-                        <th colspan="2">Firstname</th>
-                        <th>Email</th>
-                      </tr>
-                      <tr>
-                        <th>Firstname</th>
-                        <th colspan="3">Lastname</th>
-                        <th>Email</th>
-                        <th colspan="3">Firstname</th>
-                      </tr>
-                      <tr>
-                        <th>Firstname</th>
-                        <th colspan="3">Lastname</th>
-                        <th>Email</th>
-                        <th colspan="3">Firstname</th>
-                      </tr>
-                      <tr>
-                        <th>Firstname</th>
-                        <th colspan="3">Lastname</th>
-                        <th>Email</th>
-                        <th colspan="3">Firstname</th>
-                      </tr>
-                      <tr>
-                        <th>Firstname</th>
-                        <th colspan="3">Lastname</th>
-                        <th rowspan="2">Email</th>
-                        <th rowspan='2' colspan="3">Firstname</th>
-                      </tr>
-                      <tr>
-                        <th>Firstname</th>
-                        <th>Firstname</th>
-                        <th>Firstname</th>
-                        <th>Firstname</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Email</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Email</th>
-                            <th>Email</th>
-                            <th>Email</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Firstname</th>
-                            <th colspan="5">Lastname</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Firstname</th>
-                            <th>Lastname</th>
-                            <th colspan="2">Email</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Firstname</th>
-                            <th>Lastname</th>
-                            <th colspan="2">Email</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Firstname</th>
-                            <th>Lastname</th>
-                            <th colspan="2">Email</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Firstname</th>
-                            <th>Lastname</th>
-                            <th colspan="2">Email</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Firstname</th>
-                            <th>Lastname</th>
-                            <th colspan="2">Email</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Firstname</th>
-                            <th>Lastname</th>
-                            <th colspan="2">Email</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3">Firstname</th>
-                            <th>Lastname</th>
-                            <th colspan="2">Email</th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                        </tr>
-                        <tr>
-                            <th colspan="4" rowspan="5">Firstname</th>
-                            <th>Lastname</th>
-                            <th colspan="3">Email</th>
-                        </tr>
-                        <tr>
-                            <th>Lastname</th>
-                            <th colspan="3">Email</th>
-                        </tr>
-                        <tr>
-                            <th>Lastname</th>
-                            <th colspan="3">Email</th>
-                        </tr>
-                        <tr>
-                            <th>Lastname</th>
-                            <th colspan="3">Email</th>
-                        </tr>
-                        <tr>
-                            <th>Lastname</th>
-                            <th colspan="3">Email</th>
-                        </tr>
-                        <tr>
-                            <th>asd</th>
-                            <th>asd</th>
-                            <th colspan="3">asd</th>
-                            <th colspan="3" rowspan="2"></th>
-                        </tr>
-                        <tr>
-                            <th>asd</th>
-                            <th>asd</th>
-                            <th colspan="3">asd</th>
-                        </tr>
-                        <tr>
-                            <th>asd</th>
-                            <th>asd</th>
-                            <th colspan="3">asd</th>
-                            <th colspan="3">asd</th>
-                        </tr>
-                        <tr>
-                            <th colspan="8">asd</th>
-                        </tr>
-                        <tr>
-                            <th colspan="8">asd</th>
-                        </tr>
-                        <tr>
-                            <th colspan="8">asd</th>
-                        </tr>
-                    </tbody>
-                  </table>
+                <div>
+                    <table class='table table-borderless'>
+                        <thead>
+                            <tr>
+                                <th style="font-size: 30px; text-align: center;">SERVICE WORK ORDER</th>
+                            </tr> 
+                        </thead>
+                    </table>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="8">Controll Number:
+                                    <span t-esc="o.thread_name"/>
+                                </th>
+                            </tr> 
+                            <tr>
+                                <th>Date Called by Client</th>
+                                <th>
+                                    <span t-esc='o.call_date'/>
+                                </th>
+                                <th>Date of Purchase</th>
+                                <th>
+                                    <span t-esc='o.purchase_date'/>
+                                </th>
+                                <th>Purcahased from/ Requested by</th>
+                                <th>
+                                    <span t-esc='o.requested_by'/>
+                                </th>
+                                <th>Warranty</th>
+                                <th>
+                                    <t t-if="not o.with_warranty">
+                                        NO
+                                    </t>
+                                    <t t-if='o.with_warranty'>
+                                        YES
+                                    </t>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Client name:</th>
+                                <th colspan="3">
+                                    <span t-esc='o.client_name.name'/>
+                                </th>
+                                <th>Brand / No of Unit</th>
+                                <th colspan="2">
+                                    <span t-esc="o.brand_id.name"/>
+                                </th>
+                                <th>
+                                    <span t-esc="o.number_of_units"/> Unit/s</th>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <th colspan="3">
+                                    <span t-esc="o.street"/>,
+                                    <span t-esc="o.city"/>,
+                                    <span t-esc="o.zip"/>
+                                </th>
+                                <th>Item/s Desc</th>
+                                <th colspan="3">
+                                    <span t-esc="o.item_description"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>City</th>
+                                <th colspan="3">
+                                    <span t-esc="o.city"/>
+                                </th>
+                                <th>Serial / Invoice No.</th>
+                                <th colspan="3">
+                                    <span t-esc="o.invoice_number"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Contact No.</th>
+                                <th colspan="3">
+                                    <span t-esc="o.phone_number"/>
+                                </th>
+                                <th>Edp No.</th>
+                                <th colspan="3">
+                                    <span t-esc="o.edp_code.default_code"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Contact Name:</th>
+                                <th colspan="3">
+                                    <span t-esc="o.client_name.name"/>
+                                </th>
+                                <th rowspan="2">Requested / Trouble Reported</th>
+                                <th rowspan='2' colspan="3">
+                                    <span t-esc="o.complaints"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>Created by:</th>
+                                <th>
+                                    <span t-esc="o.create_uid.name"/>
+                                </th>
+                                <th>Balance Service Charge:</th>
+                                <th>
+                                    <span t-esc="o.charge"/>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="8" style="text-align: center;">REQUEST</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <th colspan="3" style="text-align: center;">Trouble Found</th>
+                                <th colspan="5" style="text-align: center;">Parts/ Fitting Requisition</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3">
+                                    <span t-esc="o.trouble_reported"/>
+                                </th>
+                                <th>&#160;</th>
+                                <th colspan="2">&#160;</th>
+                                <th>&#160;</th>
+                                <th>&#160;</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3">&#160;</th>
+                                <th>&#160;</th>
+                                <th colspan="2">&#160;</th>
+                                <th>&#160;</th>
+                                <th>&#160;</th>
+                            </tr>
+                            <tr>
+                                <th colspan="4" rowspan="5">Other Instruction/s:
+                                    <span t-esc="o.other_instructions"/>
+                                </th>
+                                <th>Total Parts Charge:</th>
+                                <th colspan="3">&#160;</th>
+                            </tr>
+                            <tr>
+                                <th>Additional Visit:</th>
+                                <th colspan="3">&#160;</th>
+                            </tr>
+                            <tr>
+                                <th>Dismantle Charge:</th>
+                                <th colspan="3">&#160;</th>
+                            </tr>
+                            <tr>
+                                <th>Service Charge:</th>
+                                <th colspan="3">&#160;</th>
+                            </tr>
+                            <tr>
+                                <th>Grand Total:</th>
+                                <th colspan="3">&#160;</th>
+                            </tr>
+                            <tr>
+                                <th colspan="8" style="text-align:center;">CUSTOMER FEEDBACK AREA</th>
+                            </tr>
+                            <tr>
+                                <th>Time Started:</th>
+                                <th>&#160;</th>
+                                <th colspan="3">Quality of Work</th>
+                                <th colspan="3" rowspan="2"></th>
+                            </tr>
+                            <tr>
+                                <th>Time Fisnished:</th>
+                                <th>&#160;</th>
+                                <th colspan="3">Response Time</th>
+                            </tr>
+                            <tr>
+                                <th>Date Attended:</th>
+                                <th>&#160;</th>
+                                <th colspan="3"></th>
+                                <th colspan="3" style="text-align: center;">Customer Signature over Printed name:</th>
+                            </tr>
+                            <tr>
+                                <th colspan="8">Client Remarks:</th>
+                            </tr>
+                            <tr>
+                                <th colspan="8">&#160;</th>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div style="margin-top: 50px;">
-                      <table class="table table-borderless" style="text-align: left;">
-                      <thead>
-                          <tr>
-                              <th>Tentative Schedule Date:</th>
-                              <th>_________________________</th>
-                              <th>Approved By</th>
-                          </tr>
-                          <tr>
-                              <th colspan="2">Tentative Schedule Date: Tentative Schedule Date: Tentative Schedule Date: Tentative Schedule Date:</th>
-                              <th>___________________________</th>
-                          </tr>
-                          <tr>
-                              <th colspan="3">Tentative Schedule Date: Tentative Schedule Date: Tentative Schedule Date: Tentative Schedule Date:</th>
-                          </tr>
-                      </thead>
-                  </table>
+                    <table class="table table-borderless" style="text-align: left;">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Service By:</th>
+                                <th>
+                                    <span t-esc="o.requested_by"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="2">Tentative Schedule Date:</th>
+                                <th>
+                                    <span t-esc="o.tentative_schedule_date"/>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="2">Approved by:</th>
+                                <th>_________________________</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3">Instructions: Accomplish 2 copies. Make sure that the duplicate copy is a CARBON COPY.</th>
+                            </tr>
+                            <tr>
+                                <th colspan="3">Units are warranted with 6 months for labor if the same trouble occurs.</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </t>
         </template>

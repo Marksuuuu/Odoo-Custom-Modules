@@ -1,24 +1,54 @@
-from odoo import models, fields, api, _
+from datetime import date, datetime
+import hashlib
+import re
+import smtplib
+from datetime import datetime, timedelta
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+from odoo import fields, models, api, _
+from odoo.exceptions import UserError
+from odoo.tools import formataddr
+import json
+import random
+
 import logging
 
 _logger = logging.getLogger(__name__)
 
+
 class DexServiceRequestForm(models.Model):
-    _name = 'dex.service.request.form'
+    _name = 'dex_service.request.form'
     _description = 'Dex Service Request Form'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
-    # _description = 'Dex Service Request Form'
-    
-    name = fields.Char(string='Control No.', copy=False, readonly=True, index=True,
-                       default=lambda self: _('New'), tracking=True)
+    name = fields.Char(
+        string='Control No.',
+        copy=False,
+        readonly=True,
+        index=True,
+        default=lambda self: _('New'),
+        tracking=True
+    )
 
-    dex_service_request_form_line_ids = fields.One2many('dex.service.request.form.line', 'dex_service_request_form_id')
-    
+    status = fields.Selection(
+        [('draft', 'Draft'), ('submitted', 'Submitted'), ('created', 'Created')], default='draft',
+        string='Type')
+
+    dex_service_request_form_line_ids = fields.One2many(
+        'dex_service.request.form.line',
+        'dex_service_request_form_id'
+    )
+
     sales_coordinator = fields.Many2one('hr.employee', string='Sales Coordinator')
 
-    partner_id = fields.Many2one('res.partner', domain=[('type', '=', 'invoice'), ('customer_rank', '>', 1)], required=True)
+    partner_id = fields.Many2one(
+        'res.partner',
+        domain=[('type', '=', 'invoice'), ('customer_rank', '>', 1)],
+        required=False,
+        store=True
+    )
 
     street = fields.Char(related='partner_id.street')
     street2 = fields.Char(related='partner_id.street2')
@@ -28,65 +58,377 @@ class DexServiceRequestForm(models.Model):
     country_id = fields.Many2one(related='partner_id.country_id')
     user_id = fields.Many2one(related='partner_id.user_id')
     type = fields.Selection(related='partner_id.type')
-    service_type = fields.Many2one('service.type', string='Service Type')
-    
+    service_type = fields.Many2one('dex_service.service.type', string='Service Type')
+
     what_type = fields.Selection(
-        [('by_invoice', 'By Invoice'), ('by_warranty', 'By Warranty'), ('by_edp_code', 'By EDP-Code'),('by_edp_code_not_existing', 'By EDP-Code (Not Existing)')], default=False,
-        string='Type')
-    
-    brand_units = fields.Many2one('uom.uom',string='Unit of Measure')
+        [('by_invoice', 'By Invoice'), ('by_warranty', 'By Warranty'),
+         ('by_edp_code', 'By EDP-Code'),
+         ('by_edp_code_not_existing', 'By EDP-Code (Not Existing)')],
+        default=False,
+        string='Type'
+    )
+
+    brand_units = fields.Many2one('uom.uom', string='Brand Units')
     number_of_units = fields.Integer(string='Number of Units')
-    sale_order_no = fields.Many2one('sale.order',string='Sale Order')
+    sale_order_no = fields.Many2one('sale.order', string='Sale Order')
     date_of_purchase = fields.Datetime(string='Date of Purchase')
-    
+
     is_created = fields.Boolean(default=False)
+
+    thread_id = fields.Many2one('dex_service.service.line.thread', string='Thread Id', domain=[('status', '!=', 'close')])
+
+    requesters_id = fields.Many2one(
+        'hr.employee',
+        string='Requesters',
+        required=False,
+        default=lambda self: self.env.user.employee_id.id,
+        copy=False
+    )
+
+    department_id = fields.Many2one(related='requesters_id.department_id', string='Department')
+
+    is_service_tech = fields.Boolean(default=False)
+
+    date_called_by_client = fields.Datetime(string='Date Called by Client')
+    trouble_reported = fields.Char(string='Trouble Reported')
+
+    def get_emails_by_department(self):
+        department_name = 'Service Dept.'
+        department = self.env['hr.department'].sudo().search([('name', '=', department_name)], limit=1)
     
+        if department:
+            employees = self.env['hr.employee'].sudo().search([('department_id', '=', department.id)])
     
+            employee_emails = [employee.work_email for employee in employees if employee.work_email]
+    
+            return employee_emails
+        else:
+            return f"No department found with name {department_name}"
+
+    def main_connection(self):
+        sender = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.sender')
+        host = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.host')
+        port = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.port')
+        username = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.username')
+        password = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.password')
+
+        credentials = {
+            'sender': sender,
+            'host': host,
+            'port': port,
+            'username': username,
+            'password': password
+        }
+        return credentials
+
+    def notify_to_all(self, recipient_list, font_awesome):
+        conn = self.main_connection()
+        sender = "Do not reply. This email is autogenerated."
+        host = conn['host']
+        port = conn['port']
+        username = conn['username']
+        password = conn['password']
+
+        # Prepare the email message 
+        msg = MIMEMultipart()
+        msg['From'] = formataddr(('Odoo Mailer', sender))
+        msg['To'] = ', '.join(recipient_list)
+        msg['Subject'] = f'This Request with serial number of "[{self.name}]" have Created'
+
+        # HTML content
+        html_content = """
+            <!DOCTYPE html>
+            <html lang="en">
+              <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>Responsive Services Section</title>
+                <!-- Font Awesome CDN -->
+                <link
+                  rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+                />
+                <!-- Google Font -->
+                <link
+                  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+                  rel="stylesheet"
+                />
+                <!-- Stylesheet -->
+                <style>
+                  * {
+                    padding: 0;
+                    margin: 0;
+                    box-sizing: border-box;
+                    font-family: "Poppins", sans-serif;
+                  }
+                  section {
+                    height: 100vh;
+                    width: 100%;
+                    display: grid;
+                    place-items: center;
+                  }
+                  .container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 1em;
+                    padding: 1em;
+                    max-width: 1200px;
+                    width: 100%;
+                  }
+                  .card {
+                    flex: 1 1 100%;
+                    max-width: 100%;
+                    padding: 2em 1.5em;
+                    background: linear-gradient(#ffffff 50%, #2c7bfe 50%);
+                    background-size: 100% 200%;
+                    background-position: 0 2.5%;
+                    border-radius: 5px;
+                    box-shadow: 0 0 35px rgba(0, 0, 0, 0.12);
+                    cursor: pointer;
+                    transition: 0.5s;
+                  }
+                  h3 {
+                    font-size: 20px;
+                    font-weight: 600;
+                    color: #1f194c;
+                    margin: 1em 0;
+                  }
+                  p {
+                    color: #575a7b;
+                    font-size: 15px;
+                    line-height: 1.6;
+                    letter-spacing: 0.03em;
+                  }
+                  .icon-wrapper {
+                    background-color: #2c7bfe;
+                    position: relative;
+                    margin: auto;
+                    font-size: 30px;
+                    height: 2.5em;
+                    width: 2.5em;
+                    color: #ffffff;
+                    border-radius: 50%;
+                    display: grid;
+                    place-items: center;
+                    transition: 0.5s;
+                  }
+                  .card:hover {
+                    background-position: 0 100%;
+                  }
+                  .card:hover .icon-wrapper {
+                    background-color: #ffffff;
+                    color: #2c7bfe;
+                  }
+                  .card:hover h3 {
+                    color: #ffffff;
+                  }
+                  .card:hover p {
+                    color: #f0f0f0;
+                  }
+                  table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 1em;
+                  }
+                  th, td {
+                    padding: 0.75em;
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                  }
+                  th {
+                    background-color: #f4f4f4;
+                  }
+                  tr:nth-child(even) {
+                    background-color: #f9f9f9;
+                  }
+                  /* @media screen and (min-width: 768px) {
+                    .card {
+                      flex: 0 0 50%;
+                    }
+                  }
+                  @media screen and (min-width: 992px) {
+                    .card {
+                      flex: 0 0 33.33%;
+                    }
+                  } */
+                </style>
+              </head>"""
+        html_content += f"""
+              <body>
+                <section>
+                  <div class="container">
+                    <div class="card">
+                      <div class="icon-wrapper">
+                        <i class="{font_awesome}"></i>
+                      </div>
+                      <h3>Service Control Number: {'[' + self.name + ']' if self.name else ''}</h3>
+                      <h3>Created by: {'[' + self.requesters_id.name + ']' if self.requesters_id else ''}</h3>
+                      <h3>Trouble Reported: {'[' + self.trouble_reported + ']' if self.trouble_reported else ''}</h3>
+                      <h3>Date Called: {'[' + str(self.date_called_by_client) + ']' if self.date_called_by_client else ''}</h3>
+                    <table>
+                        <thead>
+                          <tr>
+                            <th>Edp Code</th>
+                            <th>Description</th>
+                          </tr>
+                        </thead>
+                        <tbody>"""
+        for rec in self.dex_service_request_form_line_ids:
+            html_content += f"""
+                        <tr>
+                            <td>{rec.edp_code.name if rec.edp_code else ''}</td>
+                            <td>{rec.description if rec.description else ''}</td>
+                        </tr>
+                            """
+
+        html_content += """
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </section>
+              </body>
+            </html>
+        """
+        msg.attach(MIMEText(html_content, 'html'))
+
+        try:
+            smtpObj = smtplib.SMTP(host, port)
+            smtpObj.login(username, password)
+            smtpObj.sendmail(sender, recipient_list, msg.as_string())
+            smtpObj.quit()
+
+            msg = "Successfully sent email"
+            notification = {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Success'),
+                    'type': 'success',
+                    'message': msg,
+                    'sticky': False,
+                }
+            }
+            return notification
+        except Exception as e:
+            msg = f"Error: Unable to send email: {str(e)}"
+            notification = {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Error'),
+                    'type': 'error',
+                    'message': msg,
+                    'sticky': False,
+                }
+            }
+
+            return notification
+
+    def submit(self):
+        self.status = 'submitted'
+        font_awesome = "fa fa-bell"
+        # email = self.get_emails_by_department()
+        email = 'john.llavanes@dexterton.loc'
+        self.notify_to_all(email, font_awesome)
+
+    @api.onchange('requesters_id')
+    def onchange_requesters_id(self):
+        if self.requesters_id:
+            job_name = self.requesters_id.job_id.sudo().name
+            self.is_service_tech = job_name == 'Service Technician'
+
+    @api.onchange('thread_id')
+    def onchange_thread_id(self):
+        if self.thread_id and self.thread_id.client_name:
+            self.partner_id = self.thread_id.client_name.id
+            prod_name = self.thread_id.item_description
+            _logger.info('prod_template1 {}'.format(prod_name))
+
+            prod_template = self.env['product.template'].search([('name', '=', prod_name)])
+            if prod_template:
+                _logger.info('prod_template {}'.format(prod_template.name))
+                _logger.info('prod_template {}'.format(prod_template.id))
+                self.dex_service_request_form_line_ids = [(5, 0, 0)]
+
+                vals_list = []
+                for line_id in self.thread_id:
+                    vals = {
+                        'edp_code': prod_template.id,
+                    }
+                    vals_list.append((0, 0, vals))
+                self.dex_service_request_form_line_ids = vals_list
+            else:
+                _logger.warning('Product template not found for name: {}'.format(prod_name))
+
     @api.model
     def create(self, vals):
         if vals.get('name', '/') == '/':
             vals['name'] = self.env['ir.sequence'].next_by_code('dex.service.form.sequence.sfs') or '/'
-        
         return super(DexServiceRequestForm, self).create(vals)
-        
+
     @api.model
     def find_or_create_record(self, search_criteria, default_values):
         existing_records = self.env['service'].search(search_criteria)
-    
+        service_line_ids = default_values.pop('service_line_ids', [])
+        search_existing_records_thread = False
+        if self.thread_id:
+            search_existing_records_thread = self.env['dex_service.service.line.thread'].search([
+                ('id', '=', self.thread_id.id)
+            ])
+
+        for line in service_line_ids:
+            if not (isinstance(line, tuple) and len(line) == 3):
+                _logger.error('Unexpected line format: {}'.format(line))
+                continue
+
+            operation_type, _, line_data = line
+            if isinstance(line_data, dict):
+                filtered_line = {
+                    'client_name': line_data.get('client_name'),
+                    'item_description': line_data.get('item_description'),
+                    'edp_code': line_data.get('edp_code'),
+                    'requested_by': line_data.get('requested_by'),
+                    'trouble_reported': line_data.get('trouble_reported'),
+                    'brand_id': line_data.get('brand_id'),
+                }
+
+                if search_existing_records_thread:
+                    try:
+                        search_existing_records_thread.write(filtered_line)
+                        _logger.debug('Updated thread: {}'.format(search_existing_records_thread))
+                    except Exception as e:
+                        _logger.error('Failed to write to thread: {}'.format(e))
+                        
         if existing_records:
             for record in existing_records:
                 record.write(default_values)
             records = existing_records
+            for line in service_line_ids:
+                operation_type, _, line_data = line
+                filtered_line = {
+                    'client_name': line_data.get('client_name'),
+                    'item_description': line_data.get('item_description'),
+                    'requested_by': line_data.get('requested_by'),
+                    'service_id': existing_records.id,
+                    'edp_code': line_data.get('edp_code'),
+                    'brand_id': line_data.get('brand_id'),
+                }
+                records.service_line_ids.create(filtered_line)
         else:
             record = self.env['service'].create(default_values)
             records = self.env['service'].browse(record.id)
-        service_line_ids = default_values.pop('service_line_ids', [])
-        if service_line_ids:
             for line in service_line_ids:
-                if isinstance(line, dict):
-                    filtered_line = {
-                        'edp_code': line.get('edp_code'),
-                        'description': line.get('description'),
-                    }
-                    if isinstance(records, self.env['service']):
-                        records = self.env['service'].browse(records.ids)
-                    for record in records:
-                        self.env['service.line'].create({
-                            'service_id': record.id,
-                            **filtered_line
-                        })
-        
-        notification = {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _('Success'),
-                'type': 'success',
-                'message': 'Created Successfully',
-                'sticky': False,
-            }
-         }
-        return notification
+                operation_type, _, line_data = line
+                filtered_line = {
+                    'client_name': line_data.get('client_name'),
+                    'item_description': line_data.get('item_description'),
+                    'requested_by': line_data.get('requested_by'),
+                    'service_id': records.id,
+                    'edp_code': line_data.get('edp_code'),
+                    'brand_id': line_data.get('brand_id'),
+
+                }
+                records.service_line_ids.create(filtered_line)
 
 
     def action_find_or_create(self):
@@ -96,28 +438,37 @@ class DexServiceRequestForm(models.Model):
         default_values = {
             'partner_id': self.partner_id.id,
             'service_line_ids': [(0, 0, {
+                'call_date': self.date_called_by_client,
                 'client_name': self.partner_id.id,
-                # 'edp_code': line.edp_code.id if line.edp_code else False,
+                'requested_by': self.requesters_id.name,
                 'item_description': line.description,
+                'edp_code': line.edp_code.id,
+                'brand_id': line.brand_id.id,
+                'trouble_reported': self.trouble_reported,
             }) for line in service_line_ids]
         }
-        self.write({'is_created': True})
+        self.is_created = True
+        self.status = 'created'
         return self.find_or_create_record(search_criteria, default_values)
 
-        
-    
+
 class DexServiceRequestFormLine(models.Model):
-    _name = 'dex.service.request.form.line'
-    # _description = 'Dex Service Request Form Line'
-    
-    dex_service_request_form_id = fields.Many2one('dex.service.request.form', string='Service Request Form')
-    
-    edp_code = fields.Many2one('product.template',string='EDP-Code', domain=[('default_code', '!=', False)])
-    
+    _name = 'dex_service.request.form.line'
+    _description = 'Dex Service Request Form Line'
+
+    dex_service_request_form_id = fields.Many2one(
+        'dex_service.request.form',
+        string='Service Request Form'
+    )
+
+    edp_code = fields.Many2one(
+        'product.template',
+        string='EDP-Code',
+        domain=[('default_code', '!=', False)]
+    )
+
     description = fields.Char(related='edp_code.name')
     
-
-    
-    
+    brand_id = fields.Many2one(related='edp_code.brand_id')
     
     

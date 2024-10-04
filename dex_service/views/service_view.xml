@@ -28,7 +28,7 @@
                             </button>
 
                         </div>
-                        <div class="oe_title">
+                        <div class="oe_title" invisible='1'>
                             <label for="name" string="Control No." class="oe_edit_only"/>
                             <h1>
                                 <field name="name" invisible="1"/>
@@ -41,10 +41,10 @@
                         </group>
                         <group>
                             <group>
-                                <field name="partner_id" force_save="1" readonly="1"/>
+                                <field name="partner_id" force_save="1" readonly="1" options="{'no_create': 0}"/>
                             </group>
                             <group>
-                                <field name="requesters_id" readonly="1"/>                                
+                                <field name="requesters_id" readonly="1" options="{'no_create': 0}"/>                                
                                 <field name="transfer_to_partner_id" force_save="1" attrs="{'invisible': [('is_tranfered', '=', False)]}"/>
                             </group>
                             <group>
@@ -93,7 +93,7 @@
 
                             <group>
                                 <!--<field name='daily_sales_report_date'/>-->
-                                <field name='sales_coordinator' attrs="{'readonly': [('block_reason', '!=', False)]}"/>
+                                <field name='user_id' string="Sales Coordinator" attrs="{'readonly': [('block_reason', '!=', False)]}"/>
                                 <field name='transfer_reason' readonly="1" attrs="{'invisible': [('is_tranfered', '=', False)]}"/>
                             </group>
                         </group>
@@ -107,53 +107,71 @@
                                    </div>
                                    <br/>
                                    <field name="service_line_ids"  attrs="{'readonly': [('block_reason', '!=', False)]}">
-                                    <tree editable="bottom" create="0" decoration-success="status in ['done','open']"
+                                    <tree create="0" decoration-success="status in ['done','open']"
                                           decoration-primary="status == 'confirm'" decoration-danger="status in ['cancelled','close']" decoration-warning="status in ['pending','waiting']" >
                                         <button icon='fa-exclamation-triangle' class="bg-danger oe_link" attrs="{'invisible': [('is_inputs_complete', '!=', False)]}" help='this sign is for checking if you have (complaints,tentative date, pending_reason)'/>
                                         <!--<button icon='fa-check-square' class="bg-success oe_link" attrs="{'invisible': [('is_inputs_complete', '!=', True)]}"/>-->
                                         <field name="status" widget='selection' string='Status'/>
                                         <field name="is_inputs_complete" invisible="1"/>                                        
                                         <field name="checking_status" invisible="1"/>                                        
-                                        <field name="requested_by"/>
-                                        <field name="client_name" string='Contact Person'/>
-                                        <field name="service_type"/>
+                                        <field name="requested_by" options="{'no_create': 0}"/>
+                                        <field name="client_name" string='Contact Person' options="{'no_create': 0}"/>
+                                        <field name="service_type" options="{'no_create': 0}"/>
                                         <field name="item_description"/>
-                                        <field name="tentative_schedule_date"/>
-                                        <field name="invoice_id"/>
-                                        <field name="purchase_date"/>
-                                        <field name="complaints"/>
-                                        <field name="with_warranty"/>
-                                        <field name="warranty_number"/>
                                         <field name="serial_number"/>
-                                        <field name="pending_reason" attrs="{'invisible': [('status', '!=', 'pending')], 'required': [('status', '=', 'pending')]}"/>                                        
-                                        <field name="complaints" optional="hidden"/>
-                                        <field name="feedback_count" optional="hidden"/>
-                                        <field name="street" optional="hidden"/>
-                                        <field name="street2" optional="hidden"/>
-                                        <field name="city" optional="hidden"/>
-                                        <field name="state_id" optional="hidden"/>
-                                        <field name="zip" optional="hidden"/>
-                                        <field name="country_id" optional="hidden"/>
-                                        <field name="user_id" optional="hidden"/>
-                                        <field name="call_date" optional="hidden"/>
-                                        <field name="phone_number" optional="hidden"/>
-                                        <field name="look_for" optional="hidden"/>
-                                        <field name="pending_date" invisible="1"/>
-                                        <field name="done_date" invisible="1"/>
-                                        <field name="total_duration" optional="hidden" readonly="1" widget="float_time"/>
-                                        <field name="actual_duration" optional="hidden" readonly="1" widget="float_time"/>
-                                        <field name="charge" optional="hidden"/>
-                                        <field name="free_of_charge"/>
-                                        <field name="other_instructions" optional="hidden"/>
-                                        <field name="count_field" invisible="1"/> <!-- The field you want to use -->
-                                        <field name="requesters_id" invisible="1"/> <!-- The field you want to use -->
+                                        
                                         <!-- Add the custom widget directly here -->
-                                        <button name='print_service_request_form' class="fa fa-print btn-outline-info" type="object"  attrs="{'invisible': [('is_inputs_complete', '!=', True)]}"/>                                                                
                                         <button name="create_thread" type="object"
-                                                class="fa fa-pencil-square-o btn-outline-dark" attrs="{'invisible': [('status', '!=', 'pending')]}" help='Creating Thread'/>
+                                                class="fa fa-pencil-square-o btn-outline-dark" help='Creating Thread'/>
                                         <!--<button name="assign_workers" type="object" class="fa fa-user-plus btn-outline-success" attrs="{'invisible': [('status', '!=', 'pending')]}" help='Assign Workers / Technician'/>                                        -->
-                                        <button name="show_thread" type="object" class="fa fa-list-ol btn-outline-dark" attrs="{'invisible': [('status', '!=', 'pending')]}" help='Show All Thread / List'/>
+                                        <button name="show_thread" type="object" class="fa fa-list-ol btn-outline-dark" help='Show All Thread / List'/>
                                     </tree>
+                                    <form string="Service Record">
+                                        <sheet>
+                                            <group>
+                                                <field name="status" widget='selection' string='Status'/>
+                                                <field name="is_inputs_complete" invisible="1"/>
+                                                <field name="checking_status" invisible="1"/>
+                                                <field name="requested_by" options="{'no_create': 0}"/>
+                                                <field name="client_name" string='Contact Person' options="{'no_create': 0}"/>
+                                                <field name="service_type" options="{'no_create': 0}"/>
+                                                <field name="item_description"/>
+                                                <field name="tentative_schedule_date"/>
+                                                <!--<field name="invoice_number"/>-->
+                                                <field name="purchase_date"/>
+                                                <field name="complaints"/>
+                                                <field name="with_warranty"/>
+                                                <field name="warranty_number"/>
+                                                <field name="serial_number"/>
+                                                <field name="pending_reason" attrs="{'invisible': [('status', '!=', 'pending')], 'required': [('status', '=', 'pending')]}"/>
+                                            </group>
+                                            <group string="Additional Information" colspan="2">
+                                                <!--<field name="feedback_count" optional="hidden"/>-->
+                                                <field name="street" optional="hidden"/>
+                                                <field name="street2" optional="hidden"/>
+                                                <field name="city" optional="hidden"/>
+                                                <field name="state_id" optional="hidden"/>
+                                                <field name="zip" optional="hidden"/>
+                                                <field name="country_id" optional="hidden"/>
+                                                <field name="phone_number" optional="hidden"/>
+                                                <field name="look_for" optional="hidden"/>
+                                                <field name="call_date" optional="hidden"/>
+                                                <field name="pending_date"/>
+                                                <field name="done_date"/>
+                                            </group>
+                                            <group string="Duration &amp; Charges">
+                                                <field name="total_duration" widget="float_time" readonly="1"/>
+                                                <field name="actual_duration" widget="float_time" readonly="1"/>
+                                                <field name="charge"/>
+                                                <field name="free_of_charge"/>
+                                            </group>
+                                            <group>
+                                                <field name="other_instructions"/>
+                                                <field name="count_field" invisible="1"/>
+                                                <field name="requesters_id" invisible="1"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
                                 </field>
                             </page>
                         </notebook>

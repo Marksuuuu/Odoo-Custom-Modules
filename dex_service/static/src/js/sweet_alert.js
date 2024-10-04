@@ -15,7 +15,7 @@ odoo.define('dex_service.sweet_alert', function (require) {
         _performServerOperation: function () {
             var self = this;
             rpc.query({
-                model: 'dex.service.request.form',
+                model: 'dex_service.request.form',
                 method: 'find_or_create_record',
                 args: []
             }).then(function (result) {

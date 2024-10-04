@@ -28,7 +28,7 @@
         <record id="service_type_action_id" model="ir.actions.act_window">
             <field name="name">Service Type</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">service.type</field>
+            <field name="res_model">dex_service.service.type</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
@@ -40,7 +40,7 @@
         <record id="service_line_thread_action_id" model="ir.actions.act_window">
             <field name="name">Service Line Thread</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">service.line.thread</field>
+            <field name="res_model">dex_service.service.line.thread</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
@@ -64,7 +64,7 @@
         <record id="not_existing_product_action_id" model="ir.actions.act_window">
             <field name="name">Not Existing Product</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">not.existing.product</field>
+            <field name="res_model">dex_service.no.prod.exist</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
@@ -76,7 +76,7 @@
         <record id="service_request_action_id" model="ir.actions.act_window">
             <field name="name">Service Request</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">not.existing.product</field>
+            <field name="res_model">dex_service.no.prod.exist</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
             <field name="help" type="html">
@@ -89,7 +89,7 @@
         <record id="dex_service_request_form_action_id" model="ir.actions.act_window">
             <field name="name">Service Request Form</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">dex.service.request.form</field>
+            <field name="res_model">dex_service.request.form</field>
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
             <field name="help" type="html">
@@ -102,8 +102,8 @@
         <record id="assign_request_dex_service_action" model="ir.actions.act_window">
             <field name="name">Service Schedule</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">assign.request</field>
-            <field name="view_mode">calendar,tree,form</field>
+            <field name="res_model">dex_service.assign.request</field>
+            <field name="view_mode">tree,form</field> <!-- Calendar -->
             <field name="target">current</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
@@ -136,7 +136,7 @@
         <menuitem id="dex_service_menu_root_id" name="Dex Service" sequence="10"/>
 
         <menuitem id="dex_service_configuration_root_id" parent="dex_service.dex_service_menu_root_id"
-                  name="Configuration" sequence="4"/>
+                  name="Configuration" sequence="4" groups='dex_service.group_dex_service_admin'/>
         
         
         <!-- MENU ITEMS -->
@@ -179,7 +179,7 @@
         
         <menuitem id="itinerary_configuration_menu_action_id" name="Itinerary Configuration"
                   parent="dex_service.dex_service_configuration_root_id"
-                  sequence="3" action="itinerary_configuration_dex_service_action" groups='dex_service.group_dex_service_admin'/>
+                  sequence="3" action="itinerary_configuration_dex_service_action"/>
 
         <menuitem id="not_existing_product_menu_action_id" name="Not Existing Product"
                   parent="dex_service.dex_service_configuration_root_id"

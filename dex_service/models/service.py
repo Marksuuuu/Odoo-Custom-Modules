@@ -46,7 +46,7 @@ class Service(models.Model):
     country_id = fields.Many2one(related='partner_id.country_id')
     user_id = fields.Many2one(related='partner_id.user_id')
     type = fields.Selection(related='partner_id.type')
-    service_type = fields.Many2one('service.type', string='Service Type')
+    service_type = fields.Many2one('dex_service.service.type', string='Service Type')
     
     transfer_to_partner_id = fields.Many2one('res.partner', domain=[('type', '=', 'invoice'), ('customer_rank', '>', 1)])
     transfer_to_street = fields.Char(related='transfer_to_partner_id.street')
@@ -99,7 +99,7 @@ class Service(models.Model):
         action = {
             'name': 'Client Search',
             'type': 'ir.actions.act_window',
-            'res_model': 'client.search',
+            'res_model': 'dex_service.client.search',
             'view_mode': 'form',
             'target': 'new',
             'domain': [],
@@ -151,7 +151,7 @@ class Service(models.Model):
         action = {
             'name': 'Block Client?',
             'type': 'ir.actions.act_window',
-            'res_model': 'block.reason',
+            'res_model': 'dex_service.block.reason',
             'view_mode': 'form',
             'target': 'new',
             'domain': [],
@@ -170,7 +170,7 @@ class Service(models.Model):
         action = {
             'name': f'Create Ticket {type}',
             'type': 'ir.actions.act_window',
-            'res_model': 'create.ticket.by',
+            'res_model': 'dex_service.create.ticket.by',
             'view_mode': 'form',
             'target': 'new',
             'domain': [],
@@ -188,7 +188,7 @@ class Service(models.Model):
         action = {
             'name': 'Transfer Client',
             'type': 'ir.actions.act_window',
-            'res_model': 'transfer.to',
+            'res_model': 'dex_service.transfer.to',
             'view_mode': 'form',
             'target': 'new',
             'domain': [],
@@ -224,7 +224,7 @@ class ServiceLine(models.Model):
     item_description = fields.Char(string='Item Description')
     client_name = fields.Many2one('res.partner', domain=[('type', '=', 'invoice'), ('customer_rank', '>', 1)], store=True)
 
-    service_type = fields.Many2one('service.type', string='Service Type', store=True)
+    service_type = fields.Many2one('dex_service.service.type', string='Service Type', store=True)
     complaints = fields.Char(string='Complaints')
     feedback_count = fields.Integer(string='Feedback Count')
 
@@ -239,6 +239,11 @@ class ServiceLine(models.Model):
     call_date = fields.Datetime(string='Call Date')
     requested_by = fields.Char(string='Requested by')
     phone_number = fields.Integer(string='Phone #')
+    edp_code = fields.Many2one(
+        'product.template',
+        string='EDP-Code',
+        domain=[('default_code', '!=', False)]
+    )
     look_for = fields.Char(string='Look For')
     charge = fields.Float(string='Charge')
     free_of_charge = fields.Boolean(string='Free of Charge?')
@@ -272,6 +277,16 @@ class ServiceLine(models.Model):
     actual_duration = fields.Float(string="Actual Duration (hours)", compute='_compute_actual_duration', store=False)
     
     is_inputs_complete = fields.Boolean(default=False, compute='_compute_check_if_complete')
+    
+    invoice_number = fields.Char(string='Invoice Number')
+    
+    trouble_reported = fields.Char(string='Trouble Reported')
+    
+    brand_id = fields.Many2one('dex_brand_series.brand')
+
+    
+
+    
 
     
     @api.depends('tentative_schedule_date', 'complaints', 'phone_number')
@@ -279,8 +294,7 @@ class ServiceLine(models.Model):
         for record in self:
             record.is_inputs_complete = bool(record.tentative_schedule_date or record.complaints or record.phone_number)
             
-    def print_service_request_form(self):
-        return self.env.ref('dex_service.service_request_form_report_id').report_action(self)
+
 
     @api.model
     def write(self, vals):
@@ -330,7 +344,7 @@ class ServiceLine(models.Model):
         return super(ServiceLine, self).create(vals)
     
     def check_count_of_report_print_count(self):
-        search_for_assign_request = self.env['assign.request'].search([('service_id', '=', self.id)])
+        search_for_assign_request = self.env['dex_service.assign.request'].search([('service_id', '=', self.id)])
         # total_count = 0  
         # for rec in self:
         #     total_count += rec.report_print_count  
@@ -344,7 +358,7 @@ class ServiceLine(models.Model):
             action = {
                 'name': 'Assign Workers',
                 'type': 'ir.actions.act_window',
-                'res_model': 'assign.request',
+                'res_model': 'dex_service.assign.request',
                 'view_mode': 'tree,form',
                 # 'view_id': view_id,
                 'target': 'current',
@@ -369,7 +383,7 @@ class ServiceLine(models.Model):
             action = {
                 'name': 'Create Thread',
                 'type': 'ir.actions.act_window',
-                'res_model': 'service.line.thread',
+                'res_model': 'dex_service.service.line.thread',
                 'view_mode': 'tree,form',
                 'target': 'current',
                 'domain': [('service_line_main_ids', '=', record_id)],
@@ -391,7 +405,7 @@ class ServiceLine(models.Model):
             action = {
                 'name': 'Create Thread',
                 'type': 'ir.actions.act_window',
-                'res_model': 'create.thread.wizard',
+                'res_model': 'dex_service.create.thread.wizard',
                 # 'views': [(view_id, 'form')],
                 'view_mode': 'form',
                 'target': 'new',
@@ -404,11 +418,11 @@ class ServiceLine(models.Model):
                     'default_item_description': self.item_description,
                     'default_service_type': self.service_type.id,
                     'default_call_date': self.call_date,
-                    'default_look_for': self.look_for
-
-
-
-
+                    'default_look_for': self.look_for,
+                    'default_invoice_number': self.invoice_number,
+                    'default_warranty_number': self.warranty_number.id,
+                    'default_serial_number': self.serial_number,
+                    'default_pending_reason': self.pending_reason,
                 }
             }
             return action

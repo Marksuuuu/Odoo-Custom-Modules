@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='sales_person']" position='after'>
-                    <group name='Other Info (Service)' readonly='1'>
+                    <group string='Other Info (Service)' readonly='1'>
                         <field name='what_type'/>
                         <field name='service_ids'/>
                     </group>

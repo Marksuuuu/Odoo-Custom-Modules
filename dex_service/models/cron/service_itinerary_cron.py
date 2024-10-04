@@ -22,12 +22,12 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class ServiceItineraryCron(models.Model):
-    _inherit = 'assign.request'
+    _inherit = 'dex_service.assign.request'
     
     @api.model
     def _get_all_email(self):
         email_configs = self.env['itinerary.configuration'].search([])
-        assign_requests = self.env['assign.request'].search([])
+        assign_requests = self.env['dex_service.assign.request'].search([])
         email_list = []
         request_list = []
     
