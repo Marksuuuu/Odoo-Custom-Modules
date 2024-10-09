@@ -10,7 +10,7 @@ from email import encoders
 import openpyxl
 from openpyxl.chart import BarChart, Reference
 from io import BytesIO
-
+from datetime import datetime
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 from odoo.tools import formataddr
@@ -21,39 +21,39 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+
 class ServiceItineraryCron(models.Model):
     _inherit = 'dex_service.assign.request'
-    
+
     @api.model
     def _get_all_email(self):
         email_configs = self.env['itinerary.configuration'].search([])
         assign_requests = self.env['dex_service.assign.request'].search([])
         email_list = []
         request_list = []
-    
+
         for rec in email_configs:
             selected_data = dict(rec._fields['email_groups'].selection).get(rec.email_groups, '')
-    
+
             if selected_data != 'Specific Email':
                 email_list.append(rec.email_groups)
             elif selected_data == 'Specific Email':
                 email_list.append(rec.specific_email)
-    
+
         # Collect emails from assign_requests
         for request in assign_requests:
             request_list.append(request)
         self.notify_to_all(email_list, assign_requests)
-    
+
         return email_list
 
-    
     def main_connection(self):
         sender = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.sender')
         host = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.host')
         port = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.port')
         username = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.username')
         password = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.password')
-    
+
         credentials = {
             'sender': sender,
             'host': host,
@@ -62,7 +62,18 @@ class ServiceItineraryCron(models.Model):
             'password': password
         }
         return credentials
-    
+
+    @api.model
+    def collect_related_data(self, assign_request):
+        title_list = []
+
+        for book in assign_request.technician:
+            title_list.append(book.name)
+
+        _logger.info("title_list {}".format(title_list))
+
+        return title_list
+
     def notify_to_all(self, recipient_list, assign_requests):
         _logger.info('assign_request {}'.format(assign_requests))
         conn = self.main_connection()
@@ -71,13 +82,15 @@ class ServiceItineraryCron(models.Model):
         port = conn['port']
         username = conn['username']
         password = conn['password']
-    
+
         # Prepare the email message
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(recipient_list)
         msg['Subject'] = 'Service Itinerary'
-    
+        now = datetime.now()
+        formatted_date = now.strftime("%B %d, %Y")
+        formatted_day = now.strftime("%A")
         # HTML content
         html_content = """
         <!DOCTYPE html>
@@ -111,8 +124,10 @@ class ServiceItineraryCron(models.Model):
                 }
             </style>
         </head>
-        <body>
-            <h2>Sample Table</h2>
+        <body>"""
+
+        html_content += """<h2>Service Itinerary</h2>
+            <h5>Service for Date: {} ({})</h5>
             <table>
                 <thead>
                     <tr>
@@ -126,116 +141,132 @@ class ServiceItineraryCron(models.Model):
                         <th>SERVICE TYPE</th>
                     </tr>
                 </thead>
-                <tbody>"""
-        
+                <tbody>""".format(formatted_date, formatted_day)
+
         # Loop through each assign_request
         for assign_request in assign_requests:
+            self.collect_related_data(assign_request)
+            # technician_name = assign_request.technician.name if assign_request.technician else 'N/A'
+
+            # Prepare items_list as needed (assuming technician names or other related fields)
+            # items_list = [technician_name]  # Or modify this to get the desired list
             for line_id, service_time, other_detail in zip(assign_request.assign_request_line_ids,
                                                            assign_request.assign_request_service_time_ids,
                                                            assign_request.assign_request_other_details_ids):
-                for technician in assign_request.technician:
-                    html_content += f"""
-                    <tr>
-                        <td>{technician.name}</td>
-                        <td>{line_id.partner_id.name}</td>
-                        <td>{other_detail.purchase_date or 'N/A'}</td>
-                        <td>{line_id.street + ' ' + line_id.city}</td>
-                        <td>{'YES' if other_detail.with_warranty else 'NO'}</td>
-                        <td>{'6969696969696'}</td>
-                        <td>{other_detail.remarks if other_detail.remarks else ''}</td>
-                        <td>{other_detail.service_type.name}</td>
-                    </tr>"""
-        
+                html_content += f"""
+                <tr>
+                    <td>{', '.join(self.collect_related_data(assign_request))}</td>
+                    <td>{line_id.partner_id.name}</td>
+                    <td>{other_detail.purchase_date or 'N/A'}</td>
+                    <td>{line_id.street + ' ' + line_id.city}</td>
+                    <td>{'YES' if other_detail.with_warranty else 'NO'}</td>
+                    <td>{service_time.service_cost}</td>
+                    <td>{other_detail.remarks if other_detail.remarks else ''}</td>
+                    <td>{other_detail.service_type.name}</td>
+                </tr>"""
+
+        total_service_cost = sum(st.service_cost for st in assign_requests.assign_request_service_time_ids)
+
+        html_content += f"""
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>TOTAL</td>
+                <td>{total_service_cost}</td>
+                <td></td>
+                <td></td>
+            </tr>"""
+
         # Close HTML content
         html_content += """
             </tbody>
         </table>
         </body>
         </html>"""
-        
+
         msg.attach(MIMEText(html_content, 'html'))
-        
+
         # Create XLSX file
         workbook = openpyxl.Workbook()
         sheet = workbook.active
         sheet.title = "Service Itinerary"
-        
+
         # Add headers
-        headers = ['SERV. BY', 'CUSTOMER NAME', 'DATE PURCHASE', 'AREA', 'WARRANTY', 'AMOUNT', 'REMARKS', 'SERVICE TYPE']
+        headers = ['SERV. BY', 'CUSTOMER NAME', 'DATE PURCHASE', 'AREA', 'WARRANTY', 'AMOUNT', 'REMARKS',
+                   'SERVICE TYPE']
         sheet.append(headers)
-        
+
         # Add data
         for assign_request in assign_requests:
             for line_id, service_time, other_detail in zip(assign_request.assign_request_line_ids,
                                                            assign_request.assign_request_service_time_ids,
                                                            assign_request.assign_request_other_details_ids):
-                for technician in assign_request.technician:
-                    
-                    sheet.append([
-                        technician.name,
-                        line_id.partner_id.name,
-                        other_detail.purchase_date or 'N/A',
-                        line_id.street + ' ' + line_id.city,
-                        'YES' if other_detail.with_warranty else 'NO',
-                        '6969696969696',
-                        other_detail.remarks,
-                        other_detail.service_type.name,
-                    ])
-        
+                sheet.append([
+                    ', '.join(self.collect_related_data(assign_request)),
+                    line_id.partner_id.name,
+                    other_detail.purchase_date or 'N/A',
+                    line_id.street + ' ' + line_id.city,
+                    'YES' if other_detail.with_warranty else 'NO',
+                    service_time.service_cost,
+                    other_detail.remarks,
+                    other_detail.service_type.name,
+                ])
+
         # Create a summary sheet for graphs
         summary_sheet = workbook.create_sheet(title="Summary")
-        
+
         # Gather data for chart
         request_counts = {}
         for assign_request in assign_requests:
             for line_id in assign_request.assign_request_line_ids:
-                for technician in assign_request.technician:
-                    partner_name = line_id.partner_id.name
-                    technician_name = technician.name
-                    key = f"{partner_name} - {technician_name}"
-                    if key not in request_counts:
-                        request_counts[key] = 0
-                    request_counts[key] += 1
-        
+                partner_name = line_id.partner_id.name
+                technician_name = ', '.join(self.collect_related_data(assign_request))
+                key = f"{partner_name} - {technician_name}"
+                if key not in request_counts:
+                    request_counts[key] = 0
+                request_counts[key] += 1
+
         # Write summary data
         summary_sheet.append(['Partner - Technician', 'Requests'])
         for key, count in request_counts.items():
             summary_sheet.append([key, count])
-        
+
         # Create a bar chart
         chart = BarChart()
         chart.title = "Requests per Partner and Technician"
         chart.x_axis.title = "Partner - Technician"
         chart.y_axis.title = "Number of Requests"
-        
+
         # Reference for data
         data = Reference(summary_sheet, min_col=2, min_row=1, max_row=len(request_counts) + 1, max_col=2)
         categories = Reference(summary_sheet, min_col=1, min_row=2, max_row=len(request_counts) + 1)
-        
+
         chart.add_data(data, titles_from_data=True)
         chart.set_categories(categories)
-        
+
         # Add the chart to the summary sheet
         summary_sheet.add_chart(chart, "E5")  # Position the chart at E5
-        
+
         # Save to BytesIO
         excel_stream = BytesIO()
         workbook.save(excel_stream)
         excel_stream.seek(0)
-        
+
         # Attach XLSX to the email
         xlsx_attachment = MIMEBase('application', 'octet-stream')
         xlsx_attachment.set_payload(excel_stream.read())
         encoders.encode_base64(xlsx_attachment)
         xlsx_attachment.add_header('Content-Disposition', 'attachment', filename='service_itinerary.xlsx')
         msg.attach(xlsx_attachment)
-        
+
         try:
             smtpObj = smtplib.SMTP(host, port)
             smtpObj.login(username, password)
             smtpObj.sendmail(sender, recipient_list, msg.as_string())
             smtpObj.quit()
-        
+
             msg = "Successfully sent email"
             _logger.info(msg)
         except Exception as e:

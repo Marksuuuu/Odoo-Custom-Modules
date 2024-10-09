@@ -83,18 +83,18 @@ class DexServiceAssignRequest(models.Model):
 
     def print_both(self):
         merger = PdfFileMerger()
-    
+
         # Generate the service report PDF
         service_report_pdf = self.env.ref('dex_service.service_odoo_report_id').render_qweb_pdf([self.id])[0]
         merger.append(io.BytesIO(service_report_pdf))
         _logger.info("First report appended.")
-    
+
         if self.assign_request_line_ids:
             for rec in self.assign_request_line_ids:
                 request_form_pdf = rec.service_id.print_service_request_form()
                 acknowledgment_form_pdf = rec.service_id.print_acknowledgment_form()
-    
-                if request_form_pdf and acknowledgment_form_pdf: 
+
+                if request_form_pdf and acknowledgment_form_pdf:
                     merger.append(io.BytesIO(request_form_pdf))
                     merger.append(io.BytesIO(acknowledgment_form_pdf))
                     _logger.info("Request form PDF appended for record: %s", rec.id)
@@ -105,11 +105,11 @@ class DexServiceAssignRequest(models.Model):
                         _logger.warning("Acknowledgment form PDF is empty or not generated for record: %s", rec.id)
         else:
             _logger.warning("No service request lines found.")
-    
+
         output = io.BytesIO()
         merger.write(output)
         merger.close()
-    
+
         output.seek(0)
         merged_pdf_reader = PdfFileReader(io.BytesIO(output.getvalue()))
         _logger.info("Merged PDF page count: %d", merged_pdf_reader.getNumPages())
@@ -120,7 +120,7 @@ class DexServiceAssignRequest(models.Model):
             'datas': base64.b64encode(output.read()).decode('utf-8'),
             'store_fname': 'combined_report.pdf',
         })
-    
+
         return {
             'type': 'ir.actions.act_url',
             'url': '/web/content/%s?download=true' % attachment.id,
@@ -239,10 +239,10 @@ class DexServiceAssignRequest(models.Model):
     # if records_to_unlink:
     #     records_to_unlink.unlink()
     #     _logger.info(f'Unlinked {len(records_to_unlink)} records because report_print_count was 0')
-    # 
+    #
     # for record in self:
     #     existing_records = self.search([('service_id', '=', record.service_id.id)])
-    #     
+    #
     #     if existing_records:
     #         for existing_record in existing_records:
     #             if existing_record.report_print_count > 0:
@@ -253,7 +253,7 @@ class DexServiceAssignRequest(models.Model):
     #                 report_actions.append(report_action)
     #     else:
     #         _logger.warning(f'No existing records found for service_id {record.service_id.id}')
-    # 
+    #
     # if len(report_actions) == 1:
     #     return report_actions[0]
     # elif len(report_actions) > 1:
@@ -297,7 +297,7 @@ class DexServiceAssignRequestLine(models.Model):
     country_id = fields.Many2one(related='partner_id.country_id')
     type = fields.Selection(related='partner_id.type')
     user_id = fields.Many2one(related='partner_id.user_id')
-    
+    brand_id = fields.Many2one('dex_brand_series.brand')
     look_for = fields.Char(string='Look For')
 
     def main_func(self):
@@ -354,6 +354,7 @@ class DexServiceAssignRequestServiceTime(models.Model):
 
 class DexServiceAssignRequestOtherDetails(models.Model):
     _name = 'dex_service.assign.request.other.details'
+    _order = 'id desc'
 
     assign_request_id = fields.Many2one('dex_service.assign.request')
     service_id = fields.Many2one('dex_service.service.line.thread', string='Thread')
@@ -370,8 +371,9 @@ class DexServiceAssignRequestOtherDetails(models.Model):
     call_date = fields.Datetime(string='Call Date')
     purchase_date = fields.Date(string='Purchase Date')
     with_warranty = fields.Boolean(default=False)
-    remarks = fields.Char(string='Remarks')
+    remarks = fields.Text(string='Remarks')
     service_type = fields.Many2one('dex_service.service.type', string='Service Type')
+    trouble_reported = fields.Char(string='Trouble Reported')
 
     def main_func(self):
         pass

@@ -18,7 +18,7 @@
                                 string="Accept (Create Service)" 
                                 class="oe_highlight" 
                                 type="object" 
-                                groups="dex_service.group_dex_service_admin" 
+                                groups="dex_service.group_dex_service_admin"
                                 attrs="{'invisible': ['|',('status', 'not in', ('submitted')), ('is_created', '==', True)]}"/>
 
                         <!--<button name='action_find_or_create' -->
@@ -61,6 +61,9 @@
                             <group>
                                 <field name="date_called_by_client" attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>
                                 <field name="trouble_reported" attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>
+                                <field name='remarks' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>
+                                <field name='time_in' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>
+                                <field name='time_out' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>       
                             </group>
                             <group>
                                 <field name='partner_id' 
@@ -119,7 +122,7 @@
                                 <field name='date_of_purchase' required='1' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_created', '==', True)]}"/>
                             </group>
                         </group>
-                        
+
                         <notebook>
                             <page name='dex_service_request_form_line_page_name' string='Other Details'>
                                 <field name='dex_service_request_form_line_ids' attrs="{'readonly': ['|', ('is_service_tech', '==', True),('is_created', '==', True)]}" force_save="1">
@@ -146,9 +149,9 @@
             <field name="name">dex_service_request_form_tree</field>
             <field name="model">dex_service.request.form</field>
             <field name="arch" type="xml">
-                <tree string="Service Requests"  decoration-success="status == 'created'" decoration-info="status == 'submitted'">
+                <tree string="Service Requests" decoration-success="status == 'created'" decoration-info="status == 'submitted'">
                     <field name='create_date'/>
-                    <field name='name'/>
+                    <field name='thread_id'/>
                     <field name='status' widget="badge" decoration-success="status == 'created'" decoration-info="status == 'submitted'"/>
                     <field name='requesters_id'/>
                     <field name='partner_id'/>

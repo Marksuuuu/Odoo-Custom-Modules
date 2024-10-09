@@ -41,9 +41,9 @@
                         <notebook>
                             <page name='assign_request_line_page_name' string='Service Details'>
                                 <field name='assign_request_line_ids'>
-                                    <tree editable='bottom'>
+                                    <tree>
                                         <field name='partner_id' string='Contact Person'/>
-                                        <field name='fee'/>                                        
+                                        <field name='fee'/>
                                         <field name="street" optional="hidden"/>
                                         <field name="street2" optional="hidden"/>
                                         <field name="city" optional="hidden"/>
@@ -53,14 +53,28 @@
                                         <field name="type"/>
                                         <field name="look_for"/>
                                     </tree>
+                                    <form>
+                                        <sheet>
+                                            <group string="Contact Information">
+                                                <field name='partner_id' string='Contact Person'/>
+                                                <field name='fee'/>
+                                            </group>
+                                            <group string="Address Details">
+                                                <field name="street"/>
+                                                <field name="city"/>
+                                                <field name="country_id"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
                                 </field>
                             </page>
+
                             <page name='assign_request_service_time_page_name' string='Service Time'>
                                 <field name='assign_request_service_time_ids'>
-                                    <tree editable='bottom' create='0'>
+                                    <tree create='0'>
                                         <field name="partner_id" string='Contact Person'/>
-                                        <field name='assign_request_line'/>                                        
-                                        <field name="job_request"/>
+                                        <!--<field name='assign_request_line'/>                                        -->
+                                        <!--<field name="job_request"/>-->
                                         <field name="free_of_charge"/>
                                         <field name="service_action"/>
                                         <field name="service_cost"/>
@@ -74,15 +88,41 @@
                                         <field name="or_no"/>
                                         <field name="payment_type"/>
                                     </tree>
+                                    <form>
+                                        <sheet>
+                                            <group string="Service Information">
+                                                <field name="partner_id" string='Contact Person'/>
+                                                <!--<field name='assign_request_line'/>-->
+                                                <!--<field name="job_request"/>-->
+                                            </group>
+                                            <group string="Service Costs">
+                                                <field name="service_cost"/>
+                                                <field name="parts_cost"/>
+                                                <field name="parts_cost_actual"/>
+                                            </group>
+                                            <group string="Time Details">
+                                                <field name="time_in"/>
+                                                <field name="time_out"/>
+                                            </group>
+                                            <group string="Payment Details">
+                                                <field name="dr_no"/>
+                                                <field name="or_no"/>
+                                                <field name="payment_type"/>
+                                                <field name="payment_remarks"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
                                 </field>
                             </page>
+
                             <page name='assign_request_other_details_page_name' string='Other Details'>
                                 <field name='assign_request_other_details_ids'>
-                                    <tree editable='bottom' create='0'>
+                                    <tree create='0'>
                                         <field name='partner_id' string='Contact Person'/>
-                                        <field name='assign_request_line'/>                                        
+                                        <!--<field name='assign_request_line'/>                                        -->
                                         <field name="item_description" readonly='1'/>
                                         <field name="parts_request"/>
+                                        <field name="trouble_reported"/>
                                         <field name="parts_feedback"/>
                                         <field name="purchase_date"/>
                                         <field name="requesters_id"/>
@@ -94,8 +134,32 @@
                                         <field name="remarks"/>
                                         <field name="service_type"/>
                                     </tree>
+                                    <form>
+                                        <sheet>
+                                            <group string="Request Details">
+                                                <field name='partner_id' string='Contact Person'/>
+                                                <!--<field name='assign_request_line'/>-->
+                                                <field name="item_description" readonly='1'/>
+                                                <field name="parts_request"/>
+                                            </group>
+                                            <group string="Trouble Report">
+                                                <field name="trouble_reported"/>
+                                                <field name="complaints"/>
+                                                <field name="customer_feedback"/>
+                                            </group>
+                                            <group string="Additional Information">
+                                                <field name="purchase_date"/>
+                                                <field name="requested_date"/>
+                                                <field name="call_date"/>
+                                                <field name="with_warranty"/>
+                                                <field name="remarks" force_save='1'/>
+                                                <field name="service_type"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
                                 </field>
                             </page>
+
                         </notebook>
                     </sheet>
                     <!--<footer class="oe_right">-->
@@ -106,18 +170,18 @@
                 </form>
             </field>
         </record>
-        
+
         <record id="assign_request_dex_service_tree" model="ir.ui.view">
             <field name="name">assign_request_dex_service_tree</field>
             <field name="model">dex_service.assign.request</field>
             <field name="arch" type="xml">
                 <tree string="Tree">
-                     <field name='create_date'/>
-                     <field name='name'/>
+                    <field name='create_date'/>
+                    <field name='name'/>
                 </tree>
             </field>
         </record>
-        
+
         <record id="assign_request_dex_service_calendar" model="ir.ui.view">
             <field name="name">assign_request_dex_service_calendar</field>
             <field name="model">dex_service.assign.request</field>
@@ -131,7 +195,7 @@
                 </calendar>
             </field>
         </record>
-        
+
 
         <!--        <menuitem id="dex_import_root_id" name="Import Tool" sequence="15" action="dex_form_request_job_request_view"/>-->
 

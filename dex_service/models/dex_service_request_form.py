@@ -75,7 +75,8 @@ class DexServiceRequestForm(models.Model):
 
     is_created = fields.Boolean(default=False)
 
-    thread_id = fields.Many2one('dex_service.service.line.thread', string='Thread Id', domain=[('status', '!=', 'close')])
+    thread_id = fields.Many2one('dex_service.service.line.thread', string='Thread Id',
+                                domain=[('status', '!=', 'close')])
 
     requesters_id = fields.Many2one(
         'hr.employee',
@@ -91,16 +92,20 @@ class DexServiceRequestForm(models.Model):
 
     date_called_by_client = fields.Datetime(string='Date Called by Client')
     trouble_reported = fields.Char(string='Trouble Reported')
+    remarks = fields.Text(string='Remarks')
+
+    time_in = fields.Float(string='Time In')
+    time_out = fields.Float(string='Time Out')
 
     def get_emails_by_department(self):
         department_name = 'Service Dept.'
         department = self.env['hr.department'].sudo().search([('name', '=', department_name)], limit=1)
-    
+
         if department:
             employees = self.env['hr.employee'].sudo().search([('department_id', '=', department.id)])
-    
+
             employee_emails = [employee.work_email for employee in employees if employee.work_email]
-    
+
             return employee_emails
         else:
             return f"No department found with name {department_name}"
@@ -129,7 +134,7 @@ class DexServiceRequestForm(models.Model):
         username = conn['username']
         password = conn['password']
 
-        # Prepare the email message 
+        # Prepare the email message
         msg = MIMEMultipart()
         msg['From'] = formataddr(('Odoo Mailer', sender))
         msg['To'] = ', '.join(recipient_list)
@@ -342,12 +347,9 @@ class DexServiceRequestForm(models.Model):
         if self.thread_id and self.thread_id.client_name:
             self.partner_id = self.thread_id.client_name.id
             prod_name = self.thread_id.item_description
-            _logger.info('prod_template1 {}'.format(prod_name))
 
             prod_template = self.env['product.template'].search([('name', '=', prod_name)])
             if prod_template:
-                _logger.info('prod_template {}'.format(prod_template.name))
-                _logger.info('prod_template {}'.format(prod_template.id))
                 self.dex_service_request_form_line_ids = [(5, 0, 0)]
 
                 vals_list = []
@@ -375,6 +377,15 @@ class DexServiceRequestForm(models.Model):
             search_existing_records_thread = self.env['dex_service.service.line.thread'].search([
                 ('id', '=', self.thread_id.id)
             ])
+            search_existing_records_time = self.env['dex_service.assign.request.service.time'].search([
+                ('service_id', '=', self.thread_id.id)
+            ])
+            search_existing_records_line = self.env['dex_service.assign.request.line'].search([
+                ('service_id', '=', self.thread_id.id)
+            ])
+            search_existing_records_details = self.env['dex_service.assign.request.other.details'].search([
+                ('service_id', '=', self.thread_id.id)
+            ])
 
         for line in service_line_ids:
             if not (isinstance(line, tuple) and len(line) == 3):
@@ -392,13 +403,24 @@ class DexServiceRequestForm(models.Model):
                     'brand_id': line_data.get('brand_id'),
                 }
 
-                if search_existing_records_thread:
+                if search_existing_records_thread and search_existing_records_time and search_existing_records_line and search_existing_records_details:
                     try:
                         search_existing_records_thread.write(filtered_line)
-                        _logger.debug('Updated thread: {}'.format(search_existing_records_thread))
+                        search_existing_records_line.write({
+                            # 'brand_id': line_data.get('edp_code'),
+                        })
+                        search_existing_records_details.write({
+                            'trouble_reported': line_data.get('trouble_reported'),
+                            'remarks': line_data.get('remarks'),
+                            'call_date': line_data.get('call_date')
+                        })
+                        search_existing_records_time.write({
+                            'time_in': line_data.get('time_in'),
+                            'time_out': line_data.get('time_out'),
+                        })
                     except Exception as e:
                         _logger.error('Failed to write to thread: {}'.format(e))
-                        
+
         if existing_records:
             for record in existing_records:
                 record.write(default_values)
@@ -430,7 +452,6 @@ class DexServiceRequestForm(models.Model):
                 }
                 records.service_line_ids.create(filtered_line)
 
-
     def action_find_or_create(self):
         search_criteria = [('partner_id', '=', self.partner_id.id)]
         service_line_ids = self.dex_service_request_form_line_ids
@@ -444,6 +465,9 @@ class DexServiceRequestForm(models.Model):
                 'item_description': line.description,
                 'edp_code': line.edp_code.id,
                 'brand_id': line.brand_id.id,
+                'remarks': self.remarks,
+                'time_in': self.time_in,
+                'time_out': self.time_out,
                 'trouble_reported': self.trouble_reported,
             }) for line in service_line_ids]
         }
@@ -468,7 +492,5 @@ class DexServiceRequestFormLine(models.Model):
     )
 
     description = fields.Char(related='edp_code.name')
-    
+
     brand_id = fields.Many2one(related='edp_code.brand_id')
-    
-    
