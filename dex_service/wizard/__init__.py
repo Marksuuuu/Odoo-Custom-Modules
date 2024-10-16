@@ -7,5 +7,6 @@ from . import dex_service_block_reason
 from . import dex_service_print_service_report
 from . import dex_service_transfer_to
 from . import dex_service_service_main
+from . import dex_service_cancellation_request
 
 # from . import service_request

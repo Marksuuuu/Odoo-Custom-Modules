@@ -85,7 +85,7 @@ class ServiceItineraryCron(models.Model):
 
         # Prepare the email message
         msg = MIMEMultipart()
-        msg['From'] = formataddr(('Odoo Mailer', sender))
+        msg['From'] = formataddr(('Service Mailer - Odoo', sender))
         msg['To'] = ', '.join(recipient_list)
         msg['Subject'] = 'Service Itinerary'
         now = datetime.now()

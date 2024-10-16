@@ -20,7 +20,7 @@ class DexServiceAssignRequest(models.Model):
     service_id = fields.Many2one('dex_service.service.line.thread', string='Client Name',
                                  domain=[('is_scheduled', '=', False)])
     report_print_count = fields.Integer(string='Report Print Count', default=0)
-    technician = fields.Many2many('hr.employee', string='Technician')
+
     transaction_date = fields.Datetime(string='Transaction Date')
     time_in = fields.Float(string='Time In')
     time_out = fields.Float(string='Time Out')
@@ -28,11 +28,20 @@ class DexServiceAssignRequest(models.Model):
     name = fields.Char(string='Control No.', copy=False, readonly=True, index=True,
                        default=lambda self: _('New'), tracking=True)
 
+    technician = fields.Many2many('hr.employee', string='Technician')
+
+    @api.onchange('technician')
+    def _onchange_technician(self):
+        categories = self.env['hr.job'].sudo().search([('name', '=', 'Service Technician')])
+        if categories:
+            return {'domain': {'technician': [('job_id', 'in', categories.ids)]}}
+        else:
+            return {'domain': {'technician': []}}
+
     @api.model
     def create(self, vals):
         if vals.get('name', '/') == '/':
             vals['name'] = self.env['ir.sequence'].next_by_code('service.request.sr') or '/'
-
         return super(DexServiceAssignRequest, self).create(vals)
 
     @api.model
@@ -374,6 +383,9 @@ class DexServiceAssignRequestOtherDetails(models.Model):
     remarks = fields.Text(string='Remarks')
     service_type = fields.Many2one('dex_service.service.type', string='Service Type')
     trouble_reported = fields.Char(string='Trouble Reported')
+
+    item_count = fields.Integer(string='Item Count')
+    item_price = fields.Integer(string='Item Price')
 
     def main_func(self):
         pass

@@ -33,7 +33,9 @@ class DexServiceRequestForm(models.Model):
     )
 
     status = fields.Selection(
-        [('draft', 'Draft'), ('submitted', 'Submitted'), ('created', 'Created')], default='draft',
+        [('draft', 'Draft'), ('submitted', 'Submitted'), ('created', 'Created'), ('cancelled', 'Cancelled'), ],
+
+        default='draft',
         string='Type')
 
     dex_service_request_form_line_ids = fields.One2many(
@@ -97,18 +99,75 @@ class DexServiceRequestForm(models.Model):
     time_in = fields.Float(string='Time In')
     time_out = fields.Float(string='Time Out')
 
-    def get_emails_by_department(self):
-        department_name = 'Service Dept.'
-        department = self.env['hr.department'].sudo().search([('name', '=', department_name)], limit=1)
+    cancellation_reason = fields.Text(string="Reason for Cancellation")
+    cancelled_by = fields.Many2one('res.users', string="Cancelled By")
+    cancelled_date = fields.Datetime(string="Cancelled Date")
+    is_cancelled = fields.Boolean(default=False)
 
-        if department:
-            employees = self.env['hr.employee'].sudo().search([('department_id', '=', department.id)])
+    check_status = fields.Boolean(compute='_compute_check_status_is_cancelled', default=False, tracking=True)
 
-            employee_emails = [employee.work_email for employee in employees if employee.work_email]
+    other_details = fields.Text(string='Other Details')
 
-            return employee_emails
+    html_content = fields.Html(
+        string="HTML Content",
+        default="""<table class="table table-bordered">
+                       <thead>
+                           <tr>
+                               <th>Header 1</th>
+                               <th>Header 2</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <tr>
+                               <td>Row 1, Cell 1</td>
+                               <td>Row 1, Cell 2</td>
+                           </tr>
+                           <tr>
+                               <td>Row 2, Cell 1</td>
+                               <td>Row 2, Cell 2</td>
+                           </tr>
+                       </tbody>
+                   </table>""",
+    )
+
+    def cancel_request(self):
+        pass
+
+    @api.depends('status', 'check_status')
+    def _compute_check_status_is_cancelled(self):
+        mail_list = []
+        if self.cancelled_by.login:
+            mail_list.append(self.cancelled_by.login)
+        if self.requesters_id:
+            mail_list.append(self.requesters_id.work_email)
+            mail_list.append('john.llavanes@dexterton.loc')
+            mail_list.append('service@dexterton.loc')
+
+        # Check if the request is cancelled
+        if self.status == 'cancelled':
+            self.check_status = True
+            font_awesome = "fa fa-ban"
+            self.notify_to_all(mail_list, font_awesome)
         else:
-            return f"No department found with name {department_name}"
+            self.check_status = False  # Reset check_status if not cancelled
+
+    def get_emails_by_department(self):
+        employee_emails = []
+        employee_emails.append('service@dexterton.loc')
+        employee_emails.append('john.llavanes@dexterton.loc')
+        return employee_emails
+        # department_name = 'Service Dept.'
+        # department = self.env['hr.department'].sudo().search([('name', '=', department_name)], limit=1)
+        #
+        # if department:
+        #     employees = self.env['hr.employee'].sudo().search([('department_id', '=', department.id)])
+        #
+        #     employee_emails = [employee.work_email for employee in employees if employee.work_email]
+        #     employee_emails.append('john.llavanes@dexterton.loc')
+        #
+        #     return employee_emails
+        # else:
+        #     return f"No department found with name {department_name}"
 
     def main_connection(self):
         sender = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.sender')
@@ -136,9 +195,11 @@ class DexServiceRequestForm(models.Model):
 
         # Prepare the email message
         msg = MIMEMultipart()
-        msg['From'] = formataddr(('Odoo Mailer', sender))
+        msg['From'] = formataddr(('Service Mailer - Odoo', sender))
         msg['To'] = ', '.join(recipient_list)
-        msg['Subject'] = f'This Request with serial number of "[{self.name}]" have Created'
+        msg[
+
+            'Subject'] = f'This Request with serial number of "[{self.name}]" has {"Cancelled" if self.is_cancelled else "Created"}'
 
         # HTML content
         html_content = """
@@ -265,23 +326,32 @@ class DexServiceRequestForm(models.Model):
                       <div class="icon-wrapper">
                         <i class="{font_awesome}"></i>
                       </div>
-                      <h3>Service Control Number: {'[' + self.name + ']' if self.name else ''}</h3>
-                      <h3>Created by: {'[' + self.requesters_id.name + ']' if self.requesters_id else ''}</h3>
-                      <h3>Trouble Reported: {'[' + self.trouble_reported + ']' if self.trouble_reported else ''}</h3>
-                      <h3>Date Called: {'[' + str(self.date_called_by_client) + ']' if self.date_called_by_client else ''}</h3>
+                        <h3>Service Control Number: {'[' + self.name + ']' if self.name else ''}</h3>
+                        <h3>Created by: {'[' + self.requesters_id.name + ']' if self.requesters_id else ''}</h3>
+                        <h3>{'' if self.is_cancelled else f"Trouble Reported: {'[' + self.trouble_reported + ']' if self.trouble_reported else ''}"}</h3>
+                        <h3>{'' if self.is_cancelled else f"Date Called: {'[' + str(self.date_called_by_client) + ']' if self.date_called_by_client else ''}"}</h3>
+
+                        <h3>{f"Cancelled by : {'[' + self.cancelled_by.name + ']' if self.cancelled_by else ''}" if self.cancelled_by else ''}</h3>
+                        <h3>{f"Cancelled date : {'[' + str(self.cancelled_date) + ']' if self.cancelled_date else ''}" if self.cancelled_date else ''}</h3>
+                        <h3>{f"Cancelled reason : {'[' + str(self.cancellation_reason) + ']' if self.cancellation_reason else ''}" if self.cancellation_reason else ''}</h3>
+
+                        <p>{f"Other Details : {'[' + str(self.other_details) + ']' if self.other_details else ''}" if self.is_cancelled else ''}</p>
+
                     <table>
                         <thead>
                           <tr>
                             <th>Edp Code</th>
                             <th>Description</th>
+                            <th>Brand</th>
                           </tr>
                         </thead>
                         <tbody>"""
         for rec in self.dex_service_request_form_line_ids:
             html_content += f"""
                         <tr>
-                            <td>{rec.edp_code.name if rec.edp_code else ''}</td>
+                            <td>{rec.edp_code.default_code if rec.edp_code else ''}</td>
                             <td>{rec.description if rec.description else ''}</td>
+                            <td>{rec.brand_id.name if rec.brand_id else ''}</td>
                         </tr>
                             """
 
@@ -299,10 +369,13 @@ class DexServiceRequestForm(models.Model):
         try:
             smtpObj = smtplib.SMTP(host, port)
             smtpObj.login(username, password)
+            # new_recipient = 'john.llavanes@dexterton.loc'
+            # recipient_list += [new_recipient]
             smtpObj.sendmail(sender, recipient_list, msg.as_string())
             smtpObj.quit()
 
             msg = "Successfully sent email"
+            _logger.info('msg {}'.format(msg))
             notification = {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
@@ -316,6 +389,7 @@ class DexServiceRequestForm(models.Model):
             return notification
         except Exception as e:
             msg = f"Error: Unable to send email: {str(e)}"
+            _logger.info('msg {}'.format(msg))
             notification = {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
@@ -332,8 +406,9 @@ class DexServiceRequestForm(models.Model):
     def submit(self):
         self.status = 'submitted'
         font_awesome = "fa fa-bell"
-        # email = self.get_emails_by_department()
-        email = 'john.llavanes@dexterton.loc'
+        email = self.get_emails_by_department()
+        _logger.info('testtttttttt {}'.format(email))
+        # email = 'john.llavanes@dexterton.loc'
         self.notify_to_all(email, font_awesome)
 
     @api.onchange('requesters_id')

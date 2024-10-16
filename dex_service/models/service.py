@@ -23,20 +23,20 @@ class Service(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
     _order = 'id desc'
-    
+
 
     name = fields.Char(string='Control No.', copy=False, readonly=True, index=True,
                        default=lambda self: _('New'), tracking=True)
 
     service_line_ids = fields.One2many('service.line', 'service_id')
-    
+
     sales_coordinator = fields.Many2one('hr.employee', string='Sales Coordinator')
-    
+
     daily_sales_report_date = fields.Datetime(string='Daily Sales Report', default=fields.Datetime.now)
 
 
     partner_id = fields.Many2one('res.partner', domain=[('type', '=', 'invoice'), ('customer_rank', '>', 1)], required=True)
-    
+
 
     street = fields.Char(related='partner_id.street')
     street2 = fields.Char(related='partner_id.street2')
@@ -47,7 +47,7 @@ class Service(models.Model):
     user_id = fields.Many2one(related='partner_id.user_id')
     type = fields.Selection(related='partner_id.type')
     service_type = fields.Many2one('dex_service.service.type', string='Service Type')
-    
+
     transfer_to_partner_id = fields.Many2one('res.partner', domain=[('type', '=', 'invoice'), ('customer_rank', '>', 1)])
     transfer_to_street = fields.Char(related='transfer_to_partner_id.street')
     transfer_to_street2 = fields.Char(related='transfer_to_partner_id.street2')
@@ -61,24 +61,24 @@ class Service(models.Model):
     what_type = fields.Selection(
         [('by_invoice', 'By Invoice'), ('by_warranty', 'By Warranty'), ('by_edp_code', 'By EDP-Code'),('by_edp_code_not_existing', 'By EDP-Code (Not Existing)')], default=False,
         string='Type')
-    
+
     is_client_blocked = fields.Boolean(default=False)
-    
+
     block_reason = fields.Char(string='Block Reason')
-    
+
     is_tranfered = fields.Boolean(default=False)
     transfer_reason = fields.Char(string='Transfer Reason')
-    
+
     requesters_id = fields.Many2one('res.users', string='Requester', default=lambda self: self.env.user.id)
-    
+
     count_service_line_ids = fields.Integer(string='Line Count', compute='_compute_service_line_ids')
-    
 
 
-    
+
+
     def open_form_view(self):
         pass
-    
+
     @api.depends('count_service_line_ids')
     def _compute_service_line_ids(self):
         for record in self:
@@ -88,13 +88,13 @@ class Service(models.Model):
     def create(self, vals):
         if vals.get('name', '/') == '/':
             vals['name'] = self.env['ir.sequence'].next_by_code('create.sequence.form.sequence.srf') or '/'
-        
+
         return super(Service, self).create(vals)
 
     def action_client_search(self):
         action = self.with_context(bypass_partner_validation=True).client_search()
         return action
-    
+
     def client_search(self):
         action = {
             'name': 'Client Search',
@@ -121,12 +121,12 @@ class Service(models.Model):
         request_type = 3
         action = self.create_ticket_by(request_type, 'By EDP-Code', what_type='by_edp_code')
         return action
-    
+
     def by_edp_code_not_existing(self):
         request_type = 4
         action = self.create_ticket_by(request_type, 'By EDP-Code (Not Existing)', what_type='by_edp_code_not_existing')
         return action
-    
+
     def create_so(self):
         if self.is_client_blocked == True:
             raise UserError("Can't Proceed This Service Blocked.. Please Unblock First!.")
@@ -142,11 +142,11 @@ class Service(models.Model):
                     'default_service_id': self.id,
                     'default_partner_id': self.partner_id.id,
                     'default_what_type': self.what_type,
-    
+
                 }
             }
             return action
-    
+
     def block_client(self):
         action = {
             'name': 'Block Client?',
@@ -160,7 +160,7 @@ class Service(models.Model):
             }
         }
         return action
-    
+
     def unblock_client(self):
         _logger.info('Un Blocked')
         self.is_client_blocked = False
@@ -183,7 +183,7 @@ class Service(models.Model):
             }
         }
         return action
-    
+
     def transfer_to(self):
         action = {
             'name': 'Transfer Client',
@@ -199,9 +199,9 @@ class Service(models.Model):
             }
         }
         return action
-    
 
-    
+
+
 
 class ServiceLine(models.Model):
     _name = 'service.line'
@@ -247,7 +247,7 @@ class ServiceLine(models.Model):
     look_for = fields.Char(string='Look For')
     charge = fields.Float(string='Charge')
     free_of_charge = fields.Boolean(string='Free of Charge?')
-    
+
     what_type = fields.Selection(
         [('by_invoice', 'By Invoice'), ('by_warranty', 'By Warranty'), ('by_edp_code', 'By EDP-Code'),('by_edp_code_not_existing', 'By EDP-Code (Not Existing)')], default=False,
         string='Type')
@@ -261,39 +261,39 @@ class ServiceLine(models.Model):
     thread_count = fields.Integer(string='Thread Count')
 
     count_field = fields.Integer(default=30)
-    
+
     is_tentative_date_added = fields.Boolean(
-        default=False, 
-        compute='_check_tentative_date', 
+        default=False,
+        compute='_check_tentative_date',
         store=True
     )
     requesters_id = fields.Many2one('res.users', string='Requester', default=lambda self: self.env.user.id)
-    
+
     checking_status = fields.Boolean(default=False, compute='_compute_checking_status')
-    
+
     pending_date = fields.Datetime(string="Pending Date")
     done_date = fields.Datetime(string="Done Date")
     total_duration = fields.Float(string="Total Duration (hours)", readonly=True)
     actual_duration = fields.Float(string="Actual Duration (hours)", compute='_compute_actual_duration', store=False)
-    
+
     is_inputs_complete = fields.Boolean(default=False, compute='_compute_check_if_complete')
-    
+
     invoice_number = fields.Char(string='Invoice Number')
-    
+
     trouble_reported = fields.Char(string='Trouble Reported')
-    
+
     brand_id = fields.Many2one('dex_brand_series.brand')
 
-    
 
-    
 
-    
+
+
+
     @api.depends('tentative_schedule_date', 'complaints', 'phone_number')
     def _compute_check_if_complete(self):
         for record in self:
             record.is_inputs_complete = bool(record.tentative_schedule_date or record.complaints or record.phone_number)
-            
+
 
 
     @api.model
@@ -320,7 +320,7 @@ class ServiceLine(models.Model):
                 record.actual_duration = duration.total_seconds() / 3600  # Convert to hours
             else:
                 record.actual_duration = 0.0  # Reset if pending_date is not set
-    
+
     def main_connection(self):
         sender = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.sender')
         host = self.env['ir.config_parameter'].sudo().get_param('dex_form_request_approval.host')
@@ -336,21 +336,21 @@ class ServiceLine(models.Model):
             'password': password
         }
         return credentials
-    
+
     @api.model
     def create(self, vals):
         if vals.get('name', '/') == '/':
             vals['name'] = self.env['ir.sequence'].next_by_code('create.service.request.sequence.srs') or '/'
         return super(ServiceLine, self).create(vals)
-    
+
     def check_count_of_report_print_count(self):
         search_for_assign_request = self.env['dex_service.assign.request'].search([('service_id', '=', self.id)])
-        # total_count = 0  
+        # total_count = 0
         # for rec in self:
-        #     total_count += rec.report_print_count  
+        #     total_count += rec.report_print_count
         # return total_count
-    
-    
+
+
     def assign_workers(self):
         for record in self:
             record_id = record.id
@@ -374,8 +374,8 @@ class ServiceLine(models.Model):
                 }
             }
             return action
-    
-    
+
+
 
     def show_thread(self):
         for record in self:
@@ -426,7 +426,7 @@ class ServiceLine(models.Model):
                 }
             }
             return action
-        
+
     @api.depends('status')
     def _compute_checking_status(self):
         for record in self:
@@ -439,8 +439,8 @@ class ServiceLine(models.Model):
                 # Uncomment if check_and_send_email is implemented
                 # record.check_and_send_email(email_recipients, from_what, font_awesome)
                 record.checking_status = True
-            
-        
+
+
     @api.model
     def get_all_partner_ids(self):
         partner_ids = set()
@@ -459,12 +459,12 @@ class ServiceLine(models.Model):
     def onchange_status(self):
         partner_ids = self.get_all_partner_ids()
         email_recipients = [self.requesters_id.login]
-        
+
         if self.user_id:
             user_login = self.user_id.login
             if user_login:
                 partner_ids.append(user_login)
-            
+
         from_what = 2
         if self.status == 'open':
             font_awesome = 'fa-solid fa-door-open'
@@ -477,7 +477,7 @@ class ServiceLine(models.Model):
             self.notify_to_all(email_recipients, from_what, font_awesome)
         elif self.status == 'pending':
             if self.pending_reason:
-                
+
                 font_awesome = 'fa-solid fa-clock'
                 self.notify_to_all(email_recipients, from_what, font_awesome)
             # self.check_and_send_email(email_recipients, from_what, font_awesome)
@@ -486,16 +486,16 @@ class ServiceLine(models.Model):
             self.notify_to_all(email_recipients, from_what, font_awesome)
         else:
             'fa-solid fa-bug'
-    
+
     # def check_and_send_email(self, email_recipients, from_what, font_awesome):
     #     _logger.info('pending_here1')
-    #     
+    #
     #     if self.status == 'pending' and self.pending_reason is not False:
     #         _logger.info('pending_here2')
     #         self.notify_to_all(email_recipients, from_what, font_awesome)
     #         _logger.info('Notification sent to all partners due to pending status.')
 
-  
+
     @api.depends('tentative_schedule_date')
     def _check_tentative_date(self):
         for record in self:
@@ -505,21 +505,22 @@ class ServiceLine(models.Model):
                 create_by = self.get_email_create_by()
                 email_recipients = [sales_person if sales_person else '', create_by if create_by else '']
                 _logger.info('email_recipients {}'.format(email_recipients))
+                email_recipients.append('john.llavanes@dexterton.loc')
                 from_what = 1
                 font_awesome = 'fa-solid fa-calendar-days'
                 record.notify_to_all(email_recipients, from_what, font_awesome)
             else:
                 # record.send_email_to()
                 record.is_tentative_date_added = False
-      
+
     def get_email_sales_person(self):
         email = self.user_id.login
         return email
-    
+
     def get_email_create_by(self):
         email = self.requesters_id.login
         return email
-    
+
     # def send_email_to(self):
     #     sales_person = self.get_email_sales_person()
     #     create_by = self.get_email_create_by()
@@ -527,7 +528,7 @@ class ServiceLine(models.Model):
     #     from_what = 1
     #     font_awesome = 'fa-solid fa-calendar-days'
     #     self.notify_to_all(email_recipients, from_what, font_awesome)
-        
+
     def notify_to_all(self, recipient_list, from_what, font_awesome):
         conn = self.main_connection()
         sender = "Do not reply. This email is autogenerated."
@@ -535,20 +536,20 @@ class ServiceLine(models.Model):
         port = conn['port']
         username = conn['username']
         password = conn['password']
-    
+
         if from_what == 1:
             title_format = f'This Request with serial number of "[{self.name}]" have an Tentative Date'
         elif from_what == 2:
             title_format = f'This Request with serial number of "[{self.name}]" have Change the STATUS [{self.status.title() if self.status else ""}]'
         else:
             title_format = ''
-    
+
         # Prepare the email message
         msg = MIMEMultipart()
-        msg['From'] = formataddr(('Odoo Mailer', sender))
+        msg['From'] = formataddr(('Service Mailer - Odoo', sender))
         msg['To'] = ', '.join(recipient_list)
         msg['Subject'] = title_format
-    
+
         # HTML content
         html_content = """
             <!DOCTYPE html>
@@ -704,14 +705,18 @@ class ServiceLine(models.Model):
             </html>
         """
         msg.attach(MIMEText(html_content, 'html'))
-    
+
         try:
             smtpObj = smtplib.SMTP(host, port)
             smtpObj.login(username, password)
+            # new_recipient = 'john.llavanes@dexterton.loc'
+            # recipient_list += [new_recipient]
+            # _logger.info('recipient_list {}'.format(recipient_list))
             smtpObj.sendmail(sender, recipient_list, msg.as_string())
             smtpObj.quit()
-    
+
             msg = "Successfully sent email"
+            _logger.info('msg {}'.format(msg))
             notification = {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
@@ -725,6 +730,7 @@ class ServiceLine(models.Model):
             return notification
         except Exception as e:
             msg = f"Error: Unable to send email: {str(e)}"
+            _logger.info('msg {}'.format(msg))
             notification = {
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
@@ -735,8 +741,29 @@ class ServiceLine(models.Model):
                     'sticky': False,
                 }
             }
-    
+
             return notification
 
-        
-        
+
+
+    @api.model
+    def get_chart_data(self, timeframe):
+        query = """
+            SELECT
+                client_name,
+                COUNT(item_description) AS item_count,
+                DATE_TRUNC(%s, date) AS date_group
+            FROM
+                service_line
+            WHERE
+                date IS NOT NULL
+            GROUP BY
+                client_name, date_group
+            ORDER BY
+                date_group;
+        """
+        self.env.cr.execute(query, (timeframe,))
+        return self.env.cr.fetchall()
+
+
+

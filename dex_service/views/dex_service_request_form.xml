@@ -8,16 +8,23 @@
             <field name="arch" type="xml">
                 <form string="Service Form">
                     <header>
-                        <button name='submit' 
-                                string="Submit Request" 
-                                class="oe_highlight" 
+                        <button name='submit'
+                                string="Submit Request"
+                                class="oe_highlight"
                                 type="object"
                                 attrs="{'invisible': [('status', 'not in', ('draft'))]}"/>
 
-                        <button name='action_find_or_create' 
-                                string="Accept (Create Service)" 
-                                class="oe_highlight" 
-                                type="object" 
+                        <button name='action_find_or_create'
+                                string="Accept (Create Service)"
+                                class="oe_highlight"
+                                type="object"
+                                groups="dex_service.group_dex_service_admin"
+                                attrs="{'invisible': ['|',('status', 'not in', ('submitted')), ('is_created', '==', True)]}"/>
+
+                        <button name="%(dex_service.dex_service_cancellation_request_view_action)d"
+                                string="Cancel this Request?"
+                                class="btn-danger"
+                                type="action"
                                 groups="dex_service.group_dex_service_admin"
                                 attrs="{'invisible': ['|',('status', 'not in', ('submitted')), ('is_created', '==', True)]}"/>
 
@@ -28,14 +35,41 @@
                         <!--        groups="dex_service.group_dex_service_admin" />-->
 
                         <field name="status" widget="statusbar"
-                               statusbar_visible="draft,submitted,created"
-                               option="{'clickable': '1'}"/>
+                               statusbar_visible="draft,submitted,created,cancelled"/>
                     </header>
+                    <div class="alert alert-warning" role="alert" attrs="{'invisible': [('is_cancelled', '!=', True)]}" style='margin-top: 10px'>
+                        This Request are Cancelled.
+                        <br/>
+
+
+                        <br/>
+                        Cancelled by :
+                        <b>
+                            <field name='cancelled_by' readonly="1"/>
+                        </b>
+
+                        <br/>
+                        Cancelled on :
+                        <b>
+                            <field name='cancelled_date' readonly="1"/>
+                        </b>
+
+                        <br/>
+                        Reason :
+                        <b>
+                            <field name='cancellation_reason' readonly="1"/>
+                        </b>
+                    </div>
                     <sheet>
-                        <widget name="web_ribbon" 
-                                text="Created" 
-                                bg_color="bg-success" 
+                        <widget name="web_ribbon"
+                                text="Created"
+                                bg_color="bg-success"
                                 attrs="{'invisible': ['|', ('status', 'not in', ('created')),('is_created', '!=', True)]}"/>
+
+                        <widget name="web_ribbon"
+                                text="Cancelled"
+                                bg_color="bg-danger"
+                                attrs="{'invisible': ['|', ('status', 'not in', ('cancelled')),('is_created', '!=', True)]}"/>
 
                         <group name="group_service_thread_id" string="Service Thread" attrs="{'invisible': [('is_service_tech', '==', False)]}">
                             <div class="oe_title">
@@ -57,17 +91,19 @@
                             <group invisible='1'>
                                 <field name='is_created'/>
                                 <field name='is_service_tech'/>
+                                <field name='is_cancelled'/>
+                                <field name='check_status'/>
                             </group>
                             <group>
                                 <field name="date_called_by_client" attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>
                                 <field name="trouble_reported" attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>
                                 <field name='remarks' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>
                                 <field name='time_in' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>
-                                <field name='time_out' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>       
+                                <field name='time_out' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_service_tech', '==', False)],'required': [('is_service_tech', '==', True)]}"/>
                             </group>
                             <group>
-                                <field name='partner_id' 
-                                       attrs="{'readonly': ['|', '|', ('status', 'not in', ('draft')), ('is_service_tech', '==', True), ('is_created', '==', True)]}" 
+                                <field name='partner_id'
+                                       attrs="{'readonly': ['|', '|', ('status', 'not in', ('draft')), ('is_service_tech', '==', True), ('is_created', '==', True)]}"
                                        string='Contact Person' force_save='1' options="{'no_create': 0}"/>
 
                             </group>
@@ -83,49 +119,58 @@
                                 <b attrs="{'invisible': [('type', '!=', False)]}">Address</b>
                             </label>
                             <div class="o_address_format" readonly='1'>
-                                <field name="street" 
-                                       placeholder="Street..." 
-                                       class="o_address_street" 
+                                <field name="street"
+                                       placeholder="Street..."
+                                       class="o_address_street"
                                        readonly='1'/>
-                                <field name="street2" 
-                                       placeholder="Street 2..." 
-                                       class="o_address_street" 
+                                <field name="street2"
+                                       placeholder="Street 2..."
+                                       class="o_address_street"
                                        readonly='1'/>
-                                <field name="city" 
-                                       placeholder="City" 
-                                       class="o_address_city" 
+                                <field name="city"
+                                       placeholder="City"
+                                       class="o_address_city"
                                        readonly='1'/>
-                                <field name="state_id" 
-                                       class="o_address_state" 
+                                <field name="state_id"
+                                       class="o_address_state"
                                        placeholder="State"
-                                       options="{&quot;no_open&quot;: True}" 
-                                       context="{'country_id': country_id, 'zip': zip}" 
+                                       options="{&quot;no_open&quot;: True}"
+                                       context="{'country_id': country_id, 'zip': zip}"
                                        readonly='1'/>
-                                <field name="zip" 
-                                       placeholder="ZIP" 
-                                       class="o_address_zip" 
+                                <field name="zip"
+                                       placeholder="ZIP"
+                                       class="o_address_zip"
                                        readonly='1'/>
-                                <field name="country_id" 
-                                       placeholder="Country" 
+                                <field name="country_id"
+                                       placeholder="Country"
                                        class="o_address_country"
-                                       options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" 
+                                       options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"
                                        readonly='1'/>
                             </div>
                         </group>
 
-                        <group name="group_item_info" string="Item Information">
+                        <group name="group_item_info" string="Item Information" attrs="{'invisible': [('is_service_tech', '!=', False)]}">
                             <group>
-                                <field name='type' required='1' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_created', '==', True)]}"/>
-                                <field name='brand_units' required='1' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_created', '==', True)]}" options="{'no_create': 0}"/>
-                                <field name='number_of_units' required='1' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_created', '==', True)]}"/>
-                                <field name='sale_order_no' required='1' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_created', '==', True)]}" options="{'no_create': 0}"/>
-                                <field name='date_of_purchase' required='1' attrs="{'readonly': ['|', ('status', 'not in', ('draft')),('is_created', '==', True)]}"/>
+                                <field name='type' attrs="{'required': [('is_service_tech', '!=', True)], 'readonly': ['|', ('status', 'not in', ('draft')), ('is_created', '=', True)]}"/>
+                                <field name='brand_units' attrs="{'required': [('is_service_tech', '!=', True)], 'readonly': ['|', ('status', 'not in', ('draft')), ('is_created', '=', True)]}" options="{'no_create': 0}"/>
+                                <field name='number_of_units' attrs="{'required': [('is_service_tech', '!=', True)], 'readonly': ['|', ('status', 'not in', ('draft')), ('is_created', '=', True)]}"/>
+                                <field name='sale_order_no' attrs="{'required': [('is_service_tech', '!=', True)], 'readonly': ['|', ('status', 'not in', ('draft')), ('is_created', '=', True)]}" options="{'no_create': 0}"/>
+                                <field name='date_of_purchase' attrs="{'required': [('is_service_tech', '!=', True)], 'readonly': ['|', ('status', 'not in', ('draft')), ('is_created', '=', True)]}"/>
                             </group>
                         </group>
 
                         <notebook>
+                            <page name='dex_service_request_form_other_page_name' string='Other Info'>
+                                <group>
+                                    <field name='other_details' string='Other Info' placeholder="Please Type Here other info (Paki Lagay Dito yung iba pang detalye kagaya nang Ginamit na Item , Presyo, Bilang)" attrs="{'readonly': ['|', ('is_cancelled', '!=', False),('is_created', '==', True)]}"/>
+                                </group>
+                                <!--<field name="html_content" widget="html"/>-->
+                            </page>
+                        </notebook>
+
+                        <notebook>
                             <page name='dex_service_request_form_line_page_name' string='Other Details'>
-                                <field name='dex_service_request_form_line_ids' attrs="{'readonly': ['|', ('is_service_tech', '==', True),('is_created', '==', True)]}" force_save="1">
+                                <field name='dex_service_request_form_line_ids' attrs="{'readonly': ['|', '|', ('is_cancelled', '!=', False), ('is_service_tech', '==', True), ('is_created', '==', True)]}" force_save="1">
                                     <tree editable='bottom'>
                                         <field name='edp_code' required="1"/>
                                         <field name="description" required="1"/>
@@ -149,10 +194,10 @@
             <field name="name">dex_service_request_form_tree</field>
             <field name="model">dex_service.request.form</field>
             <field name="arch" type="xml">
-                <tree string="Service Requests" decoration-success="status == 'created'" decoration-info="status == 'submitted'">
+                <tree string="Service Requests" decoration-success="status == 'created'" decoration-primary="status == 'submitted'" decoration-danger="status == 'cancelled'" decoration-muted="status == 'draft'">
                     <field name='create_date'/>
                     <field name='thread_id'/>
-                    <field name='status' widget="badge" decoration-success="status == 'created'" decoration-info="status == 'submitted'"/>
+                    <field name='status' widget="badge" decoration-success="status == 'created'" decoration-primary="status == 'submitted'" decoration-danger="status == 'cancelled'" decoration-muted="status == 'draft'"/>
                     <field name='requesters_id'/>
                     <field name='partner_id'/>
                     <field name='brand_units'/>

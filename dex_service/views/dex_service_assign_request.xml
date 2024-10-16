@@ -31,7 +31,7 @@
                                 <field name='technician' widget='many2many_tags' required='1' string="Service By"/>
                             </group>
                             <group>
-                                <field name='time_in' required='1'/> 
+                                <field name='time_in' required='1'/>
                                 <field name='time_out' required='1'/>
                             </group>
                             <group>
@@ -131,8 +131,9 @@
                                         <field name="call_date"/>
                                         <field name="complaints"/>
                                         <field name="with_warranty"/>
-                                        <field name="remarks"/>
                                         <field name="service_type"/>
+                                        <field name="item_count" optional="hidden"/>
+                                        <field name="item_price" optional="hidden"/>
                                     </tree>
                                     <form>
                                         <sheet>
@@ -154,6 +155,8 @@
                                                 <field name="with_warranty"/>
                                                 <field name="remarks" force_save='1'/>
                                                 <field name="service_type"/>
+                                                <field name="item_count"/>
+                                                <field name="item_price"/>
                                             </group>
                                         </sheet>
                                     </form>

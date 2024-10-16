@@ -19,10 +19,10 @@
                                 <field name="service_id" readonly="1"/>
                             </h1>
                         </div>
-                        <group>                 
+                        <group>
                             <group>
-                                <field name='warranty_number' attrs="{'invisible': [('request_type', '!=', 2)],'required': [('request_type', '=', 2)]}"/>                                
-                                <field name='invoice_no' context="{'for_invoice_select': 1}" attrs="{'invisible': [('request_type', 'not in', (1))], 'required': [('request_type', 'in', (1))]}"/>
+                                <field name='warranty_number' attrs="{'invisible': [('request_type', '!=', 2)],'required': [('request_type', '=', 2)]}"/>
+                                <field name='invoice_no' context="{'no_create': 1, 'for_invoice_select': 1}" attrs="{'invisible': [('request_type', 'not in', (1))], 'required': [('request_type', 'in', (1))]}"/>
                                 <field name='edp_code' options="{'no_create':1}" context="{'create':False}" attrs="{'invisible': [('request_type', '!=', 3)]}">
                                     <tree editable='bottom'>
                                         <field name='default_code'/>
@@ -39,7 +39,7 @@
                                 <!--<div class="o_row" name="height_mm">-->
                                 <!--    <field name="height_mm"/><span>mm</span>-->
                                 <!--</div>-->
-                                
+
                             </group>
                             <!--<group string='Invoice' name='invoice' attrs="{'invisible': [('request_type', 'not in', (1,2))]}">-->
                             <!--    &lt;!&ndash;<field name="invoice_to_name"/>&ndash;&gt;-->
@@ -49,13 +49,13 @@
                             <!--</group>-->
                             <group>
                                 <field name='what_type' readonly="1"/>
-                                <field name='service_type' required="1"/>
+                                <field name='service_type' required="1" options="{'no_create': 1}"/>
                                 <field name='request_type' invisible="1"/>
                                 <field name='status' string="Status" required="1"/>
                             </group>
-                                                     
+
                         </group>
-                        
+
                         <notebook attrs="{'invisible': [('request_type', 'not in', (1))]}">
                             <page string='Invoice Lines'>
                                 <field name='create_ticket_by_line_ids'>
@@ -69,7 +69,7 @@
 
                             </page>
                         </notebook>
-                        
+
                     </sheet>
                     <footer class="oe_right">
                         <button name="btn_save_changes" icon='fa-floppy-o' string=" Save" type="object" class="btn-outline-primary"
@@ -89,4 +89,4 @@
         </record>
 
     </data>
-</odoo>   
+</odoo>

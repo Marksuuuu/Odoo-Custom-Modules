@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="action_account_invoice_report_all"
+                model="ir.actions.client">
+            <field name="name">Account Report</field>
+            <field name="tag">invoice_dashboard</field>
+        </record>
+
+        <!--<menuitem id="menu_service_line_chart" name="Service Line Chart" action="action_account_invoice_report_all" parent="dex_service.dex_service_menu_root_id" sequence="6"/>-->
+
+
+    </data>
+</odoo>

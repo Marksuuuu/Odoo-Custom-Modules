@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="Invoicedashboard">
+        <div class="accounts-dashboard-wrap">
+            <div class="o_dashboards col-xs-12 col-sm-12 col-lg-12 col-md-12" style="background-color: #e1e1e1;overflow: scroll; !important; ">
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-12">
+                                <div class="dash-header">
+                                    <h1 class="custom-h1 dashboard-h1">Dashboard </h1>
+                                    <!--<input type="checkbox" style="display:none" data-toggle="toggle" data-on="" data-off="">-->
+                                    <!--<input type="checkbox" id="toggle-two"></input>-->
+                                    <!--</input>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:0px">
+                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                    <div class="">
+                        <div class="row account-details" style="margin:0px">
+                            <div class="col-md-3">
+                                <!--                   Net Profit or Loss          -->
+                                <div class="tile wide invoice box-1">
+                                    <div class="headers">
+                                        <div class="main-title">TBA</div>
+                                        <div id="monthly_invoice">
+                                            <div class="left">
+                                                <div class="count">
+                                                    <span id="net_profit_current_year" />
+                                                </div>
+                                            </div>
+                                            <div class="right">
+                                                <div class="count">
+                                                    <span id="net_profit_current_months" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--      Total Income       -->
+                            <div class="col-md-3">
+                                <div class="tile wide invoice box-2">
+                                    <div class="header">
+                                        <div class="main-title">TBA</div>
+                                        <div id="monthly_income">
+                                            <div class="left">
+                                                <div class="count">
+                                                    <span id="total_incomes_this_year" />
+                                                </div>
+                                            </div>
+                                            <div class="right">
+                                                <div class="count">
+                                                    <span id="total_incomes_" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--              Total Expense              -->
+                            <div class="col-md-3">
+                                <div class="tile wide invoice box-3">
+                                    <div class="header">
+                                        <div class="main-title">TBA</div>
+                                        <div id="monthly_expense">
+                                            <div class="left">
+                                                <div class="count">
+                                                    <span id="total_expense_this_year" />
+                                                </div>
+                                            </div>
+                                            <div class="right">
+                                                <div class="count">
+                                                    <span id="total_expenses_" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--            Unreconciled items             -->
+                            <div class="col-md-3">
+                                <div class="tile wide invoice box-4">
+                                    <div class="header">
+                                        <div class="main-title">TBA</div>
+                                        <div id="monthly_unreconciled">
+                                            <div class="left">
+                                                <div class="count">
+                                                    <span id="unreconciled_counts_this_year" />
+                                                </div>
+                                            </div>
+                                            <div class="right">
+                                                <div class="count">
+                                                    <span id="unreconciled_items_" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--		<div class="row" style="margin:0px">-->
+            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                <div class="row" style="margin:0px">
+                    <div class="col-md-4">
+                        <div class="card" style="height:366px;">
+                            <div class="card-header" style=" padding: 17px 1.5rem !important; display: flex !IMPORTANT; justify-content: space-between; align-items: center; ">
+                                <h3 class="custom-h3 card-title">
+                                    <b>SERVICE COUNT PER DAY</b>
+                                </h3>
+                                <div class="card-tools">
+                                <!--<select id="timeframe-select">-->
+                                <!--    <option value="day" selected='selected'>Day</option>-->
+                                <!--    <option value="week">Week</option>-->
+                                <!--    <option value="month">Month</option>-->
+                                <!--    <option value="year">Year</option>-->
+                                <!--</select>-->
+                                </div>
+                            </div>
+                            <div style="max-height: 400px; overflow-y: auto;">
+                                 <div style="max-height: 400px;" class="chart">
+                                    <canvas id="myChart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="col-graph">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <b>
+                                        <h3 class="custom-h3">NO OF SERVICES PER TECHNICIAN</h3>
+                                    </b>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body" id="ex_body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div>
+                                            <canvas id="assign_chart" height="250px" width="400px"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card" style="height:366px;">
+                            <div class="card-header" style=" padding: 17px 1.5rem !important; display: flex !IMPORTANT; justify-content: space-between; align-items: center; ">
+                                <h3 class="custom-h3 card-title">
+                                    <b>ALL RECORDS</b>
+                                </h3>
+                            </div>
+                            <div style="max-height: 400px; overflow-y: auto;">
+                                <table class="table table-striped" id="service_table">
+                                    <thead>
+                                        <tr>
+                                            <th style='position: sticky; top: 0; background-color: #fff;z-index: 1;'>Client Name</th>
+                                            <th style='position: sticky; top: 0; background-color: #fff;z-index: 1;'>Name</th>
+                                            <th style='position: sticky; top: 0; background-color: #fff;z-index: 1;'>Status</th>
+                                            <th style='position: sticky; top: 0; background-color: #fff;z-index: 1;'>Total Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="service_table_body">
+                                        <!-- Data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="col-graph">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <b>
+                                        <h3 class="custom-h3">STATUS DISTRIBUTION OF ALL ITEMS</h3>
+                                    </b>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body" id="ex_body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div>
+                                            <canvas id="service_chart" height="250px" width="400px"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="col-graph">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    <b>
+                                        <h3 class="custom-h3">TBA</h3>
+                                    </b>
+                                </div>
+                                <div class="card-tools">
+                                    <select id="aged_payable_value">
+                                        <option id="aged_receivable_this_month" value="this_month">This Month</option>
+                                        <option id="aged_receivable_this_year" value="this_year">This Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body" id="aged_payable_body_hide">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="chart">
+                                            <canvas id="horizontalbarChart" width="400" height="250"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card" style="height:366px;">
+                            <div class="card-header" style=" padding: 17px 1.5rem !important; display: flex !IMPORTANT; justify-content: space-between; align-items: center; ">
+                                <h3 class="custom-h3 card-title">
+                                    <b>TBA</b>
+                                </h3>
+                            </div>
+                            <div style="max-height: 400px; overflow-y: auto;">
+                                        <table class="table table-striped" id="service_table">
+                                            <thead>
+                                                <tr>
+                                                    <th style='position: sticky; top: 0; background-color: #fff;z-index: 1;'>Client Name</th>
+                                                    <th style='position: sticky; top: 0; background-color: #fff;z-index: 1;'>Name</th>
+                                                    <th style='position: sticky; top: 0; background-color: #fff;z-index: 1;'>Status</th>
+                                                    <th style='position: sticky; top: 0; background-color: #fff;z-index: 1;'>Total Duration</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="service_table_body">
+                                                <!-- Data will be populated here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--		</div>-->
+            <div class="container-fluid o_hr_dashboard">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" id="invoice_grapg" />
+                <div class="dashboard-header-filter">
+                    <div class="manager_filter_class" />
+                </div>
+            </div>
+            <div id="chart-container"></div>
+        </div>
+    </t>
+</templates>

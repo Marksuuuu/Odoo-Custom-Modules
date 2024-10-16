@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+        <template id="my_chart_template">
+            <div class="my_chart_selector">
+                <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+        </template>
+
+        <record id="view_my_chart_model_tree" model="ir.ui.view">
+            <field name="name">service.line.tree</field>
+            <field name="model">service.line</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_my_chart_model_form" model="ir.ui.view">
+            <field name="name">service.line.form</field>
+            <field name="model">service.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div>
+                            <t t-call="dex_service.my_chart_template"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_my_chart_model" model="ir.actions.act_window">
+            <field name="name">My Charts</field>
+            <field name="res_model">service.line</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+
+
+    </data>
+</odoo>

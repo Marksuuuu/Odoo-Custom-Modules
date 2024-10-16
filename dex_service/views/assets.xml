@@ -3,7 +3,20 @@
     <data>
         <template id="dex_assets_backend" name="Dex Service Assets assets" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
+                <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"/>
+                <script src="https://cdn.jsdelivr.net/npm/datatables@1.10.18/media/js/jquery.dataTables.min.js"/>
+                <link href="https://cdn.jsdelivr.net/npm/datatables@1.10.18/media/css/jquery.dataTables.min.css" rel="stylesheet"/>
+                <link rel="stylesheet" type="text/scss" href="/dex_service/static/src/scss/style.scss"/>
+                <link rel="stylesheet" type="text/scss" href="/dex_service/static/src/lib/bootstrap-toggle-master/css/bootstrap-toggle.min.css"/>
+                <!--<link rel="stylesheet" type="text/scss" href="/dex_service/static/src/lib/dataTables.bootstrap4.min.css"/>-->
                 <script type="text/javascript" src="/dex_service/static/src/js/tree_button.js"/>
+                <script type="text/javascript" src="/dex_service/static/src/js/account_dashboard.js"/>
+                <script type="text/javascript" src="/dex_service/static/src/lib/Chart.bundle.js"/>
+                <script type="text/javascript" src="/dex_service/static/src/lib/Chart.bundle.min.js"/>
+                <script type="text/javascript" src="/dex_service/static/src/lib/Chart.min.js"/>
+                <!--<script type="text/javascript" src="/dex_service/static/src/lib/dataTables.bootstrap4.min.js"/>-->
+                <!--<script type="text/javascript" src="/dex_service/static/src/lib/dataTables.min.js"/>-->
+                <script type="text/javascript" src="/dex_service/static/src/lib/bootstrap-toggle-master/js/bootstrap-toggle.min.js"/>
             </xpath>
         </template>
     </data>

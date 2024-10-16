@@ -44,7 +44,7 @@
                                 <field name="partner_id" force_save="1" readonly="1" options="{'no_create': 0}"/>
                             </group>
                             <group>
-                                <field name="requesters_id" readonly="1" options="{'no_create': 0}"/>                                
+                                <field name="requesters_id" readonly="1" options="{'no_create': 0}"/>
                                 <field name="transfer_to_partner_id" force_save="1" attrs="{'invisible': [('is_tranfered', '=', False)]}"/>
                             </group>
                             <group>
@@ -112,14 +112,14 @@
                                         <button icon='fa-exclamation-triangle' class="bg-danger oe_link" attrs="{'invisible': [('is_inputs_complete', '!=', False)]}" help='this sign is for checking if you have (complaints,tentative date, pending_reason)'/>
                                         <!--<button icon='fa-check-square' class="bg-success oe_link" attrs="{'invisible': [('is_inputs_complete', '!=', True)]}"/>-->
                                         <field name="status" widget='selection' string='Status'/>
-                                        <field name="is_inputs_complete" invisible="1"/>                                        
-                                        <field name="checking_status" invisible="1"/>                                        
+                                        <field name="is_inputs_complete" invisible="1"/>
+                                        <field name="checking_status" invisible="1"/>
                                         <field name="requested_by" options="{'no_create': 0}"/>
                                         <field name="client_name" string='Contact Person' options="{'no_create': 0}"/>
                                         <field name="service_type" options="{'no_create': 0}"/>
                                         <field name="item_description"/>
                                         <field name="serial_number"/>
-                                        
+
                                         <!-- Add the custom widget directly here -->
                                         <button name="create_thread" type="object"
                                                 class="fa fa-pencil-square-o btn-outline-dark" help='Creating Thread'/>

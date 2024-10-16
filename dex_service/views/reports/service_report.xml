@@ -130,7 +130,7 @@
                                             SERVICE NUMBER:
                                             <b>
                                                 <span t-esc="a[0].service_id.thread_name"/>
-                                            </b>                                            
+                                            </b>
                                         </t>
                                     </td>
                                 </tr>
@@ -160,7 +160,7 @@
                                     <td>IN</td>
                                     <td>
                                         <span t-esc="a[1].time_in"/>
-                                    </td>                                    
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>TELL NO.</td>
@@ -235,7 +235,7 @@
                                 <td>TIME IN:</td>
                                 <td>
                                     <span t-esc="o.time_in"/>
-                                </td>                                
+                                </td>
                             </tr>
                         </tbody>
                     </table>
